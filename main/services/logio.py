@@ -7,7 +7,8 @@
 '''
 
 from . import services
+from flask import current_app
 
 @services.route('/login')
 def login():
-    return "hello world"
+    return "test"
