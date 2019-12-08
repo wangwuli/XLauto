@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-@author: liww liww@cenboomh.com
+@author: liww
 @file: logio.py
 @time: 2019/11/22 17:10
 @desc:

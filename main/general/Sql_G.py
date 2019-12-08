@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
 @author: liww liww@cenboomh.com
-@file: sql_dao.py
+@file: Sql_G.py
 @time: 2019/12/3 17:14
 @desc:
 '''
