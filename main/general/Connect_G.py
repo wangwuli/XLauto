@@ -9,7 +9,6 @@ import os
 import shlex
 import subprocess
 import paramiko
-from stat import S_ISDIR
 
 
 class SSHMet():
