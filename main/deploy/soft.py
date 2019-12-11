@@ -18,24 +18,24 @@ class conf_file_pro:
         self.name = None
         self.gender = None
 
-    def getName(self):
+    def xml_conf(self):
         return self.name
 
-    def getGender(self):
+    def cfg_conf(self):
         return self.gender
 
 
 class docker(conf_file_pro):
     def __init__(self, name):
-        print ("Hello Mr." + name)
+        print ("docker")
 
 class yum(conf_file_pro):
     def __init__(self, name):
-        print ("Hello Miss." + name)
+        print ("yum")
 
 class make(conf_file_pro):
     def __init__(self, name):
-        print ("Hello Miss." + name)
+        print ("make")
 
 
 class SoftIstall:
