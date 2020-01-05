@@ -5,11 +5,11 @@
 @time: 2019/12/5 10:06
 @desc:
 '''
-
 from . import deploy
 
 @deploy.route('/deploy/soft_install',methods=['GET','POST','PUT','DELETE'])
 def soft_install():
+
     return "test"
 
 
