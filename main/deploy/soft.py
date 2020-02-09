@@ -16,13 +16,16 @@ def soft_install():
 class conf_file_pro:
     def __init__(self):
         self.name = None
-        self.gender = None
+        self.conf_type = None
 
     def xml_conf(self):
         return self.name
 
     def cfg_conf(self):
-        return self.gender
+        return self.name
+
+    def template(self):
+        return
 
 
 class docker(conf_file_pro):

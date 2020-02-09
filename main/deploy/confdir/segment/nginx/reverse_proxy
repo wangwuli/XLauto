@@ -1,0 +1,6 @@
+server {
+        listen       {{ server_port }};
+        server_name  {{ server_name }}
+        access_log  {{ log_path }}  main;
+        {{ location }}
+}
