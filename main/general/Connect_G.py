@@ -11,13 +11,20 @@ import subprocess
 import paramiko
 
 
-class SSHMet():
+class Sshmet():
     def __init__(self):
         self.ip = None
         self.username = None
         self.password = None
         self.port = None
         self.timeout = 30
+
+    def set_info(self, host_info_dict):
+        self.ip = host_info_dict["ip"]
+        self.username = host_info_dict["username"]
+        self.password = host_info_dict["password"]
+        self.port = host_info_dict["port"]
+        self.timeout = host_info_dict["timeout"]
 
     def connect(self):
         self.ssh = paramiko.SSHClient()
@@ -58,17 +65,17 @@ class SSHMet():
 class SCPMet(SSHMet):
 
     def connect(self):
-        self.ssh = paramiko.Transport((self.ip,self.port))
+        self.ssh = paramiko.Transport((self.ip, self.port))
         self.connect(username=self.username, password=self.password)
         self.sftp = paramiko.SFTPClient.from_transport(self.ssh)
         return self.sftp
 
-    def get_file(self,src_file,des_file):
-        self.sftp.get(src_file,des_file)
+    def get_file(self, src_file, des_file):
+        self.sftp.get(src_file, des_file)
         return des_file
 
-    def put_file(self,src_file,des_file):
-        self.sftp.put(src_file,des_file)
+    def put_file(self, src_file, des_file):
+        self.sftp.put(src_file, des_file)
 
         # all_files = self.__get_all_files_in_local_dir(local_dir)
         # for x in all_files:
@@ -80,7 +87,7 @@ class SCPMet(SSHMet):
 
         return des_file
 
-    def list_dir(self,dir_name):
+    def list_dir(self, dir_name):
         return self.sftp.listdir(dir_name)
 
     def __get_all_files_in_local_dir(self, local_dir):
@@ -93,4 +100,3 @@ class SCPMet(SSHMet):
             else:
                 all_files.append(filename)
         return all_files
-
