@@ -39,15 +39,12 @@ class SoftIstall:
         elif type == 'yum':
             if sys.platform.find("linux") == 0:
                 return RETURNG.return_false("windows服务器暂时不支持yum安装。")
-            yum(name, othe_parameter)
+            yum = Yum(name, othe_parameter)
+            yum.template()
             return True
 
 
 class conf_file_pro:
-    def __init__(self):
-        self.name = None
-        self.conf_type = None
-
     def xml_conf(self):
         return self.name
 
@@ -63,7 +60,7 @@ class docker(conf_file_pro):
         print("docker")
 
 
-class yum(conf_file_pro):
+class Yum(conf_file_pro):
     def __init__(self, name, othe_parameter):
         result=[]
         install_cmd = "yum install -y %s" % name
