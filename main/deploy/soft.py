@@ -71,6 +71,7 @@ class Yum(conf_file_pro):
         pool.join()
         return result
 
+
     def ssh_d(self, host_listinfo, cmd):
         ssh = Sshmet()
         ssh.set_info(host_listinfo)
