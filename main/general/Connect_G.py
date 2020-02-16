@@ -24,12 +24,12 @@ class Sshmet():
         self.username = host_info_dict["username"]
         self.password = host_info_dict["password"]
         self.port = host_info_dict["port"]
-        self.timeout = host_info_dict["timeout"]
+        self.timeout = host_info_dict["timeout"] and host_info_dict["timeout"] or self.timeout
 
     def connect(self):
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.connect(self.ip, self.port, self.user, self.pwd, timeout=self.timeout, banner_timeout=10)
+        self.ssh.connect(self.ip, self.port, self.username, self.password, timeout=int(self.timeout), banner_timeout=10)
         return self.ssh
 
     def execcmd(self, cmd):
@@ -41,7 +41,10 @@ class Sshmet():
         # env = 'source .bash_profile;source /etc/profile;export LANG=en_US.UTF-8;'
         # stdin, stdout, stderr = self.ssh.exec_command('%s%s' % (env, cmd))
         stdin, stdout, stderr = self.ssh.exec_command(cmd)
-        result = ''.join(stdout.read() + stderr.read()).strip()
+        # test_1 = stdout.read()
+        # test_2 = stderr.read()
+        #result = ''.join(stdout.read() + stderr.read())
+        result = (stdout.read() + stderr.read()).strip()
         return result
 
     def execrealtime(self, shell_cmd, object_):
@@ -62,7 +65,7 @@ class Sshmet():
         self.ssh.close()
 
 
-class SCPMet(SSHMet):
+class SCPMet(Sshmet):
 
     def connect(self):
         self.ssh = paramiko.Transport((self.ip, self.port))
