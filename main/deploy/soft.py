@@ -15,14 +15,8 @@ from flask import request
 
 @deploy.route('/deploy/soft_install', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def soft_install():
-    data_dict = request.get_json()
-    soft_ = SoftIstall()
-    info = soft_.soft_install(data_dict['name'],data_dict['type'],data_dict["othe_parameter"])
-    return info
-
-
-class SoftIstall:
     """
+    example json:
     {
     "name": "nginx",
     "type": "yum",
@@ -37,8 +31,20 @@ class SoftIstall:
     }
     }
     """
+    data_dict = request.get_json()
+    soft_ = SoftIstall()
+    info = soft_.soft_install(data_dict['name'],data_dict['type'],data_dict["othe_parameter"])
+    return info
 
+
+class SoftIstall:
     def soft_install(self, name, type, othe_parameter):
+        """
+        :param name: The software name
+        :param type: Deployment type
+        :param othe_parameter: other parameters dict
+        :return:
+        """
         if type == 'docker':
             return docker(name)
         elif type == 'make':
