@@ -23,15 +23,18 @@ def soft_install():
 
 class SoftIstall:
     """
-    name: 软件名称,
-    type: 部署方式,
-    othe_parameter:{
-        config:{
-            configaddr: { 配置文件相对路径 },
-            configparameter:{"key":"value",{{ 配置文件参数 }:{ 设置值 }},
-            conftype: {  配置文件格式类型（ini、cfg、xml、config..） } },
-        }
-        hosts:[{"ip":"" ,"username":"" ,"password":"", "port":"" ,"timeout":""},{}..]
+    {
+    "name": "nginx",
+    "type": "yum",
+    "othe_parameter":{
+        "config":{
+            "configaddr": "",
+            "configparameter":{"key":"value"},
+            "conftype":""
+        },
+        "hosts":
+            [{"ip":"192.168.0.107" ,"username":"root" ,"password":"wangwuli", "port":"22" ,"timeout":"30"}]
+    }
     }
     """
 
