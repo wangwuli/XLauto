@@ -9,7 +9,7 @@ from . import deploy
 import sys
 from  multiprocessing import Pool
 from ..general.Connect_G import Sshmet
-from ..general.General import RETURNG
+from ..general.General import RETURNG, Result
 from flask import request
 
 
@@ -78,13 +78,13 @@ class Yum(conf_file_pro):
     def yum_install(self, name, othe_parameter):
         result=[]
         install_cmd = "yum install -y %s" % name
-        # pool = Pool(5)
-        # for i in range(len(othe_parameter["hosts"])):
-        #     result.append(pool.apply_async(func=self.ssh_d, args=(othe_parameter['hosts'][i],install_cmd)))
-        # pool.close()
-        # pool.join()
-        test = self.ssh_d(othe_parameter['hosts'][0],install_cmd)
-        return test
+        pool = Pool(5)
+        for i in range(len(othe_parameter["hosts"])):
+             result.append(pool.apply_async(func=self.ssh_d, args=(othe_parameter['hosts'][i],install_cmd)).get())
+        pool.close()
+        pool.join()
+        #test = self.ssh_d(othe_parameter['hosts'][0],install_cmd)
+        return Result.success_response(result)
 
 
     def ssh_d(self, host_listinfo, cmd):
