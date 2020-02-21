@@ -28,6 +28,7 @@ class DateEncoder(json.JSONEncoder):
 class Result():
     success_code = "0"
     fail_code = "1"
+    warning_code = "2"
 
     @staticmethod
     def success(data=[], msg="查询成功", count=-1):
@@ -45,12 +46,21 @@ class Result():
         return response
 
     @staticmethod
-    def fail(data=[], code="1", msg=""):
-        result = {"code": code, "msg": msg, "success": False, 'data': data}
+    def fail(data=[], msg="查询失败"):
+        result = {"code": Result.fail_code, "msg": msg, "success": False, 'data': data}
         return json.dumps(result, cls=DateEncoder)
 
     @staticmethod
-    def fail_response(data=[], code="1", msg="", status=200):
-        result = Result.fail(data, code, msg)
-        make_response(jsonify({'test': 'good'}, status))
+    def fail_response(data=[],  msg="", status=200):
+        result = Result.fail(data, Result.fail_code, msg)
+        return make_response(jsonify(result, status))
+
+    @staticmethod
+    def warning(data=[], msg=""):
+        result = {"code": Result.warning_code, "msg": msg, "success": False, 'data': data}
+        return json.dumps(result, cls=DateEncoder)
+
+    @staticmethod
+    def warning_response(data=[], msg="", status=200):
+        result = Result.fail(data, Result.warning_code, msg)
         return make_response(jsonify(result, status))

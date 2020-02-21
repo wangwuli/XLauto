@@ -27,7 +27,7 @@ def soft_install():
             "conftype":""
         },
         "hosts":
-            [{"ip":"192.168.0.107" ,"username":"root" ,"password":"wangwuli", "port":"22" ,"timeout":"30"}]
+            [{"ip":"192.168.0.107" ,"username":"root" ,"password":"123456", "port":"22" ,"timeout":"30"}]
     }
     }
     """
@@ -50,8 +50,6 @@ class SoftIstall:
         elif type == 'make':
             return make(name)
         elif type == 'yum':
-            if sys.platform.find("linux") == 0:
-                return RETURNG.return_false("windows服务器暂时不支持yum安装。")
             yum_ = Yum()
             yum_info = yum_.yum_install(name, othe_parameter)
             #yum.template()
@@ -90,7 +88,10 @@ class Yum(conf_file_pro):
     def ssh_d(self, host_listinfo, cmd):
         ssh = Sshmet()
         ssh.set_info(host_listinfo)
-        ssh_c = ssh.connect()
+        try:
+            ssh_c = ssh.connect()
+        except TimeoutError as e:
+            return RETURNG.return_false(e.strerror)
         info = ssh.execcmd(cmd)
         ssh_c.close()
         return info
