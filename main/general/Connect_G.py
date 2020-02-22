@@ -41,11 +41,15 @@ class Sshmet():
         # env = 'source .bash_profile;source /etc/profile;export LANG=en_US.UTF-8;'
         # stdin, stdout, stderr = self.ssh.exec_command('%s%s' % (env, cmd))
         stdin, stdout, stderr = self.ssh.exec_command(cmd)
-        # test_1 = stdout.read()
-        # test_2 = stderr.read()
+        stdout = str(stdout.read(),'utf-8')
+        stderr = str(stderr.read(),'utf-8')
         #result = ''.join(stdout.read() + stderr.read())
-        result = (stdout.read() + stderr.read()).strip()
-        return result
+        result = (stdout+ stderr).strip()
+        if stderr == '':
+            exec_info = True
+        else:
+            exec_info = False
+        return (exec_info, result)
 
     def execrealtime(self, shell_cmd, object_):
         """

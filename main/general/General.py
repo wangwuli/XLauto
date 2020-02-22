@@ -4,15 +4,19 @@ import json
 from flask import jsonify, make_response, Response
 
 
-class RETURNG:
-    def return_false(self, str):
+class ReturnG:
+    def return_false(str):
         return (False, str)
 
-    def return_true(self, str):
+    def return_true(str):
         return (True, str)
 
-    def if_ft(self, tuple_):
+    def if_ft(tuple_):
         return tuple_[0]
+
+    def get_value(tuple_):
+        return tuple_[1]
+
 
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -24,6 +28,7 @@ class DateEncoder(json.JSONEncoder):
             return str(obj)
         else:
             return json.JSONEncoder.default(self, obj)
+
 
 class Result():
     success_code = "0"
@@ -51,7 +56,7 @@ class Result():
         return json.dumps(result, cls=DateEncoder)
 
     @staticmethod
-    def fail_response(data=[],  msg="", status=200):
+    def fail_response(data=[], msg="", status=200):
         result = Result.fail(data, Result.fail_code, msg)
         return make_response(jsonify(result, status))
 

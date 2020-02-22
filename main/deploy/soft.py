@@ -5,11 +5,13 @@
 @time: 2019/12/5 10:06
 @desc:
 '''
+import os
+
 from . import deploy
 import sys
 from multiprocessing import Pool
 from ..general.Connect_G import Sshmet
-from ..general.General import RETURNG, Result
+from ..general.General import ReturnG, Result
 from flask import request
 
 
@@ -93,7 +95,7 @@ class Yum(conf_file_pro):
         try:
             ssh_c = ssh.connect()
         except TimeoutError as e:
-            return RETURNG.return_false(e.strerror)
+            return ReturnG.return_false(e.strerror)
         info = ssh.execcmd(cmd)
         ssh_c.close()
         return info
@@ -103,21 +105,55 @@ class Make(conf_file_pro):
     def install(self, name, othe_parameter):
         result = []
         pool = Pool(5)
-        for i in range(len(othe_parameter["hosts"])):
-            result.append(pool.apply_async(func=self.ssh_d, args=(
-            othe_parameter['hosts'], othe_parameter['install_conf'], othe_parameter['name'])).get())
-        pool.close()
-        pool.join()
-        # test = self.ssh_d(othe_parameter['hosts'][0],install_cmd)
-        return Result.success_response(result)
+        # for i in range(len(othe_parameter["hosts"])):
+        #     result.append(pool.apply_async(func=self.ssh_d, args=(
+        #     othe_parameter['hosts'], othe_parameter['install_conf'], name)).get())
+        # pool.close()
+        # pool.join()
+        test = self.ssh_d(othe_parameter['hosts'][0], othe_parameter['install_conf'], name)
+        return Result.success_response(test)
 
-    def ssh_d(self, install_conf_dict, cmd):
+    def ssh_d(self, hosts_dict, install_conf_dict, soft_name):
         ssh = Sshmet()
-        ssh.set_info(host_listinfo)
+        ssh.set_info(hosts_dict)
         try:
             ssh_c = ssh.connect()
         except TimeoutError as e:
-            return RETURNG.return_false(e.strerror)
-        info = ssh.execcmd(cmd)
+            return ReturnG.return_false(e.strerror)
+        unzip_info = self.get_unzipdir(ssh, install_conf_dict['file_path'],soft_name)
+        if ReturnG.if_ft(unzip_info):
+            cmd  = "cd %s && ./configure --with-http_stub_status_module --with-http_ssl_module && make && make install" %unzip_info[1]
+            info = ssh.execcmd(cmd)
+        else:
+            return ReturnG.return_false(unzip_info[1])
         ssh_c.close()
         return info
+
+    def get_unzipdir(self, ssh, file_path, name):
+        file_path_tuple = os.path.split(file_path)
+
+        file_type = ssh.execcmd("file --mime-type %s" % file_path)[1]
+
+        if file_type.find("No such file or directory") != -1:
+            return ReturnG.return_false('安装文件不存在')
+        elif file_type.find("gzip") != -1:
+            new_file_path = "%s/%s.tar" %(file_path_tuple[0],name)
+            cmd = "gunzip %s -c >  %s" % (file_path, new_file_path)
+            file_path = new_file_path
+        elif file_type.find("tar") != -1:
+            new_file_path = "%s/%s" % (file_path_tuple[0], name)
+            cmd = "mkdir {new_file_path} ; tar -xvf {file_path} -C {new_file_path} --strip-components 1".format(file_path=file_path, new_file_path=new_file_path)
+            file_path = new_file_path
+        elif file_type.find("directory") != -1:
+            return ReturnG.return_true(file_path)
+        else:
+            return ReturnG.return_false("解压失败")
+
+        exe_info = ssh.execcmd(cmd)
+
+        if not ReturnG.if_ft(exe_info):
+            exe_info_text = ReturnG.get_value(exe_info)
+            if exe_info_text.find("command not found") != -1:
+                return ReturnG.return_false(exe_info)
+
+        return self.get_unzipdir(ssh, file_path, name)
