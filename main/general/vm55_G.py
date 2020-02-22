@@ -109,10 +109,9 @@ class NewVmClass():
 
 test=NewVmClass()
 
-test.connect(host='192.18.254.10',user='root',pwd='Actech@123')
-#test.connect(host='192.168.10.200',user='root',pwd='cbh@qq.com123')
+test.connect(host='192.168.0.127',user='root',pwd='123456')
 
-# vm = test.get_me_vm_obj('102.31 建行聚合付A')
+# vm = test.get_me_vm_obj('test_vm_name')
 # vm.PowerOff()
 #vm.PowerOn()
 

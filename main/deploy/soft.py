@@ -7,7 +7,7 @@
 '''
 from . import deploy
 import sys
-from  multiprocessing import Pool
+from multiprocessing import Pool
 from ..general.Connect_G import Sshmet
 from ..general.General import RETURNG, Result
 from flask import request
@@ -33,7 +33,7 @@ def soft_install():
     """
     data_dict = request.get_json()
     soft_ = SoftIstall()
-    info = soft_.soft_install(data_dict['name'],data_dict['type'],data_dict["othe_parameter"])
+    info = soft_.soft_install(data_dict['name'], data_dict['type'], data_dict["othe_parameter"])
     return info
 
 
@@ -48,11 +48,14 @@ class SoftIstall:
         if type == 'docker':
             return docker(name)
         elif type == 'make':
-            return make(name)
+            make = Make()
+            make_info = make.install(name, othe_parameter)
+            # yum.template()
+            return make_info
         elif type == 'yum':
             yum_ = Yum()
-            yum_info = yum_.yum_install(name, othe_parameter)
-            #yum.template()
+            yum_info = yum_.install(name, othe_parameter)
+            # yum.template()
             return yum_info
 
 
@@ -73,17 +76,16 @@ class docker(conf_file_pro):
 
 
 class Yum(conf_file_pro):
-    def yum_install(self, name, othe_parameter):
-        result=[]
+    def install(self, name, othe_parameter):
+        result = []
         install_cmd = "yum install -y %s" % name
         pool = Pool(5)
         for i in range(len(othe_parameter["hosts"])):
-             result.append(pool.apply_async(func=self.ssh_d, args=(othe_parameter['hosts'][i],install_cmd)).get())
+            result.append(pool.apply_async(func=self.ssh_d, args=(othe_parameter['hosts'][i], install_cmd)).get())
         pool.close()
         pool.join()
-        #test = self.ssh_d(othe_parameter['hosts'][0],install_cmd)
+        # test = self.ssh_d(othe_parameter['hosts'][0],install_cmd)
         return Result.success_response(result)
-
 
     def ssh_d(self, host_listinfo, cmd):
         ssh = Sshmet()
@@ -97,7 +99,25 @@ class Yum(conf_file_pro):
         return info
 
 
+class Make(conf_file_pro):
+    def install(self, name, othe_parameter):
+        result = []
+        pool = Pool(5)
+        for i in range(len(othe_parameter["hosts"])):
+            result.append(pool.apply_async(func=self.ssh_d, args=(
+            othe_parameter['hosts'], othe_parameter['install_conf'], othe_parameter['name'])).get())
+        pool.close()
+        pool.join()
+        # test = self.ssh_d(othe_parameter['hosts'][0],install_cmd)
+        return Result.success_response(result)
 
-class make(conf_file_pro):
-    def __init__(self, name):
-        print("make")
+    def ssh_d(self, install_conf_dict, cmd):
+        ssh = Sshmet()
+        ssh.set_info(host_listinfo)
+        try:
+            ssh_c = ssh.connect()
+        except TimeoutError as e:
+            return RETURNG.return_false(e.strerror)
+        info = ssh.execcmd(cmd)
+        ssh_c.close()
+        return info
