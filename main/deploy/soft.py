@@ -21,15 +21,22 @@ def soft_install():
     example json:
     {
     "name": "nginx",
-    "type": "yum",
+    "type": "make",
     "othe_parameter":{
-        "config":{
-            "configaddr": "",
-            "configparameter":{"key":"value"},
-            "conftype":""
-        },
-        "hosts":
-            [{"ip":"192.168.0.107" ,"username":"root" ,"password":"123456", "port":"22" ,"timeout":"30"}]
+	"configpath":{
+		"config": "",
+		"configparameter":{"key":"value"},
+		"conftype": ""
+	},
+	"install_conf":{
+		"file_path":"/root/nginx-1.17.8.tar.gz",
+		"intsall_parameters":{
+			"make_parameters": "--with-http_stub_status_module --with-http_ssl_module"
+			},
+		"install_shell":[]
+	},
+	"hosts":
+		[{"ip":"192.168.0.107" ,"username":"root" ,"password":"wangwuli", "port":"22" ,"timeout":"30"}]
     }
     }
     """
@@ -105,13 +112,13 @@ class Make(conf_file_pro):
     def install(self, name, othe_parameter):
         result = []
         pool = Pool(5)
-        # for i in range(len(othe_parameter["hosts"])):
-        #     result.append(pool.apply_async(func=self.ssh_d, args=(
-        #     othe_parameter['hosts'], othe_parameter['install_conf'], name)).get())
-        # pool.close()
-        # pool.join()
-        test = self.ssh_d(othe_parameter['hosts'][0], othe_parameter['install_conf'], name)
-        return Result.success_response(test)
+        for i in range(len(othe_parameter["hosts"])):
+            result.append(pool.apply_async(func=self.ssh_d, args=(
+            othe_parameter['hosts'][i], othe_parameter['install_conf'], name)).get())
+        pool.close()
+        pool.join()
+        #test = self.ssh_d(othe_parameter['hosts'][0], othe_parameter['install_conf'], name)
+        return Result.success_response(result)
 
     def ssh_d(self, hosts_dict, install_conf_dict, soft_name):
         ssh = Sshmet()
