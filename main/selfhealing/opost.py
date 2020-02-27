@@ -8,3 +8,7 @@ def opost():
 
 
     return data_dict
+
+
+class Opost():
+    pass

@@ -107,3 +107,43 @@ class SCPMet(Sshmet):
             else:
                 all_files.append(filename)
         return all_files
+
+
+
+class Ip_c():
+    def __init__(self):
+        self.succeed = True
+
+    def string_formatting(self, ipstr):
+        """
+        解析连续IP字符，返回数组
+        :param ipstr: 192.168.0.1-192,192.168.0.199
+        :return:
+        """
+        ip_addrs = []
+        for ipstr_one in ipstr.split(','):
+            if ipstr_one.find('-') != -1:
+                basket_dict_one_separation = ipstr_one.split('-')
+                if self.if_ipaddr(basket_dict_one_separation[0]) and len(str(basket_dict_one_separation[1]) < 4):
+                    start_number = basket_dict_one_separation[0].split(".")[-1]
+                    start_number_s = basket_dict_one_separation[0].rstrip(start_number)
+                    for number_one in range(int(start_number) , int(basket_dict_one_separation[1]) + 1):
+                        ip_addrs.append(start_number_s + str(number_one))
+            else:
+                if self.if_ipaddr(ipstr_one):
+                    ip_addrs.append(ipstr_one)
+        return ip_addrs
+
+    def if_ipaddr(self, ip):
+        """
+        判断字符串是否为IP
+        :param ipstr: 192.168.0.1
+        :return:
+        """
+        ip_split = ip.split('.')
+        if not len(ip_split) == 4:
+            self.succeed = False
+        for ip_split_one in ip_split:
+            if not 0 < int(ip_split_one) < 255:
+                self.succeed = False
+        return ip
