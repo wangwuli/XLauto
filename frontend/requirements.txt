@@ -1,0 +1,4 @@
+#node-v13.10.1
+npm i element-ui -S
+#in frontend
+npm i
