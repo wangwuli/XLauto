@@ -12,7 +12,7 @@ def home_menu_query():
                 "id": 0,
                 "name": "aa",
                 "icon": "el-icon-message",
-                "icon": "菜单一"
+                "alias": "菜单一"
             }
         },
         {
@@ -20,7 +20,7 @@ def home_menu_query():
                 "id": 1,
                 "name": "systemManage",
                 "icon": "el-icon-message",
-                "alias": "菜单二"
+                "alias": "菜单二2222222222222"
             },
 
             "childs": [

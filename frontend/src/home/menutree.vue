@@ -37,7 +37,7 @@
 </script>
 
 
-<style scoped>
+<style>
   /* 水平样式 */
  .el-menu--horizontal>div>.el-submenu {
     float: left;
@@ -51,13 +51,13 @@
     border-bottom: 2px solid transparent;
     color: #909399;
 }
-/*!* 解决下图1 下拉三角图标 *!*/
-/*.el-menu--horizontal>div>.el-submenu .el-submenu__icon-arrow {*/
-/*    position: static;*/
-/*    vertical-align: middle;*/
-/*    margin-left: 8px;*/
-/*    margin-top: -3px;*/
-/*}*/
+/* 解决下图1 下拉三角图标 */
+.el-menu--horizontal>div>.el-submenu .el-submenu__icon-arrow {
+    position: static;
+    vertical-align: middle;
+    margin-left: 8px;
+    margin-top: -3px;
+}
 /* 解决下图2 无下拉菜单时 不对齐问题 */
 .el-menu--horizontal>div>.el-submenu .el-submenu__title {
     height: 60px;
