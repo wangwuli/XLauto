@@ -6,4 +6,4 @@ from flask import Blueprint
 
 services = Blueprint('services', __name__)
 
-from main.services import logio
+from main.services import logio, home
