@@ -1,11 +1,11 @@
 <template>
-<h2>Essential Links</h2>
+  <h2>Essential Links</h2>
 </template>
 
 <script>
-    export default {
-        name: "TEST"
-    }
+export default {
+  name: 'TEST'
+}
 </script>
 
 <style scoped>

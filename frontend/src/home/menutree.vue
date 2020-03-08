@@ -26,21 +26,18 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
-  export default {
-    name: 'NavMenu',
-    props: ['navMenus'],
-    data() {
-      return {}
-    },
-    methods: {
-      ...mapActions({
-      handleOpen2:'editableTabs'
+import { mapActions } from 'vuex'
+export default {
+  name: 'NavMenu',
+  props: ['navMenus'],
+  data () { return {} },
+  methods: {
+    ...mapActions({
+      handleOpen2: 'editableTabs'
     })
-    }
   }
+}
 </script>
-
 
 <style>
   /* 水平样式 */

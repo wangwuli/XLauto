@@ -17,57 +17,56 @@
 export default {
   name: '',
   components: {},
-  data() {
+  data () {
     return {
 
-    };
+    }
   },
   computed: {
     // 监听vuex保存的数据
-    editableTabs:{
-       get(){
-          return this.$store.state.tabsPage;
-          debugger
-       },
-       set(val){
-          this.$store.state.tabsPage = val;
-       }
+    editableTabs: {
+      get () {
+        return this.$store.state.tabsPage
+      },
+      set (val) {
+        this.$store.state.tabsPage = val
+      }
     },
-    editableTabsValue:{
-       get(){
-          return this.$store.state.TabsValue;
-       },
-       set(val){
-          this.$store.state.TabsValue = val;
-       }
+    editableTabsValue: {
+      get () {
+        return this.$store.state.TabsValue
+      },
+      set (val) {
+        this.$store.state.TabsValue = val
+      }
     }
   },
   methods: {
-      removeTab(targetName) {
-        let tabs = this.editableTabs;
-        let activeName = this.editableTabsValue;
-        if (activeName === targetName) {
-          tabs.forEach((tab, index) => {
-            if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1];
-              console.log(nextTab);
-              if (nextTab) {
-                activeName = nextTab.name;
-              }
+    removeTab (targetName) {
+      var tabs = this.editableTabs
+      var activeName = this.editableTabsValue
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            var nextTab = tabs[index + 1] || tabs[index - 1]
+            console.log(nextTab)
+            if (nextTab) {
+              activeName = nextTab.name
             }
-          });
-        }
-        this.editableTabsValue = activeName;
-        this.editableTabs = tabs.filter(tab => tab.name !== targetName);
-        // 删除时跳转不在停留被删除页
-        this.$router.push({ name: activeName });
-      },
-      tabClick(event) {
-        //写一个点击tabs跳转
-        this.$router.push({ name: event.name });
-      },
+          }
+        })
+      }
+      this.editableTabsValue = activeName
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName)
+      // 删除时跳转不在停留被删除页
+      this.$router.push({ name: activeName })
+    },
+    tabClick (event) {
+      // 写一个点击tabs跳转
+      this.$router.push({ name: event.name })
     }
-};
+  }
+}
 </script>
 
 <!--// thanks https://www.jianshu.com/p/c0e3028ae378-->

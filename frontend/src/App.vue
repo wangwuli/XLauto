@@ -25,43 +25,43 @@
 </template>
 
 <script>
-  import NavMenu from "./home/menutree";
-  import * as Request from "./general/request.js";
-  import mainTabs from "./home/tabs"
+import NavMenu from '@/home/menutree'
+import * as Request from './general/request.js'
+import mainTabs from '@/home/tabs'
 
-  export default {
-    created() {
-      this.homemenuQuery()
-    },
+export default {
+  created () {
+    this.homemenuQuery()
+  },
 
-    components: {
-      NavMenu: NavMenu,
-      mainTabs: mainTabs
-    },
-    data() {
-      return {
-        activeIndex: '主页',
-        menuData: [],
-        editableTabsValue: '2',
-        editableTabs: [],
-        tabIndex: 2
-      }
-    },
-    methods: {
-      async homemenuQuery() {
-        const response = await Request.GET('/home/menu_query')
-        if (response && response.data) {
-          var data = response.data
-          if (data.success) {
-            this.$message.success(data.msg);
-            this.menuData = data.data
-          } else {
-            this.$message.error(data.msg);
-          }
+  components: {
+    NavMenu: NavMenu,
+    mainTabs: mainTabs
+  },
+  data () {
+    return {
+      activeIndex: '主页',
+      menuData: [],
+      editableTabsValue: '2',
+      editableTabs: [],
+      tabIndex: 2
+    }
+  },
+  methods: {
+    async homemenuQuery () {
+      const response = await Request.GET('/home/menu_query')
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+          this.menuData = data.data
+        } else {
+          this.$message.error(data.msg)
         }
       }
     }
   }
+}
 </script>
 
 <style>
