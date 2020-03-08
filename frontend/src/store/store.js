@@ -64,3 +64,5 @@ export default new Vuex.Store({
     }
   }
 });
+
+// thanks https://www.jianshu.com/p/c0e3028ae378
