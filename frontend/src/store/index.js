@@ -11,7 +11,6 @@ export default new Vuex.Store({
   mutations: {
     editableTabs: (state, obj) => {
       obj = obj.entity
-      debugger
       // 浅拷贝 store.tabsPage
       var arr = Array.from(state.tabsPage)
       // 判断数组内是否为空

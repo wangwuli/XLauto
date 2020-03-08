@@ -1,27 +1,22 @@
 <template>
   <el-container>
-    <el-header>
-      <div>
-        <el-menu
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b"
-          :default-active="activeIndex"
-          router
-          mode="horizontal"
-        >
-          <NavMenu :navMenus="menuData" style="width:800px;overflow-x:auto;"></NavMenu>
-        </el-menu>
-
-      </div>
-    </el-header>
-
-    <el-main>
-      <mainTabs></mainTabs> <!-- 我是tabs组件 -->
-    </el-main>
-
+    <el-header style="padding-right: 0px;padding-left: 0px;">
+    <el-menu
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+      :default-active="activeIndex"
+      router
+      mode="horizontal"
+      width="100%"
+    >
+      <NavMenu :navMenus="menuData" style="width:800px;overflow-x:auto;"></NavMenu>
+    </el-menu>
+  </el-header>
+  <el-main style="padding-right: 0px;padding-left: 0px;">
+    <mainTabs></mainTabs> <!-- 我是tabs组件 -->
+  </el-main>
   </el-container>
-
 </template>
 
 <script>
