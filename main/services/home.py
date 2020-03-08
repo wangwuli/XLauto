@@ -10,29 +10,38 @@ def home_menu_query():
         {
             "entity": {
                 "id": 0,
-                "name": "aa",
-                "icon": "el-icon-message",
-                "alias": "菜单一"
+                "name": "home",
+                "icon": "el-icon-s-home",
+                "title": "主页"
             }
         },
         {
             "entity": {
                 "id": 1,
-                "name": "systemManage",
-                "icon": "el-icon-message",
-                "alias": "菜单二2222222222222"
+                "name": "instrument",
+                "icon": "el-icon-s-cooperation",
+                "title": "工具"
             },
 
             "childs": [
                 {
                     "entity": {
                         "id": 3,
-                        "name": "authManage",
-                        "icon": "el-icon-loading",
-                        "alias": "权限管理",
-                        "value": {"path": "/hello"}
+                        "name": "network",
+                        "icon": "el-icon-place",
+                        "title": "网络",
+                        "path": "/network"
                     }
                 },
+                {
+                    "entity": {
+                        "id": 2,
+                        "name": "test",
+                        "icon": "el-icon-place",
+                        "title": "网络2",
+                        "path": "/test"
+                    }
+                }
             ]
         }
     ]

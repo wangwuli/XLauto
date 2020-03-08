@@ -4,10 +4,10 @@
     <template v-for="navMenu in navMenus">
         <!-- 最后一级菜单 -->
       <el-menu-item v-if="!navMenu.childs&&navMenu.entity"
-                    :key="navMenu.entity.id" :data="navMenu" :index="navMenu.entity.name"
-                   >
+                    :key="navMenu.entity.id" :data="navMenu" :index="navMenu.entity.name" @click="handleOpen2(navMenu)"
+      >
         <i :class="navMenu.entity.icon"></i>
-        <span slot="title">{{navMenu.entity.alias}}</span>
+        <span slot="title">{{navMenu.entity.title}}</span>
       </el-menu-item>
 
       <!-- 此菜单下还有子菜单 -->
@@ -15,7 +15,7 @@
                   :key="navMenu.entity.id" :data="navMenu" :index="navMenu.entity.name">
         <template slot="title">
           <i :class="navMenu.entity.icon"></i>
-          <span> {{navMenu.entity.alias}}</span>
+          <span> {{navMenu.entity.title}}</span>
         </template>
         <!-- 递归 -->
         <NavMenu :navMenus="navMenu.childs"></NavMenu>
@@ -26,13 +26,18 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
   export default {
     name: 'NavMenu',
     props: ['navMenus'],
     data() {
       return {}
     },
-    methods: {}
+    methods: {
+      ...mapActions({
+      handleOpen2:'editableTabs'
+    })
+    }
   }
 </script>
 
