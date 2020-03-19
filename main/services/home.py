@@ -38,7 +38,7 @@ def home_menu_query():
                         "id": 2,
                         "name": "test",
                         "icon": "el-icon-place",
-                        "title": "网络2",
+                        "title": "主机",
                         "path": "/test"
                     }
                 }

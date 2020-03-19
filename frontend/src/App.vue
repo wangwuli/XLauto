@@ -16,6 +16,9 @@
   <el-main style="padding-right: 0px;padding-left: 0px;">
     <mainTabs></mainTabs> <!-- 我是tabs组件 -->
   </el-main>
+  <el-aside>
+    <upperbutton />
+  </el-aside>
   </el-container>
 </template>
 
@@ -23,6 +26,8 @@
 import NavMenu from '@/home/menutree'
 import * as Request from './general/request.js'
 import mainTabs from '@/home/tabs'
+// import allDrawer from '@/home/alldrawer'
+import upperbutton from '@/home/upperbutton'
 
 export default {
   created () {
@@ -31,7 +36,8 @@ export default {
 
   components: {
     NavMenu: NavMenu,
-    mainTabs: mainTabs
+    mainTabs: mainTabs,
+    upperbutton: upperbutton
   },
   data () {
     return {
