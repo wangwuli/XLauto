@@ -20,7 +20,7 @@
       <el-input
         :rows="textarea_rows"
         type="textarea"
-        placeholder="请输入内容"
+        placeholder="未显示内容"
         v-model="happened_text">
       </el-input>
     </el-drawer>

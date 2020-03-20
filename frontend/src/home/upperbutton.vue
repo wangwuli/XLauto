@@ -53,6 +53,7 @@ export default {
       return (() => {
         // debugger
         that.left = window.innerWidth - 15
+        that.top = Math.floor(window.innerHeight / 2)
       })()
     }
     // this.bindScrollEvent()
