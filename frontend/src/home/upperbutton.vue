@@ -48,6 +48,13 @@ export default {
     this.top = (this.clientH / 2 - this.itemHeight / 2)
   },
   mounted () {
+    const that = this
+    window.onresize = () => {
+      return (() => {
+        // debugger
+        that.left = window.innerWidth - 15
+      })()
+    }
     // this.bindScrollEvent()
   },
   beforeDestroy () {

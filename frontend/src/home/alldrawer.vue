@@ -12,11 +12,17 @@
 <!--    </el-button>-->
 
     <el-drawer
-      title="我是标题"
+      title="What happened?"
       :visible.sync="drawer"
       :direction="direction"
       :before-close="handleClose">
-      <span>我来啦!</span>
+<!--      <span>我来啦!</span>-->
+      <el-input
+        :rows="textarea_rows"
+        type="textarea"
+        placeholder="请输入内容"
+        v-model="happened_text">
+      </el-input>
     </el-drawer>
 <!--  </el-row>-->
 </template>
@@ -24,10 +30,27 @@
 <script>
 export default {
   name: 'alldrawer',
+  mounted () {
+    const that = this
+    window.onresize = () => {
+      return (() => {
+        // debugger
+        that.screenheight = window.innerHeight
+        if (that.screenheight > 150) {
+          that.textarea_rows = Math.floor((that.screenheight - 80) / 24)
+        } else {
+          that.textarea_rows = 2
+        }
+      })()
+    }
+  },
   data () {
     return {
-      drawer: true,
-      direction: 'rtl'
+      textarea_rows: Math.floor((window.innerHeight - 80) / 24),
+      screenheight: window.innerHeight,
+      drawer: false,
+      direction: 'rtl',
+      happened_text: ''
     }
   },
   methods: {
@@ -35,12 +58,19 @@ export default {
       this.drawer = value
     },
     handleClose (done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
+      done()
+      // this.$confirm('确认关闭？')
+      //   .then(_ => {
+      //     done()
+      //   })
+      //   .catch(_ => {})
     }
   }
 }
 </script>
+
+<style scoped>
+  /*.textarea >>> .el-textarea__inner {*/
+  /*  height: 100px; !important;*/
+  /*}*/
+</style>
