@@ -1,23 +1,34 @@
 <template>
-  <row>
-    <dev
-         ref="dragIcon"
-         class="dragIcon"
-         @touchstart.stop="handleTouchStart"
-         @touchmove.prevent.stop="handleTouchMove($event)"
-         @touchend.stop="handleTouchEnd"
-         :style="{left: left + 'px',top: top + 'px',width: itemWidth + 'px',height: itemHeight + 'px'}"
-         v-if="isShow">
-      <el-button type="info" @click="openlogDrawer" icon="el-icon-question" circle></el-button>
-    </dev>
-    <allDrawer ref="alldrawerref" ></allDrawer>
-  </row>
+  <el-row>
+    <div
+      ref="dragIcon"
+      class="dragIcon"
+      @touchstart.stop="loghandleTouchStart"
+      @touchmove.prevent.stop="loghandleTouchMove($event)"
+      @touchend.stop="loghandleTouchEnd"
+      :style="{left: left + 'px',top: top + 'px',width: itemWidth + 'px',height: itemHeight + 'px'}"
+      v-if="isShow">
+      <el-button type="info" @click="openlogDrawer" icon="el-icon-question" circle/>
+    </div>
+    <div
+      ref="host_dragIcon"
+      class="dragIcon"
+      @touchstart.stop="hosthandleTouchStart"
+      @touchmove.prevent.stop="hosthandleTouchMove($event)"
+      @touchend.stop="hosthandleTouchEnd"
+      :style="{left: host_left + 'px',top: host_top + 'px',width: itemWidth + 'px',height: itemHeight + 'px'}"
+      v-if="isShow">
+    <el-button type="info" @click="openlogDrawer" icon="el-icon-aim" circle/>
+  </div>
+  <allDrawer ref="alldrawerref"></allDrawer>
+  </el-row>
 </template>
 
 <script>
 import allDrawer from '@/home/alldrawer'
 
 export default {
+  name: 'upperbutton',
   components: {
     allDrawer: allDrawer
   },
@@ -33,6 +44,8 @@ export default {
   },
   data () {
     return {
+      host_left: 0,
+      host_top: 0,
       left: 0,
       top: 0,
       startToMove: false,
@@ -44,6 +57,8 @@ export default {
     }
   },
   created () {
+    this.host_left = 30
+    this.host_top = (this.clientH / 2 - this.itemHeight / 2)
     this.left = (this.clientW - this.itemWidth - 30)
     this.top = (this.clientH / 2 - this.itemHeight / 2)
   },
@@ -54,6 +69,8 @@ export default {
         // debugger
         that.left = window.innerWidth - 15
         that.top = Math.floor(window.innerHeight / 2)
+        that.host_left = -25
+        that.host_top = that.top
       })()
     }
     // this.bindScrollEvent()
@@ -69,11 +86,29 @@ export default {
         this.$refs.alldrawerref.open_close(true)
       })
     },
-    handleTouchStart () {
-      this.startToMove = true
+    loghandleTouchStart () {
+      this.handleTouchStart()
       this.$refs.dragIcon.style.transition = 'none'
     },
-    handleTouchMove (e) {
+    hosthandleTouchStart () {
+      this.handleTouchStart()
+      this.$refs.host_dragIcon.style.transition = 'none'
+    },
+    handleTouchStart () {
+      this.startToMove = true
+    },
+    hosthandleTouchMove (e) {
+      const clientX = e.targetTouches[0].clientX // 手指相对视口的x
+      const clientY = e.targetTouches[0].clientY // 手指相对视口的y
+      const isInScreen = clientX <= this.clientW && clientX >= 0 && clientY <= this.clientH && clientY >= 0
+      if (this.startToMove && e.targetTouches.length === 1) {
+        if (isInScreen) {
+          this.host_left = clientX - this.itemWidth / 2
+          this.host_top = clientY - this.itemHeight / 2
+        }
+      }
+    },
+    loghandleTouchMove (e) {
       const clientX = e.targetTouches[0].clientX // 手指相对视口的x
       const clientY = e.targetTouches[0].clientY // 手指相对视口的y
       const isInScreen = clientX <= this.clientW && clientX >= 0 && clientY <= this.clientH && clientY >= 0
@@ -84,7 +119,7 @@ export default {
         }
       }
     },
-    handleTouchEnd () {
+    loghandleTouchEnd () {
       // if (this.left < (this.clientW / 2)) {
       if (this.left > -20 && this.left < 0) {
         this.left = -20 // 不让贴边 所以设置30没设置0
@@ -96,6 +131,19 @@ export default {
         // this.left = document.documentElement.clientWidth - 25
       }
       this.$refs.dragIcon.style.transition = 'all .3s'
+    },
+    hosthandleTouchEnd () {
+      // if (this.left < (this.clientW / 2)) {
+      if (this.host_left > -20 && this.host_left < 0) {
+        this.host_left = -20 // 不让贴边 所以设置30没设置0
+        this.handleIconY()
+      } else if (this.host_left < this.clientW && this.host_left > this.clientW - 40) {
+        // this.left = this.clientW - this.itemWidth - 30 // 不让贴边 所以减30
+        this.host_left = this.clientW - 20
+        this.handleIconY()
+        // this.left = document.documentElement.clientWidth - 25
+      }
+      this.$refs.host_dragIcon.style.transition = 'all .3s'
     },
     handleIconY () {
       if (this.top < 0) {
@@ -136,7 +184,7 @@ export default {
     height: 30px;
     border-radius: 50%;
     /*background-color: #909399;*/
-    line-height: 40px;
+    /*line-height: 40px;*/
     text-align: center;
     color: #fff;
   }
