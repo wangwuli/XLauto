@@ -10,6 +10,7 @@
       v-if="isShow">
       <el-button type="info" @click="openlogDrawer" icon="el-icon-question" circle/>
     </div>
+    <allDrawer ref="alldrawerref"></allDrawer>
     <div
       ref="host_dragIcon"
       class="dragIcon"
@@ -18,19 +19,21 @@
       @touchend.stop="hosthandleTouchEnd"
       :style="{left: host_left + 'px',top: host_top + 'px',width: itemWidth + 'px',height: itemHeight + 'px'}"
       v-if="isShow">
-    <el-button type="info" @click="openlogDrawer" icon="el-icon-aim" circle/>
+    <el-button type="info" @click="openhostDrawer" icon="el-icon-aim" circle/>
   </div>
-  <allDrawer ref="alldrawerref"></allDrawer>
+  <hostsList ref="hostlistref"></hostsList>
   </el-row>
 </template>
 
 <script>
 import allDrawer from '@/home/alldrawer'
+import hostsList from '@/home/hostslist'
 
 export default {
   name: 'upperbutton',
   components: {
-    allDrawer: allDrawer
+    allDrawer: allDrawer,
+    hostsList: hostsList
   },
   props: {
     itemWidth: {
@@ -80,9 +83,13 @@ export default {
     this.removeScrollEvent()
   },
   methods: {
+    openhostDrawer () {
+      this.$nextTick(() => {
+        this.$refs.hostlistref.open_close(true)
+      })
+    },
     openlogDrawer () {
       this.$nextTick(() => {
-        console.log(this.$refs.alldrawerref)
         this.$refs.alldrawerref.open_close(true)
       })
     },

@@ -10,14 +10,14 @@
       mode="horizontal"
       width="100%"
     >
-      <NavMenu :navMenus="menuData" style="width:800px;overflow-x:auto;"></NavMenu>
+      <NavMenu :navMenus="menuData" style="width:800px;overflow-x:auto;"></NavMenu> <!-- 我是菜单栏组件 -->
     </el-menu>
   </el-header>
   <el-main style="padding-right: 0px;padding-left: 0px;">
-    <mainTabs></mainTabs> <!-- 我是tabs组件 -->
+    <mainTabs /> <!-- 我是tabs组件 -->
   </el-main>
   <el-aside>
-    <upperbutton />
+    <upperbutton /> <!-- 我是悬浮按钮组件 -->
   </el-aside>
   </el-container>
 </template>
@@ -26,7 +26,6 @@
 import NavMenu from '@/home/menutree'
 import * as Request from './general/request.js'
 import mainTabs from '@/home/tabs'
-// import allDrawer from '@/home/alldrawer'
 import upperbutton from '@/home/upperbutton'
 
 export default {
@@ -42,10 +41,7 @@ export default {
   data () {
     return {
       activeIndex: '主页',
-      menuData: [],
-      editableTabsValue: '2',
-      editableTabs: [],
-      tabIndex: 2
+      menuData: []
     }
   },
   methods: {

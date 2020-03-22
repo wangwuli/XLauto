@@ -5,7 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    tabsPage: [],
+    tabsPage: [{
+      title: '主页',
+      name: 'home'
+    }],
     TabsValue: ''
   },
   mutations: {

@@ -15,11 +15,10 @@
 
 <script>
 export default {
-  name: '',
+  name: 'tabs',
   components: {},
   data () {
     return {
-
     }
   },
   computed: {
@@ -61,8 +60,8 @@ export default {
       // 删除时跳转不在停留被删除页
       this.$router.push({ name: activeName })
     },
+    // 已打开tabs切换事件
     tabClick (event) {
-      // 写一个点击tabs跳转
       this.$router.push({ name: event.name })
     }
   }
