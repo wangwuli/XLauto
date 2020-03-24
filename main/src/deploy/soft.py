@@ -8,10 +8,9 @@
 import os
 
 from . import deploy
-import sys
 from multiprocessing import Pool
-from ..general.Connect_G import Sshmet
-from ..general.General import ReturnG, Result
+from src.general.Connect_G import Sshmet
+from src.general.General import ReturnG, Result
 from flask import request
 
 

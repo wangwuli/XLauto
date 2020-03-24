@@ -1,7 +1,7 @@
-from main.selfhealing import selfhealing
-from main.services import services
-from main.deploy import deploy
-from main.independent import independent
+from src.selfhealing import selfhealing
+from src.services import services
+from src.deploy import deploy
+from src.independent import independent
 
 
 def init_app(app):

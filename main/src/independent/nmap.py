@@ -9,8 +9,8 @@ from urllib import request
 from . import independent
 import telnetlib
 
-from ..general.Connect_G import Ip_c
-from ..general.General import Result
+from src.general.Connect_G import Ip_c
+from src.general.General import Result
 
 
 @independent.route('/independent/nmap',methods=['GET'])

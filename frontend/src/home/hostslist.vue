@@ -1,79 +1,135 @@
 <template>
   <el-drawer
-  title="What happened?"
+  title="target!!!"
   :visible.sync="drawer"
   :direction="direction"
-  :before-close="handleClose">
+  :before-close="handleClose"
+  :style="{width: clientW + 'px'}">
+    <el-row>
+    <el-button icon="el-icon-d-arrow-right" circle style="float:right" @click="littleRight"></el-button>
+    <el-button icon="el-icon-d-arrow-left" circle style="float:left" @click="littleLeft"></el-button>
+    </el-row>
+    <el-form ref="hostFilterform" :model="host_filter_form" label-width="80px" size="mini" style="padding-left: 15px;padding-top: 15px"
+             :inline="true">
+      <el-form-item size="mini" label="选择项目">
+        <el-select v-model="host_filter_form.host_project" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item size="mini" label="选择类型">
+        <el-select v-model="host_filter_form.host_type" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item size="mini" label="主机IP">
+        <el-select v-model="host_filter_form.host_ip" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
   <el-table
+    size="mini"
     ref="multipleTable"
     :data="tableData"
     tooltip-effect="dark"
-    style="width: 100%"
+    style="width: 100%; height:50%"
     @selection-change="handleSelectionChange">
     <el-table-column
       type="selection"
       width="55">
     </el-table-column>
     <el-table-column
+      prop="ipaddr"
       label="日期"
       width="120">
-      <template slot-scope="scope">{{ scope.row.date }}</template>
     </el-table-column>
     <el-table-column
-      prop="name"
-      label="姓名"
+      prop="app_name"
+      label="应用名"
       width="120">
     </el-table-column>
     <el-table-column
-      prop="address"
-      label="地址"
+      prop="use_name"
+      label="用途"
       show-overflow-tooltip>
     </el-table-column>
   </el-table>
+  <el-pagination
+    :size="mini"
+    pager-count="3"
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page="currentPage4"
+    :page-sizes="[100, 200, 300, 400]"
+    :page-size="2"
+    layout="total, sizes, pager"
+    :small="true"
+    :total="400">
+  </el-pagination>
   </el-drawer>
 </template>
 
 <script>
+import * as Request from '@/general/request.js'
+
 export default {
   name: 'hostlist',
   data () {
     return {
+      clientW: document.documentElement.clientWidth,
+      host_filter_form: {
+        host_project: '',
+        host_type: '',
+        host_ip: ''
+      },
       drawer: false,
       direction: 'ltr',
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+      tableData: [],
+      multipleSelection: [],
+      value: '',
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
       }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        value: '选项2',
+        label: '双皮奶'
       }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        value: '选项3',
+        label: '蚵仔煎'
       }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        value: '选项4',
+        label: '龙须面'
       }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
-      multipleSelection: []
+        value: '选项5',
+        label: '北京烤鸭'
+      }]
     }
   },
-
+  created () {
+    this.hostslistQuery()
+  },
   methods: {
+    littleLeft () {
+      this.clientW -= this.clientW * 0.2
+    },
+    littleRight () {
+      this.clientW += this.clientW * 0.2
+    },
     open_close (value) {
       this.drawer = value
     },
@@ -91,6 +147,18 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    async hostslistQuery () {
+      const response = await Request.GET('/home/hosts_query')
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+          this.tableData = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     }
   }
 }

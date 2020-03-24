@@ -6,4 +6,4 @@ from flask import Blueprint
 
 independent = Blueprint('independent', __name__)
 
-from main.independent import nmap
+from src.independent import nmap

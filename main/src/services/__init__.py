@@ -4,6 +4,6 @@
 #     login.init_app(app)
 from flask import Blueprint
 
-deploy = Blueprint('deploy', __name__)
+services = Blueprint('services', __name__)
 
-from main.deploy import soft
+from src.services import logio, home

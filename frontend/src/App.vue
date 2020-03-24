@@ -10,7 +10,8 @@
       mode="horizontal"
       width="100%"
     >
-      <NavMenu :navMenus="menuData" style="width:800px;overflow-x:auto;"></NavMenu> <!-- 我是菜单栏组件 -->
+      <NavMenu :navMenus="menuData"  :style="{width: clientW + 'px'}"></NavMenu> <!-- 我是菜单栏组件 -->
+<!--      "width:50%;overflow-x:auto;"-->
     </el-menu>
   </el-header>
   <el-main style="padding-right: 0px;padding-left: 0px;">
@@ -41,7 +42,8 @@ export default {
   data () {
     return {
       activeIndex: '主页',
-      menuData: []
+      menuData: [],
+      clientW: document.documentElement.clientWidth
     }
   },
   methods: {

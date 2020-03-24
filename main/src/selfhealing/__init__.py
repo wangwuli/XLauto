@@ -6,4 +6,4 @@ from flask import Blueprint
 
 selfhealing = Blueprint('selfhealing', __name__)
 
-from main.selfhealing import opost
+from src.selfhealing import opost

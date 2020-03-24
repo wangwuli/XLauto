@@ -24,8 +24,6 @@ from flask_script import Manager
 config_name = os.environ.get('FLASK_CONFIG') or 'default'
 
 #
-# app = create_app(config_name)
-#
 # manager = Manager(app)
 
 if __name__ == '__main__':
