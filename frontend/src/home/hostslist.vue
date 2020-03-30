@@ -54,18 +54,18 @@
       width="55">
     </el-table-column>
     <el-table-column
-      prop="ipaddr"
-      label="日期"
+      prop="host_ip"
+      label="IP"
       width="120">
     </el-table-column>
     <el-table-column
-      prop="app_name"
-      label="应用名"
+      prop="type_name"
+      label="主机类"
       width="120">
     </el-table-column>
     <el-table-column
-      prop="use_name"
-      label="用途"
+      prop="host_name"
+      label="主机名"
       show-overflow-tooltip>
     </el-table-column>
   </el-table>
