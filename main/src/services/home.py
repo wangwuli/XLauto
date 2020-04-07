@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from models.models import HostInstance, SysCode, db
+from main.models.models import HostInstance, SysCode, db
 from . import services
 from src.general.General import Result
 from src.general.Transform import model_to_dict
