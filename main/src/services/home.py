@@ -5,6 +5,7 @@ from src.general.General import Result
 from src.general.Transform import model_to_dict
 
 
+
 @services.route('/home/menu_query', methods=['GET'])
 def home_menu_query():
     data = [
