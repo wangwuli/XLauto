@@ -1,6 +1,5 @@
 # coding: utf-8
 from sqlalchemy import Column, DateTime, Integer, SmallInteger, String
-from sqlalchemy.schema import FetchedValue
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -16,7 +15,7 @@ class HostInstance(db.Model):
     host_name = db.Column(db.String(50))
     host_type = db.Column(db.String(50), nullable=False)
     host_project = db.Column(db.String(50))
-    is_remove = db.Column(db.Integer, server_default=db.FetchedValue(), info='1为删除')
+    is_remove = db.Column(db.Integer)
     comment = db.Column(db.String(50))
 
 
@@ -26,12 +25,12 @@ class Project(db.Model):
 
     project_id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(50))
-    project_code = db.Column(db.String(50), info='项目编码')
-    controller_ip = db.Column(db.String(50), info='项目区域子控制器')
-    order_id = db.Column(db.Integer, info='查询排序')
-    is_remove = db.Column(db.Integer, server_default=db.FetchedValue(), info='1为删除标记')
-    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    project_code = db.Column(db.String(50))
+    controller_ip = db.Column(db.String(50))
+    order_id = db.Column(db.Integer)
+    is_remove = db.Column(db.Integer)
+    create_time = db.Column(db.DateTime)
+    modify_time = db.Column(db.DateTime)
     comments = db.Column(db.String(500))
 
 
@@ -47,9 +46,9 @@ class ServerSoftware(db.Model):
     stop_soft_cmd = db.Column(db.String(50))
     restart_soft_cmd = db.Column(db.String(50))
     soft_log_path = db.Column(db.String(50))
-    is_remove = db.Column(db.Integer, server_default=db.FetchedValue(), info='1为删除')
-    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    is_remove = db.Column(db.Integer)
+    create_time = db.Column(db.DateTime)
+    modify_time = db.Column(db.DateTime)
     comments = db.Column(db.String(50))
 
 
@@ -70,10 +69,11 @@ class SysCode(db.Model):
 class SysMenu(db.Model):
     __tablename__ = 'sys_menu'
 
-    menu_id = db.Column(db.Integer, primary_key=True)
-    menu_pid = db.Column(db.Integer)
-    menu_name = db.Column(db.String(50))
-    menu_url = db.Column(db.String(50))
-    menu_icon = db.Column(db.String(50))
-    statu = db.Column(db.Integer, server_default=db.FetchedValue(), info='0为禁用')
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer)
+    title = db.Column(db.String(50))
+    name = db.Column(db.String(50))
+    path = db.Column(db.String(50))
+    icon = db.Column(db.String(50))
+    statu = db.Column(db.Integer)
     comments = db.Column(db.String(50))

@@ -1,72 +1,25 @@
 # -*- coding: utf-8 -*-
-from main.models.models import HostInstance, SysCode, db
+import copy
+
+from main.models.models import HostInstance, SysCode, db, SysMenu
 from . import services
 from src.general.General import Result
-from src.general.Transform import model_to_dict
-
+from src.general.Transform import model_to_dict, list_to_tree
 
 
 @services.route('/home/menu_query', methods=['GET'])
 def home_menu_query():
-    data = [
-        {
-            "entity": {
-                "id": 0,
-                "name": "home",
-                "icon": "el-icon-s-home",
-                "title": "主页"
-            }
-        },
-        {
-            "entity": {
-                "id": 1,
-                "name": "instrument",
-                "icon": "el-icon-s-cooperation",
-                "title": "工具"
-            },
 
-            "childs": [
-                {
-                    "entity": {
-                        "id": 3,
-                        "name": "network",
-                        "icon": "el-icon-place",
-                        "title": "网络",
-                        "path": "/network"
-                    }
-                },
-                {
-                    "entity": {
-                        "id": 2,
-                        "name": "test",
-                        "icon": "el-icon-place",
-                        "title": "主机",
-                        "path": "/test"
-                    }
-                }
-            ]
-        },
-        {
-            "entity": {
-                "id": 4,
-                "name": "deploy",
-                "icon": "el-icon-s-claim",
-                "title": "部署"
-            }
-        },
-        {
-            "entity": {
-                "id": 5,
-                "name": "info_record",
-                "icon": "el-icon-s-custom",
-                "title": "维护"
-            }
-        },
-    ]
+    sys_menu = db.session.query(SysMenu.id,SysMenu.parent_id,SysMenu.name,SysMenu.icon,SysMenu.title).all()
+
+    sys_menu_data = model_to_dict(sys_menu)
+
+    data = list_to_tree(sys_menu_data)
 
     return Result.success_response(data,'菜单加载成功')
 
 
+#主机列表查询
 @services.route('/home/hosts_query', methods=['GET'])
 def home_hosts_query():
 

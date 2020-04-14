@@ -3,19 +3,19 @@
 
     <template v-for="navMenu in navMenus">
         <!-- 最后一级菜单 -->
-      <el-menu-item v-if="!navMenu.childs&&navMenu.entity"
-                    :key="navMenu.entity.id" :data="navMenu" :index="navMenu.entity.name" @click="handleOpen2(navMenu)"
+      <el-menu-item v-if="!navMenu.childs"
+                    :key="navMenu.id" :data="navMenu" :index="navMenu.name" @click="handleOpen2(navMenu)"
       >
-        <i :class="navMenu.entity.icon"></i>
-        <span slot="title">{{navMenu.entity.title}}</span>
+        <i :class="navMenu.icon"></i>
+        <span slot="title">{{navMenu.title}}</span>
       </el-menu-item>
 
       <!-- 此菜单下还有子菜单 -->
-      <el-submenu v-if="navMenu.childs&&navMenu.entity"
-                  :key="navMenu.entity.id" :data="navMenu" :index="navMenu.entity.name">
+      <el-submenu v-if="navMenu.childs"
+                  :key="navMenu.id" :data="navMenu" :index="navMenu.name">
         <template slot="title">
-          <i :class="navMenu.entity.icon"></i>
-          <span> {{navMenu.entity.title}}</span>
+          <i :class="navMenu.icon"></i>
+          <span> {{navMenu.title}}</span>
         </template>
         <!-- 递归 -->
         <NavMenu :navMenus="navMenu.childs"></NavMenu>
