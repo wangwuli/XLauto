@@ -12,34 +12,28 @@
     <el-form ref="hostFilterform" :model="host_filter_form" label-width="80px" size="mini" style="padding-left: 15px;padding-top: 15px"
              :inline="true">
       <el-form-item size="mini" label="选择项目">
-        <el-select v-model="host_filter_form.host_project" placeholder="请选择" size="mini">
+        <el-select v-model="host_filter_form.host_project" placeholder="请选择" size="mini" style="width:130px">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            v-for="item in projectslist"
+            :key="item.project_id"
+            :label="item.project_name"
+            :value="item.project_id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item size="mini" label="选择类型">
-        <el-select v-model="host_filter_form.host_type" placeholder="请选择" size="mini">
+        <el-select v-model="host_filter_form.host_type" placeholder="请选择" size="mini" style="width:130px">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            v-for="item in hosttypelist"
+            :key="item.code_key"
+            :label="item.code_name"
+            :value="item.host_type">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item size="mini" label="主机IP">
-        <el-select v-model="host_filter_form.host_ip" placeholder="请选择" size="mini">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+        <el-input v-model="host_filter_form.host_ip" placeholder="请选择" style="width:130px"></el-input>
+        <el-button icon="el-icon-search" circle style="margin-left:30px;" @click="getnewHostsinfo"></el-button>
       </el-form-item>
     </el-form>
   <el-table
@@ -56,16 +50,19 @@
     <el-table-column
       prop="host_ip"
       label="IP"
-      width="120">
+      :fit="true"
+      show-overflow-tooltip>
     </el-table-column>
     <el-table-column
-      prop="type_name"
+      prop="host_type_text"
       label="主机类"
-      width="120">
+      :fit="true"
+      show-overflow-tooltip>
     </el-table-column>
     <el-table-column
       prop="host_name"
       label="主机名"
+      :fit="true"
       show-overflow-tooltip>
     </el-table-column>
   </el-table>
@@ -102,6 +99,8 @@ export default {
       tableData: [],
       multipleSelection: [],
       value: '',
+      hosttypelist: [],
+      projectslist: [],
       options: [{
         value: '选项1',
         label: '黄金糕'
@@ -122,8 +121,13 @@ export default {
   },
   created () {
     this.hostslistQuery()
+    this.hosttypeQuery()
+    this.projectsQuery()
   },
   methods: {
+    getnewHostsinfo () {
+      this.hostslistQuery()
+    },
     littleLeft () {
       this.clientW -= this.clientW * 0.2
     },
@@ -149,12 +153,36 @@ export default {
       this.multipleSelection = val
     },
     async hostslistQuery () {
-      const response = await Request.GET('/home/hosts_query')
+      const response = await Request.GET('/home/hosts_query', this.host_filter_form)
       if (response && response.data) {
         var data = response.data
         if (data.success) {
           this.$message.success(data.msg)
           this.tableData = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async hosttypeQuery () {
+      const response = await Request.GET('/general/code_query', { code_type: 'host_type' })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          // this.$message.success(data.msg)
+          this.hosttypelist = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async projectsQuery () {
+      const response = await Request.GET('/home/projects')
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          // this.$message.success(data.msg)
+          this.projectslist = data.data
         } else {
           this.$message.error(data.msg)
         }
