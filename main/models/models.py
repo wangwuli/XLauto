@@ -13,7 +13,7 @@ class HostInstance(db.Model):
     host_id = db.Column(db.Integer, primary_key=True)
     host_ip = db.Column(db.String(50), nullable=False)
     host_name = db.Column(db.String(50))
-    host_type = db.Column(db.String(50), nullable=False)
+    host_type_key = db.Column(db.String(50), nullable=False)
     host_project = db.Column(db.String(50))
     is_remove = db.Column(db.Integer)
     comment = db.Column(db.String(50))

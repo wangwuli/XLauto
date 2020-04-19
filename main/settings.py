@@ -29,4 +29,8 @@ SQLALCHEMY_POOL_SIZE = 5
 
 #控制在连接池达到最大值后可以创建的连接数，当这些额外的 连接回收到连接池后将会被断开和抛弃
 #SQLALCHEMY_MAX_OVERFLOW =
+
+SQLALCHEMY_BINDS = {
+    "xlauto_mysql" : SQLALCHEMY_DATABASE_URI
+}
 #————————————————————————————————————#

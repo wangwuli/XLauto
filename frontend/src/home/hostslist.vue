@@ -27,7 +27,7 @@
             v-for="item in hosttypelist"
             :key="item.code_key"
             :label="item.code_name"
-            :value="item.host_type">
+            :value="item.code_key">
           </el-option>
         </el-select>
       </el-form-item>
@@ -71,12 +71,13 @@
     pager-count="3"
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
-    :current-page="currentPage4"
     :page-sizes="[100, 200, 300, 400]"
-    :page-size="2"
+    :page-size="host_date_size"
+    :current-page="host_date_page"
     layout="total, sizes, pager"
     :small="true"
-    :total="400">
+    style="text-align: center"
+    :total="host_date_total">
   </el-pagination>
   </el-drawer>
 </template>
@@ -101,6 +102,9 @@ export default {
       value: '',
       hosttypelist: [],
       projectslist: [],
+      host_date_size: 20,
+      host_date_page: 1,
+      host_date_total: 0,
       options: [{
         value: '选项1',
         label: '黄金糕'
@@ -125,6 +129,14 @@ export default {
     this.projectsQuery()
   },
   methods: {
+    handleSizeChange (val) {
+      this.host_date_size = val
+      this.hostslistQuery()
+    },
+    handleCurrentChange (val) {
+      this.host_date_page = val
+      this.hostslistQuery()
+    },
     getnewHostsinfo () {
       this.hostslistQuery()
     },
@@ -153,12 +165,16 @@ export default {
       this.multipleSelection = val
     },
     async hostslistQuery () {
-      const response = await Request.GET('/home/hosts_query', this.host_filter_form)
+      var datas = JSON.parse(JSON.stringify(this.host_filter_form))
+      datas.size = this.host_date_size
+      datas.page = this.host_date_page
+      const response = await Request.GET('/home/hosts_query', datas)
       if (response && response.data) {
         var data = response.data
         if (data.success) {
           this.$message.success(data.msg)
           this.tableData = data.data
+          this.host_date_total = data.count
         } else {
           this.$message.error(data.msg)
         }

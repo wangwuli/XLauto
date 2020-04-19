@@ -19,12 +19,10 @@
 #     manager.run()
 
 from main import create_app
-import os
-from flask_script import Manager
-config_name = os.environ.get('FLASK_CONFIG') or 'default'
-
-#
-# manager = Manager(app)
+#import os
+#config_name = os.environ.get('FLASK_CONFIG') or 'default'
 
 if __name__ == '__main__':
-    create_app.run(debug=True)
+    from flask_script import Manager
+    manager = Manager(create_app())
+    manager.run()

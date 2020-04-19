@@ -6,10 +6,12 @@
 @desc:
 '''
 import pymysql
+from flask import app
+
 import settings
 
 
-def mysql_sql_exec(cmd, args):
+def mysql_sql_exec(cmd, args = []):
     conn = pymysql.Connection(host=settings.database_service_ip, database=settings.database_name,
                               user=settings.database_user, password=settings.database_pwd,
                               port=int(settings.database_service_port), charset='utf8')
