@@ -34,3 +34,5 @@ SQLALCHEMY_BINDS = {
     "xlauto_mysql" : SQLALCHEMY_DATABASE_URI
 }
 #————————————————————————————————————#
+
+PASS_KEY = 'xlauto'

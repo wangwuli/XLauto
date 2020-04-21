@@ -67,11 +67,11 @@
     </el-table-column>
   </el-table>
   <el-pagination
-    :size="mini"
-    pager-count="3"
+    size="mini"
+    :pager-count=5
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
-    :page-sizes="[100, 200, 300, 400]"
+    :page-sizes="host_page_sizes"
     :page-size="host_date_size"
     :current-page="host_date_page"
     layout="total, sizes, pager"
@@ -105,22 +105,7 @@ export default {
       host_date_size: 20,
       host_date_page: 1,
       host_date_total: 0,
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }]
+      host_page_sizes: [10, 20, 50, 100]
     }
   },
   created () {
@@ -175,6 +160,14 @@ export default {
           this.$message.success(data.msg)
           this.tableData = data.data
           this.host_date_total = data.count
+          if (this.host_date_total > 100) {
+            this.host_page_sizes = [
+              parseInt(this.host_date_total / 10),
+              parseInt(this.host_date_total / 5),
+              parseInt(this.host_date_total / 2),
+              parseInt(this.host_date_total)
+            ]
+          }
         } else {
           this.$message.error(data.msg)
         }

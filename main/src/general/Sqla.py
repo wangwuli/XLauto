@@ -70,6 +70,15 @@ class Sqla():
         except Exception as e:
             db.session.rollback()
             raise Exception("execute sql fail ,is rollback")
-
-
 #https://www.cnblogs.com/gongnanxiong/p/11743055.html
+    def sql_encryption(self, str):
+        sql = """
+        select HEX(AES_ENCRYPT(:str, 'key')) AS passwd;
+        """
+        return self.fetch_to_dict(sql,{'str':str, 'key': self.current_app.config['PASS_KEY']})[0]['passwd']
+
+    def sql_decrypt(self, unhex_str):
+        sql = """
+        select AES_DECRYPT(UNHEX(:str), :key) AS passwd;
+        """
+        return self.fetch_to_dict(sql,{'str':unhex_str, 'key': self.current_app.config['PASS_KEY']})[0]['passwd']

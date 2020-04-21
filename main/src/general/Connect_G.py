@@ -20,11 +20,11 @@ class Sshmet():
         self.timeout = 30
 
     def set_info(self, host_info_dict):
-        self.ip = host_info_dict["ip"]
-        self.username = host_info_dict["username"]
-        self.password = host_info_dict["password"]
-        self.port = host_info_dict["port"]
-        self.timeout = host_info_dict["timeout"] and host_info_dict["timeout"] or self.timeout
+        self.ip = host_info_dict["host_ip"]
+        self.username = host_info_dict["user_name"]
+        self.password = host_info_dict["user_pass"]
+        self.port = host_info_dict["host_port"]
+        self.timeout = host_info_dict.get("timeout") and host_info_dict["timeout"] or self.timeout
 
     def connect(self):
         self.ssh = paramiko.SSHClient()
@@ -45,11 +45,9 @@ class Sshmet():
         stderr = str(stderr.read(),'utf-8')
         #result = ''.join(stdout.read() + stderr.read())
         result = (stdout+ stderr).strip()
-        if stderr == '':
-            exec_info = True
-        else:
-            exec_info = False
-        return (exec_info, result)
+        if not stderr == '':
+            result = False
+        return result
 
     def execrealtime(self, shell_cmd, object_):
         """

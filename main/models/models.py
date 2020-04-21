@@ -13,10 +13,22 @@ class HostInstance(db.Model):
     host_id = db.Column(db.Integer, primary_key=True)
     host_ip = db.Column(db.String(50), nullable=False)
     host_name = db.Column(db.String(50))
+    host_port = db.Column(db.Integer)
     host_type_key = db.Column(db.String(50), nullable=False)
     host_project = db.Column(db.String(50))
     is_remove = db.Column(db.Integer)
     comment = db.Column(db.String(50))
+
+
+
+class HostUser(db.Model):
+    __tablename__ = 'host_users'
+
+    user_id = db.Column(db.Integer, primary_key=True)
+    host_id = db.Column(db.Integer, nullable=False)
+    user_name = db.Column(db.String(50), nullable=False)
+    user_pass = db.Column(db.String(50), nullable=False)
+    user_role = db.Column(db.String(50), nullable=False)
 
 
 

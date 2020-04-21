@@ -1,3 +1,4 @@
+from src.general.LinuxShell import ServerInfo
 from src.general.Sql_G import mysql_sql_exec
 from src.general.Sqla import Sqla
 from flask import current_app
@@ -8,16 +9,16 @@ def home_hosts_query_filter(parameter_dict):
     sql_fragment = ''
     sql_parameter = {}
     if parameter_dict['host_project'] != '':
-        sql_fragment += "AND a.host_project = %s "
-        sql_parameter.append(parameter_dict['host_project'])
+        sql_fragment += "AND a.host_project = :host_project "
+        sql_parameter['host_project'] = parameter_dict['host_project']
 
     if parameter_dict['host_type'] != '':
-        sql_fragment += "AND a.host_type_key = %s "
-        sql_parameter.append(parameter_dict['host_type'])
+        sql_fragment += "AND a.host_type_key = :host_type "
+        sql_parameter['host_type'] = parameter_dict['host_type']
 
     if parameter_dict['host_ip'] != '':
-        sql_fragment += "AND a.host_ip LIKE %s "
-        sql_parameter.append('%%%s%%' %parameter_dict['host_ip'])
+        sql_fragment += "AND a.host_ip LIKE :host_ip "
+        sql_parameter['host_ip'] = '%%%s%%' %parameter_dict['host_ip']
 
     sql_fragment += "LIMIT :start,:size "
     size = int(parameter_dict["size"])
@@ -47,3 +48,24 @@ def home_hosts_query_filter(parameter_dict):
 
 
     return (data, total['total'])
+
+
+def host_info_query(host_id):
+    sqla = Sqla(current_app)
+    sql = """
+    SELECT * FROM  host_instance a
+    LEFT JOIN host_users b ON b.host_id = a.host_id AND b.user_role = "root"
+    WHERE a.host_id = :host_id
+    """
+    host_user_info = sqla.fetch_to_dict(sql, {'host_id':host_id})
+    if host_user_info:
+        host_user_info = host_user_info[0]
+    host_user_info['user_pass'] = sqla.sql_decrypt(host_user_info['user_pass'])
+
+    info_obj = ServerInfo()
+    info_obj.set_info(host_user_info)
+    info_obj.connect()
+    data = {**info_obj.get_freeinfo(), **info_obj.get_updateinfo()}
+    info_obj.close()
+
+    return data
