@@ -47,8 +47,8 @@ export default {
 /* 一级菜单的样式 */
 .el-menu--horizontal>div>.el-menu-item {
     float: left;
-    height: 60px;
-    line-height: 60px;
+    height: 40px;
+    line-height: 40px;
     margin: 0;
     border-bottom: 2px solid transparent;
     color: #909399;
@@ -62,8 +62,8 @@ export default {
 }
 /* 解决下图2 无下拉菜单时 不对齐问题 */
 .el-menu--horizontal>div>.el-submenu .el-submenu__title {
-    height: 60px;
-    line-height: 60px;
+    height: 40px;
+    line-height: 40px;
     border-bottom: 2px solid transparent;
     color: #909399;
 }

@@ -9,7 +9,8 @@ export default new Vuex.Store({
       title: '主页',
       name: 'home'
     }],
-    TabsValue: ''
+    TabsValue: '',
+    host_table_click_value: ''
   },
   mutations: {
     editableTabs: (state, obj) => {

@@ -65,7 +65,7 @@ def host_info_query(host_id):
     info_obj = ServerInfo()
     info_obj.set_info(host_user_info)
     info_obj.connect()
-    data = {**info_obj.get_freeinfo(), **info_obj.get_updateinfo()}
+    data = {**info_obj.get_freeinfo(), **info_obj.get_updateinfo(), **info_obj.get_disk()}
     info_obj.close()
 
     return data

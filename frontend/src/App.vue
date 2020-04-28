@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="padding-left:0">
     <el-header style="padding-right: 0px;padding-left: 0px;">
     <el-menu
       background-color="#545c64"
@@ -14,7 +14,7 @@
 <!--      "width:50%;overflow-x:auto;"-->
     </el-menu>
   </el-header>
-  <el-main style="padding-right: 0px;padding-left: 0px;">
+  <el-main style="padding-right: 8px;padding-left: 8px;">
     <mainTabs /> <!-- 我是tabs组件 -->
   </el-main>
   <el-aside>
@@ -67,5 +67,18 @@ export default {
   * {
     outline: none;
   }
+  html,body,#app,.el-container {
+    /*设置内部填充为0，几个布局元素之间没有间距*/
+    padding: 0px;
+    /*外部间距也是如此设置*/
+    margin: 0px;
+    /*统一设置高度为100%*/
+  }
+/*
+下面这样是重新定义菜单宽度
+*/
+.el-menu--collapse .el-menu .el-submenu, .el-menu--popup {
+screenHeighth: 1000px;
+}
 </style>
 <!--thanks https://blog.csdn.net/qq_31126175/article/details/81875468-->

@@ -2,8 +2,24 @@
   <el-row>
     <el-tabs :tab-position="tabPosition" style="height: 100%">
       <el-tab-pane label="主机信息">
-        <div id="mem_show" class="chart-container"></div>
-        <div id="mem_ta_show" class="chart-container"></div>
+        <div style="width: 300px; height: 200px " class="box-card">
+          <el-card class="box-card">
+            <div slot="header">
+              <span>服务器时间</span>
+            </div>
+            <div v-html="monitoring_data.server_current_time" style="height: 10px">
+            </div>
+          </el-card>
+          <el-card class="box-card">
+            <div slot="header">
+              <span>当前登录用户数</span>
+            </div>
+            <div v-html="monitoring_data.login_user_number" style="height: 10px">
+            </div>
+          </el-card>
+          </div>
+          <div id="mem_show" class="chart-container grid-content"></div>
+          <div id="mem_ta_show" class="chart-container grid-content"></div>
       </el-tab-pane>
       <el-tab-pane label="命令推送">配置管理</el-tab-pane>
       <el-tab-pane label="待开发">角色管理</el-tab-pane>
@@ -12,10 +28,29 @@
 </template>
 <script>
 import Echarts from 'echarts'
+import { mapState } from 'vuex'
+import * as Request from '@/general/request.js'
+
 export default {
   name: 'host_m',
   data () {
     return {
+      monitoring_data: {
+        login_user_number: 0,
+        server_current_time: '未知',
+        server_start_time: '未知',
+        cpu_loadaverage: '-1, -1, -1',
+        mem_total: 0,
+        mem_used: 0,
+        mem_free: 0,
+        mem_shared: 0,
+        mem_buffcache: 0,
+        mem_mem_buffcache: 0,
+        swap_total: 0,
+        swap_used: 0,
+        swap_free: 0,
+        hard_disk: {}
+      },
       tabPosition: 'left',
       mem_ta_option: {
         title: {
@@ -85,6 +120,7 @@ export default {
     }
   },
   mounted () {
+    setInterval(this.hostinfoQuery, 15000)
     this.$nextTick(() => {
       this.pieCharts2 = Echarts.init(document.getElementById('mem_show'))
       this.pieCharts2.setOption(this.mem_option)
@@ -95,24 +131,50 @@ export default {
     })
   },
   methods: {
-    handleResize () {
-      // this.pieCharts.resize()
+    async hostinfoQuery () {
+      var value = this.table_click_value
+      if (value === '') {
+        return false
+      }
+      const response = await Request.GET('/hosts/info_query', value)
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+          this.menuData = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     }
   },
-  beforeDestroy () {
-    // window.removeEventListener('resize', this.handleResize)
-    // this.pieCharts.dispose()
+  computed: {
+    ...mapState({
+      table_click_value: 'host_table_click_value'
+    })
   }
 }
 </script>
 <style scoped>
 .chart-container {
-  border-radius: 4px;
+  /*border-radius: 4px;*/
   height: 200px;
   width: 200px;
-  background: #fff;
+  /*background: #fff;*/
   box-shadow: 0 1px 10px 2px rgba(182, 191, 196, 0.5);
-  padding: 20px;
+  /*padding: 20px;*/
+  float:left;
+  margin : 0px 0px 15px 5px;
+}
+
+.box-card {
+  font-size: 10px;
+  width: 200px;
   float:left;
 }
+
+.grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
 </style>

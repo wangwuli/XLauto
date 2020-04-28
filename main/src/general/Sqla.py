@@ -30,6 +30,7 @@ class Sqla():
                     result.append(result_row)
             else:
                 return None
+        db.session.remove()
         return result
 
 
@@ -49,6 +50,7 @@ class Sqla():
         print('sql', sql)
         db.session.execute(sql, params, bind=db.get_engine(bind='xlauto_mysql'))
         db.session.commit()
+        db.session.remove()
 
     def get_count(self, sql, params={}):
         return int(self.fetch_to_dict(sql, params, fecth='one', bind='xlauto_mysql').get('count'))
@@ -70,6 +72,7 @@ class Sqla():
         except Exception as e:
             db.session.rollback()
             raise Exception("execute sql fail ,is rollback")
+        db.session.remove()
 #https://www.cnblogs.com/gongnanxiong/p/11743055.html
     def sql_encryption(self, str):
         sql = """

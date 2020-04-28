@@ -37,6 +37,7 @@
       </el-form-item>
     </el-form>
   <el-table
+    @row-click="hoststableClick"
     size="mini"
     ref="multipleTable"
     :data="tableData"
@@ -114,6 +115,10 @@ export default {
     this.projectsQuery()
   },
   methods: {
+    hoststableClick (row) {
+      this.edittableClickValue = row
+      this.$message.success('点击标记：' + row.host_ip + '  成功')
+    },
     handleSizeChange (val) {
       this.host_date_size = val
       this.hostslistQuery()
@@ -195,6 +200,19 @@ export default {
         } else {
           this.$message.error(data.msg)
         }
+      }
+    }
+  },
+  computed: {
+    // ...mapState({
+    //   table_click_value: 'host_table_click_value'
+    // }),
+    edittableClickValue: {
+      get () {
+        return this.$store.state.host_table_click_value
+      },
+      set (val) {
+        this.$store.state.host_table_click_value = val
       }
     }
   }

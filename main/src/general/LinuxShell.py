@@ -18,7 +18,7 @@ class ServerInfo(Sshmet):
             info_s_s = info_s[1].split('users')
             data['server_start_time'] = info_s_s[0][:-2].replace(',','').strip()
             data['login_user_number'] = info_s_s[0][-2]
-            data['cpu_loadaverage'] = info_s_s[1].split(':')[1]
+            data['cpu_loadaverage'] = info_s_s[1].split('load average: ')[1]
         return data
 
     def get_freeinfo(self):
@@ -42,3 +42,21 @@ class ServerInfo(Sshmet):
 
         return data
 
+    def get_disk(self):
+        info = self.execcmd("df -m | grep ^/dev")
+        data = {}
+        if info:
+            data_dict = {}
+            info_disk_list = info.split('\n')
+            for info_disk_list_one in info_disk_list:
+                info_disk_one_list = info_disk_list_one.split()
+                data_dict['partition_name'] = info_disk_one_list[0]
+                data_dict['total_partition_size'] = info_disk_one_list[1]
+                data_dict['surplus_partition_size'] = info_disk_one_list[2]
+                data_dict['use_partition_size'] = info_disk_one_list[3]
+                data_dict['usage_partition_size'] = info_disk_one_list[4]
+                data_dict['mount_partition_dir'] = info_disk_one_list[5]
+                data[data_dict['partition_name']] = data_dict
+        return_data = {'hard_disk': data}
+
+        return return_data
