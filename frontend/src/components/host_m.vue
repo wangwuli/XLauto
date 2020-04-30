@@ -2,24 +2,27 @@
   <el-row>
     <el-tabs :tab-position="tabPosition" style="height: 100%">
       <el-tab-pane label="主机信息">
-        <div style="width: 300px; height: 200px " class="box-card">
+        <div style="height: 200px " class="box-card">
           <el-card class="box-card">
             <div slot="header">
               <span>服务器时间</span>
             </div>
-            <div v-html="monitoring_data.server_current_time" style="height: 10px">
+            <div v-html="monitoring_data.server_current_time" style="height: 5px">
             </div>
           </el-card>
           <el-card class="box-card">
             <div slot="header">
               <span>当前登录用户数</span>
             </div>
-            <div v-html="monitoring_data.login_user_number" style="height: 10px">
+            <div v-html="monitoring_data.login_user_number" style="height: 5px">
             </div>
           </el-card>
           </div>
           <div id="mem_show" class="chart-container grid-content"></div>
           <div id="mem_ta_show" class="chart-container grid-content"></div>
+          <div id="mem_virtual_show" class="chart-container grid-content"></div>
+          <div id="disk_show" class="chart-container grid-content" style="height: 400px; width: 400px;"></div>
+          <div id="cpu_loadaverage_show" class="chart-container grid-content" style="width: 400px;"></div>
       </el-tab-pane>
       <el-tab-pane label="命令推送">配置管理</el-tab-pane>
       <el-tab-pane label="待开发">角色管理</el-tab-pane>
@@ -38,18 +41,7 @@ export default {
       monitoring_data: {
         login_user_number: 0,
         server_current_time: '未知',
-        server_start_time: '未知',
-        cpu_loadaverage: '-1, -1, -1',
-        mem_total: 0,
-        mem_used: 0,
-        mem_free: 0,
-        mem_shared: 0,
-        mem_buffcache: 0,
-        mem_mem_buffcache: 0,
-        swap_total: 0,
-        swap_used: 0,
-        swap_free: 0,
-        hard_disk: {}
+        server_start_time: '未知'
       },
       tabPosition: 'left',
       mem_ta_option: {
@@ -64,15 +56,53 @@ export default {
         },
         yAxis: {
           type: 'value',
-          max: 100000
+          max: 0
         },
         grid: {
           left: 60
         },
         series: [{
+          itemStyle: {
+            normal: {
+              color: '#91c7ae'
+            }
+          },
           radius: '50%',
           barWidth: 30,
-          data: [1000],
+          data: [0],
+          type: 'bar',
+          showBackground: true,
+          backgroundStyle: {
+            color: 'rgba(220, 220, 220, 0.8)'
+          }
+        }]
+      },
+      mem_virtual_option: {
+        title: {
+          text: '虚拟内存'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['已使用'],
+          show: true,
+          max: 0
+        },
+        yAxis: {
+          type: 'value',
+          max: 0
+        },
+        grid: {
+          left: 60
+        },
+        series: [{
+          itemStyle: {
+            normal: {
+              color: '#c23531'
+            }
+          },
+          radius: '50%',
+          barWidth: 30,
+          data: [0],
           type: 'bar',
           showBackground: true,
           backgroundStyle: {
@@ -90,6 +120,14 @@ export default {
         },
         series: [
           {
+            itemStyle: {
+              normal: { // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                color: function (params) {
+                  var colorList = ['#c23531', '#f5e8c8', '#b8d2c7', '#91c7ae']
+                  return colorList[params.dataIndex]
+                }
+              }
+            },
             name: '访问来源',
             type: 'pie',
             radius: ['50%', '70%'],
@@ -109,14 +147,109 @@ export default {
               show: false
             },
             data: [
-              { value: 335, name: '使用', itemStyle: { color: '#c23531' } },
-              { value: 310, name: '共享', itemStyle: { color: '#f5e8c8' } },
-              { value: 234, name: '缓存缓冲', itemStyle: { color: '#b8d2c7' } },
-              { value: 1548, name: '空闲', itemStyle: { color: '#91c7ae' } }
+              { value: 0, name: '使用' },
+              { value: 0, name: '共享' },
+              { value: 0, name: '缓存缓冲' },
+              { value: 0, name: '空闲' }
             ]
+            // data: [
+            //   { value: 335, name: '使用', itemStyle: { color: '#c23531' } },
+            //   { value: 310, name: '共享', itemStyle: { color: '#f5e8c8' } },
+            //   { value: 234, name: '缓存缓冲', itemStyle: { color: '#b8d2c7' } },
+            //   { value: 1548, name: '空闲', itemStyle: { color: '#91c7ae' } }
+            // ]
           }
         ]
+      },
+      disk_option: {
+        title: {
+          text: '硬盘'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['剩余(M)', '使用(M)']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        yAxis: [
+          {
+            type: 'category',
+            axisTick: {
+              show: false
+            },
+            data: ['未知']
+          }
+        ],
+        series: [
+          {
+            itemStyle: {
+              normal: {
+                color: '#91c7ae'
+              }
+              // normal: { // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+              //   color: function (params) {
+              //     var colorList = ['#c23531']
+              //     return colorList[params.dataIndex]
+              //   }
+              // }
+            },
+            name: '剩余(M)',
+            type: 'bar',
+            stack: '总量',
+            label: {
+              show: true,
+              position: 'top'
+            },
+            data: [-1]
+          },
+          {
+            itemStyle: {
+              normal: {
+                color: '#c23531'
+              }
+            },
+            name: '使用(M)',
+            type: 'bar',
+            stack: '总量',
+            label: {
+              show: true,
+              position: 'insideTop'
+            },
+            data: [1]
+          }
+        ]
+      },
+      cpu_loadaverage_option: {
+        title: {
+          text: 'CPU'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['一分钟前', '五分钟前', '十分钟前']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          data: [-1, -1, -1],
+          type: 'line'
+        }]
       }
+
     }
   },
   mounted () {
@@ -126,11 +259,51 @@ export default {
       this.pieCharts2.setOption(this.mem_option)
       this.pieCharts = Echarts.init(document.getElementById('mem_ta_show'))
       this.pieCharts.setOption(this.mem_ta_option)
-
+      this.pieCharts3 = Echarts.init(document.getElementById('disk_show'))
+      this.pieCharts3.setOption(this.disk_option)
+      this.pieCharts4 = Echarts.init(document.getElementById('cpu_loadaverage_show'))
+      this.pieCharts4.setOption(this.cpu_loadaverage_option)
+      this.pieCharts5 = Echarts.init(document.getElementById('mem_virtual_show'))
+      this.pieCharts5.setOption(this.mem_virtual_option)
       // window.addEventListener('resize', this.handleResize)
     })
   },
   methods: {
+    datassetOption (data) {
+      var usepartitionSizelist = []
+      var surplusPartitionsize = []
+      var mountPartitiondir = []
+      for (var key in data.hard_disk) {
+        var item = data.hard_disk[key]
+        usepartitionSizelist.push(item.use_partition_size)
+        surplusPartitionsize.push(item.surplus_partition_size)
+        mountPartitiondir.push(item.mount_partition_dir)
+      }
+      console.log(data.hard_disk)
+      this.cpu_loadaverage_option.series[0].data = data.cpu_loadaverage
+      this.disk_option.series[0].data = surplusPartitionsize
+      this.disk_option.series[1].data = usepartitionSizelist
+      this.disk_option.yAxis[0].data = mountPartitiondir
+      this.monitoring_data.login_user_number = data.login_user_number
+      this.monitoring_data.server_current_time = data.server_current_time
+      this.monitoring_data.server_start_time = data.server_start_time
+      this.mem_option.series[0].data[0].value = data.mem_used
+      this.mem_option.series[0].data[1].value = data.mem_shared
+      this.mem_option.series[0].data[2].value = data.mem_buffcache
+      this.mem_option.series[0].data[3].value = data.mem_free
+      this.mem_ta_option.yAxis.max = data.mem_total
+      this.mem_ta_option.series[0].data[0] = data.mem_available
+      this.mem_virtual_option.yAxis.max = data.swap_total
+      this.mem_virtual_option.series[0].data[0] = data.swap_used
+
+      this.pieChartssetOption()
+    },
+    pieChartssetOption () {
+      this.pieCharts.setOption(this.mem_ta_option)
+      this.pieCharts2.setOption(this.mem_option)
+      this.pieCharts3.setOption(this.disk_option)
+      this.pieCharts4.setOption(this.cpu_loadaverage_option)
+    },
     async hostinfoQuery () {
       var value = this.table_click_value
       if (value === '') {
@@ -141,7 +314,7 @@ export default {
         var data = response.data
         if (data.success) {
           this.$message.success(data.msg)
-          this.menuData = data.data
+          this.datassetOption(data.data)
         } else {
           this.$message.error(data.msg)
         }
