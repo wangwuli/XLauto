@@ -1,7 +1,9 @@
-#sqlalchemy 查询结果转为字典
-from datetime import datetime
+import time
+from functools import wraps
 
-from sqlalchemy.orm import class_mapper
+#sqlalchemy 查询结果转为字典
+#from datetime import datetime
+#from sqlalchemy.orm import class_mapper
 
 
 # def model_to_dict(result):
@@ -38,3 +40,20 @@ def list_to_tree(data):
         res.setdefault(v["id"], v).update(v)
         res.setdefault(v["parent_id"], {}).setdefault("childs", []).append(v)
     return res[0]["childs"]
+
+
+def func_need_time(f):
+    """
+    简单记录执行时间
+    :param f:
+    :return:
+    src: https://www.jianshu.com/p/112c5fc48d53
+    """
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = f(*args, **kwargs)
+        end = time.time()
+        print (f.__name__, 'took', end - start, 'seconds')
+        return result
+    return wrapper

@@ -2,7 +2,8 @@
   <el-row>
     <el-tabs :tab-position="tabPosition" style="height: 100%">
       <el-tab-pane label="主机信息">
-        <div style="height: 200px " class="box-card">
+        <dev style="float:left; height: 400px; width: 410px;">
+          <div class="box-card-g">
           <el-card class="box-card">
             <div slot="header">
               <span>服务器时间</span>
@@ -21,8 +22,10 @@
           <div id="mem_show" class="chart-container grid-content"></div>
           <div id="mem_ta_show" class="chart-container grid-content"></div>
           <div id="mem_virtual_show" class="chart-container grid-content"></div>
+        </dev>
           <div id="disk_show" class="chart-container grid-content" style="height: 400px; width: 400px;"></div>
           <div id="cpu_loadaverage_show" class="chart-container grid-content" style="width: 400px;"></div>
+          <div id="connect_show" class="chart-container grid-content" style="width: 400px;"></div>
       </el-tab-pane>
       <el-tab-pane label="命令推送">配置管理</el-tab-pane>
       <el-tab-pane label="待开发">角色管理</el-tab-pane>
@@ -248,8 +251,27 @@ export default {
           data: [-1, -1, -1],
           type: 'line'
         }]
+      },
+      connect_option: {
+        title: {
+          text: 'TCP'
+        },
+        xAxis: {
+          type: 'category',
+          data: []
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          data: [],
+          type: 'bar',
+          showBackground: true,
+          backgroundStyle: {
+            color: 'rgba(220, 220, 220, 0.8)'
+          }
+        }]
       }
-
     }
   },
   mounted () {
@@ -265,6 +287,8 @@ export default {
       this.pieCharts4.setOption(this.cpu_loadaverage_option)
       this.pieCharts5 = Echarts.init(document.getElementById('mem_virtual_show'))
       this.pieCharts5.setOption(this.mem_virtual_option)
+      this.pieCharts6 = Echarts.init(document.getElementById('connect_show'))
+      this.pieCharts6.setOption(this.connect_option)
       // window.addEventListener('resize', this.handleResize)
     })
   },
@@ -279,7 +303,7 @@ export default {
         surplusPartitionsize.push(item.surplus_partition_size)
         mountPartitiondir.push(item.mount_partition_dir)
       }
-      console.log(data.hard_disk)
+      // console.log(data.hard_disk)
       this.cpu_loadaverage_option.series[0].data = data.cpu_loadaverage
       this.disk_option.series[0].data = surplusPartitionsize
       this.disk_option.series[1].data = usepartitionSizelist
@@ -295,6 +319,8 @@ export default {
       this.mem_ta_option.series[0].data[0] = data.mem_available
       this.mem_virtual_option.yAxis.max = data.swap_total
       this.mem_virtual_option.series[0].data[0] = data.swap_used
+      this.connect_option.xAxis.data = data.socket_tu_name
+      this.connect_option.series[0].data = data.socket_tu_value
 
       this.pieChartssetOption()
     },
@@ -303,6 +329,8 @@ export default {
       this.pieCharts2.setOption(this.mem_option)
       this.pieCharts3.setOption(this.disk_option)
       this.pieCharts4.setOption(this.cpu_loadaverage_option)
+      this.pieCharts5.setOption(this.mem_virtual_option)
+      this.pieCharts6.setOption(this.connect_option)
     },
     async hostinfoQuery () {
       var value = this.table_click_value
@@ -337,13 +365,23 @@ export default {
   box-shadow: 0 1px 10px 2px rgba(182, 191, 196, 0.5);
   /*padding: 20px;*/
   float:left;
-  margin : 0px 0px 15px 5px;
+  margin : 0px 0px 5px 5px;
+}
+
+.box-card-g {
+  height: 200px;
+  width: 200px;
+  float:left;
+  margin : 0px 1px 0px 4px;
+  box-shadow: 0 1px 10px 2px rgba(182, 191, 196, 0.5);
 }
 
 .box-card {
   font-size: 10px;
   width: 200px;
   float:left;
+  /*margin : 0px 2px 0px 2px;*/
+  /*box-shadow: 0 1px 10px 2px rgba(182, 191, 196, 0.5);*/
 }
 
 .grid-content {

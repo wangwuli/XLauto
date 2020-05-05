@@ -23,6 +23,18 @@ class ServerInfo(Sshmet):
         return data
 
     def get_freeinfo(self):
+        """
+        mem_total : 总内存
+        mem_used : 内存使用
+        mem_free : 内存空闲
+        mem_shared : 共享内存
+        mem_buffcache : 内存缓存
+        mem_available : 内存可用
+        swap_total: 总虚拟内存
+        swap_used: 虚拟内存使用
+        swap_free: 虚拟内存空闲
+        :return:
+        """
         info = self.execcmd("free -m")
         data = {}
         if info:
@@ -61,3 +73,20 @@ class ServerInfo(Sshmet):
         return_data = {'hard_disk': data}
 
         return return_data
+
+    def get_ss(self):
+        info_u = self.execcmd("ss -s")
+        if info_u:
+            info_socket_list = info_u.split('\n')
+            state_list = info_socket_list[1].split('(')[1].split(')')[0].split(',')
+            name_list = []
+            value_list = []
+            for state_list_one in state_list:
+                name_list.append(state_list_one.split()[0])
+                value_list.append(int(state_list_one.split()[1]))
+
+        data = {"socket_tu_name":name_list, "socket_tu_value":value_list}
+
+        return data
+
+

@@ -3,6 +3,8 @@ from src.general.Sql_G import mysql_sql_exec
 from src.general.Sqla import Sqla
 from flask import current_app
 
+from src.general.Transform import func_need_time
+
 
 def home_hosts_query_filter(parameter_dict):
 
@@ -49,7 +51,7 @@ def home_hosts_query_filter(parameter_dict):
 
     return (data, total['total'])
 
-
+@func_need_time
 def host_info_query(host_id):
     sqla = Sqla(current_app)
     sql = """
@@ -65,7 +67,7 @@ def host_info_query(host_id):
     info_obj = ServerInfo()
     info_obj.set_info(host_user_info)
     info_obj.connect()
-    data = {**info_obj.get_freeinfo(), **info_obj.get_updateinfo(), **info_obj.get_disk()}
+    data = {**info_obj.get_freeinfo(), **info_obj.get_updateinfo(), **info_obj.get_disk(), **info_obj.get_ss()}
     info_obj.close()
 
     return data
