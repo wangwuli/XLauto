@@ -2,6 +2,15 @@
   <el-row>
     <el-tabs :tab-position="tabPosition" style="height: 100%">
       <el-tab-pane label="主机信息">
+        <el-button v-text="ip_addr" size="mini" style="margin-right: 20px"></el-button>
+        <el-radio v-model="radio" label="2">停止刷新</el-radio>
+        <el-radio v-model="radio" label="1">定时刷新</el-radio>
+        <span>间隔：</span>
+        <el-input v-model="flush_time" placeholder="刷新" style="width: 5%;  margin-right: 20px" size="mini"></el-input>
+        <span>连接状态：</span>
+        <i class="el-icon-success" v-if="status_colour" style="color:#91c7ae;"></i>
+        <i class="el-icon-error" v-else  style="color:#c23531;"></i>
+        <el-divider size="mini"></el-divider>
         <dev style="float:left; height: 400px; width: 410px;">
           <div class="box-card-g">
           <el-card class="box-card">
@@ -41,12 +50,16 @@ export default {
   name: 'host_m',
   data () {
     return {
+      status_colour: false,
+      ip_addr: '未选择',
+      radio: '1',
+      flush_time: 15,
+      tabPosition: 'left',
       monitoring_data: {
         login_user_number: 0,
         server_current_time: '未知',
         server_start_time: '未知'
       },
-      tabPosition: 'left',
       mem_ta_option: {
         title: {
           text: '内存'
@@ -337,14 +350,17 @@ export default {
       if (value === '') {
         return false
       }
+      this.ip_addr = value.host_ip
       const response = await Request.GET('/hosts/info_query', value)
       if (response && response.data) {
         var data = response.data
         if (data.success) {
           this.$message.success(data.msg)
           this.datassetOption(data.data)
+          this.status_colour = true
         } else {
           this.$message.error(data.msg)
+          this.status_colour = false
         }
       }
     }
