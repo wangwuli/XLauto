@@ -64,8 +64,8 @@ class ServerInfo(Sshmet):
                 data_dict = {}
                 info_disk_one_list = info_disk_list_one.split()
                 data_dict['total_partition_size'] = int(info_disk_one_list[1])
-                data_dict['surplus_partition_size'] = int(info_disk_one_list[2])
-                data_dict['use_partition_size'] = int(info_disk_one_list[3])
+                data_dict['surplus_partition_size'] = int(info_disk_one_list[3])
+                data_dict['use_partition_size'] = int(info_disk_one_list[2])
                 data_dict['usage_partition_size'] = info_disk_one_list[4]
                 data_dict['mount_partition_dir'] = info_disk_one_list[5]
                 data_dict['partition_name'] = info_disk_one_list[0]

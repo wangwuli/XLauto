@@ -2,36 +2,36 @@
   <el-row>
     <el-tabs :tab-position="tabPosition" style="height: 100%">
       <el-tab-pane label="主机信息">
-        <el-button v-text="ip_addr" size="mini" style="margin-right: 20px"></el-button>
-        <el-radio v-model="radio" label="2">停止刷新</el-radio>
-        <el-radio v-model="radio" label="1">定时刷新</el-radio>
+        <el-button v-text="ip_addr" size="mini" style="margin-right: 20px" @input="initWebSocket"></el-button>
+        <el-radio v-model="radio" label="2" @change="if_stop_flush">停止刷新</el-radio>
+        <el-radio v-model="radio" label="1" @change="if_stop_flush">定时刷新</el-radio>
         <span>间隔：</span>
-        <el-input v-model="flush_time" placeholder="刷新" style="width: 5%;  margin-right: 20px" size="mini"></el-input>
+        <el-input v-model="flush_time" placeholder="刷新" style="width: 5%;  margin-right: 20px" size="mini" @input="restart_ful_time"></el-input>
         <span>连接状态：</span>
         <i class="el-icon-success" v-if="status_colour" style="color:#91c7ae;"></i>
         <i class="el-icon-error" v-else  style="color:#c23531;"></i>
         <el-divider size="mini"></el-divider>
-        <dev style="float:left; height: 400px; width: 410px;">
+        <div style="float:left; height: 400px; width: 410px;">
           <div class="box-card-g">
           <el-card class="box-card">
             <div slot="header">
               <span>服务器时间</span>
             </div>
-            <div v-html="monitoring_data.server_current_time" style="height: 5px">
+            <div v-html="monitoring_data.server_current_time" style="height: 10px">
             </div>
           </el-card>
-          <el-card class="box-card">
+          <el-card class="box-card" style="margin-top: 20px">
             <div slot="header">
               <span>当前登录用户数</span>
             </div>
-            <div v-html="monitoring_data.login_user_number" style="height: 5px">
+            <div v-html="monitoring_data.login_user_number" style="height: 10px">
             </div>
           </el-card>
           </div>
           <div id="mem_show" class="chart-container grid-content"></div>
           <div id="mem_ta_show" class="chart-container grid-content"></div>
           <div id="mem_virtual_show" class="chart-container grid-content"></div>
-        </dev>
+        </div>
           <div id="disk_show" class="chart-container grid-content" style="height: 400px; width: 400px;"></div>
           <div id="cpu_loadaverage_show" class="chart-container grid-content" style="width: 400px;"></div>
           <div id="connect_show" class="chart-container grid-content" style="width: 400px;"></div>
@@ -44,12 +44,13 @@
 <script>
 import Echarts from 'echarts'
 import { mapState } from 'vuex'
-import * as Request from '@/general/request.js'
+// import * as Request from '@/general/request.js'
 
 export default {
   name: 'host_m',
   data () {
     return {
+      is_setInterval: '',
       status_colour: false,
       ip_addr: '未选择',
       radio: '1',
@@ -287,9 +288,13 @@ export default {
       }
     }
   },
+  destroyed () {
+    this.websock.close()
+  },
   mounted () {
-    setInterval(this.hostinfoQuery, 15000)
     this.$nextTick(() => {
+      this.initWebSocket()
+      this.is_setInterval = setInterval(this.websocketonopen, this.flush_time * 1000)
       this.pieCharts2 = Echarts.init(document.getElementById('mem_show'))
       this.pieCharts2.setOption(this.mem_option)
       this.pieCharts = Echarts.init(document.getElementById('mem_ta_show'))
@@ -306,6 +311,61 @@ export default {
     })
   },
   methods: {
+    if_stop_flush () {
+      if (this.radio === '2') {
+        clearInterval(this.is_setInterval)
+      } else {
+        clearInterval(this.is_setInterval)
+        this.is_setInterval = setInterval(this.websocketonopen, this.flush_time * 1000)
+      }
+    },
+    restart_ful_time () {
+      this.if_stop_flush()
+      // clearInterval(this.is_setInterval)
+      // this.is_setInterval = setInterval(this.websocketonopen, this.flush_time * 1000)
+    },
+    // 初始化weosocket https://www.jianshu.com/p/9d8b2e42328c
+    initWebSocket () {
+      const wsuri = 'ws://localhost:5000/socket/hosts/info_query'
+      this.websock = new WebSocket(wsuri)
+      this.websock.onmessage = this.websocketonmessage
+      this.websock.onopen = this.websocketonopen
+      this.websock.onerror = this.websocketonerror
+      this.websock.onclose = this.websocketclose
+    },
+    websocketonopen () { // 连接建立之后执行send方法发送数据
+      if (this.websock.readyState === 3) {
+        this.$message.warning('连接意外关闭,正在重连')
+        this.initWebSocket()
+      }
+      var value = this.table_click_value
+      if (value === '') {
+        return false
+      }
+      this.ip_addr = value.host_ip
+      var actions = { host_id: value.host_id, flush_time: this.flush_time }
+      this.websocketsend(JSON.stringify(actions))
+    },
+    websocketonerror () { // 连接建立失败重连
+      this.initWebSocket()
+    },
+    websocketonmessage (e) { // 数据接收
+      const data = JSON.parse(e.data)
+      if (data.success) {
+        this.$message.success(data.msg)
+        this.datassetOption(data.data)
+        this.status_colour = true
+      } else {
+        this.$message.error(data.msg)
+        this.status_colour = false
+      }
+    },
+    websocketsend (Data) { // 数据发送
+      this.websock.send(Data)
+    },
+    websocketclose (e) { // 关闭
+      console.log('断开连接', e)
+    },
     datassetOption (data) {
       var usepartitionSizelist = []
       var surplusPartitionsize = []
@@ -344,26 +404,26 @@ export default {
       this.pieCharts4.setOption(this.cpu_loadaverage_option)
       this.pieCharts5.setOption(this.mem_virtual_option)
       this.pieCharts6.setOption(this.connect_option)
-    },
-    async hostinfoQuery () {
-      var value = this.table_click_value
-      if (value === '') {
-        return false
-      }
-      this.ip_addr = value.host_ip
-      const response = await Request.GET('/hosts/info_query', value)
-      if (response && response.data) {
-        var data = response.data
-        if (data.success) {
-          this.$message.success(data.msg)
-          this.datassetOption(data.data)
-          this.status_colour = true
-        } else {
-          this.$message.error(data.msg)
-          this.status_colour = false
-        }
-      }
     }
+    // async hostinfoQuery () {
+    //   var value = this.table_click_value
+    //   if (value === '') {
+    //     return false
+    //   }
+    //   this.ip_addr = value.host_ip
+    //   const response = await Request.GET('/hosts/info_query', value)
+    //   if (response && response.data) {
+    //     var data = response.data
+    //     if (data.success) {
+    //       this.$message.success(data.msg)
+    //       this.datassetOption(data.data)
+    //       this.status_colour = true
+    //     } else {
+    //       this.$message.error(data.msg)
+    //       this.status_colour = false
+    //     }
+    //   }
+    // }
   },
   computed: {
     ...mapState({
@@ -404,4 +464,18 @@ export default {
     border-radius: 4px;
     min-height: 36px;
   }
+
+/*.el-card /deep/ .el-card__body {*/
+/*  margin-top:-3px;*/
+/*}*/
+
+.el-card /deep/ .el-card__header {
+    padding: 8px 20px;
+    border-bottom: 1px solid #EBEEF5;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: lightgrey;
+}
+
 </style>
