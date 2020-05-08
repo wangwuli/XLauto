@@ -41,7 +41,7 @@
                 "color": "#eeeeee"
             },
             "subtextStyle": {
-                "color": "#aaa"
+                "color": "#aaaaaa"
             }
         },
         "line": {
@@ -191,7 +191,7 @@
             "lineStyle": {
                 "normal": {
                     "width": 1,
-                    "color": "#aaa"
+                    "color": "#aaaaaa"
                 }
             },
             "symbolSize": 4,
@@ -213,7 +213,7 @@
             "label": {
                 "normal": {
                     "textStyle": {
-                        "color": "#eee"
+                        "color": "#eeeeee"
                     }
                 }
             }
@@ -417,10 +417,10 @@
         "toolbox": {
             "iconStyle": {
                 "normal": {
-                    "borderColor": "#999"
+                    "borderColor": "#999999"
                 },
                 "emphasis": {
-                    "borderColor": "#666"
+                    "borderColor": "#666666"
                 }
             }
         },
@@ -469,7 +469,7 @@
             },
             "checkpointStyle": {
                 "color": "#e43c59",
-                "borderColor": "rgba(194,53,49, 0.5)"
+                "borderColor": "rgba(194,53,49,0.5)"
             },
             "label": {
                 "normal": {
@@ -505,12 +505,12 @@
             "label": {
                 "normal": {
                     "textStyle": {
-                        "color": "#eee"
+                        "color": "#eeeeee"
                     }
                 },
                 "emphasis": {
                     "textStyle": {
-                        "color": "#eee"
+                        "color": "#eeeeee"
                     }
                 }
             }

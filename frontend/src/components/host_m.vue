@@ -477,7 +477,7 @@ export default {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-size: 16px;
-    background-color: #f3d999;
+    background-color: #ccc;
 }
 
 </style>
