@@ -43,6 +43,7 @@
 </template>
 <script>
 import Echarts from 'echarts'
+import dark from '../plugins/dark.json'
 import { mapState } from 'vuex'
 // import * as Request from '@/general/request.js'
 
@@ -140,7 +141,7 @@ export default {
             itemStyle: {
               normal: { // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
                 color: function (params) {
-                  var colorList = ['#c23531', '#f5e8c8', '#b8d2c7', '#91c7ae']
+                  var colorList = ['#dd6b66', '#eedd78', '#8dc1a9', '#73a373']
                   return colorList[params.dataIndex]
                 }
               }
@@ -295,17 +296,18 @@ export default {
     this.$nextTick(() => {
       this.initWebSocket()
       this.is_setInterval = setInterval(this.websocketonopen, this.flush_time * 1000)
-      this.pieCharts2 = Echarts.init(document.getElementById('mem_show'))
+      Echarts.registerTheme('dark', dark)
+      this.pieCharts2 = Echarts.init(document.getElementById('mem_show', 'dark'))
       this.pieCharts2.setOption(this.mem_option)
-      this.pieCharts = Echarts.init(document.getElementById('mem_ta_show'))
+      this.pieCharts = Echarts.init(document.getElementById('mem_ta_show', 'dark'))
       this.pieCharts.setOption(this.mem_ta_option)
-      this.pieCharts3 = Echarts.init(document.getElementById('disk_show'))
+      this.pieCharts3 = Echarts.init(document.getElementById('disk_show', 'dark'))
       this.pieCharts3.setOption(this.disk_option)
-      this.pieCharts4 = Echarts.init(document.getElementById('cpu_loadaverage_show'))
+      this.pieCharts4 = Echarts.init(document.getElementById('cpu_loadaverage_show', 'dark'))
       this.pieCharts4.setOption(this.cpu_loadaverage_option)
-      this.pieCharts5 = Echarts.init(document.getElementById('mem_virtual_show'))
+      this.pieCharts5 = Echarts.init(document.getElementById('mem_virtual_show', 'dark'))
       this.pieCharts5.setOption(this.mem_virtual_option)
-      this.pieCharts6 = Echarts.init(document.getElementById('connect_show'))
+      this.pieCharts6 = Echarts.init(document.getElementById('connect_show', 'dark'))
       this.pieCharts6.setOption(this.connect_option)
       // window.addEventListener('resize', this.handleResize)
     })
@@ -471,11 +473,11 @@ export default {
 
 .el-card /deep/ .el-card__header {
     padding: 8px 20px;
-    border-bottom: 1px solid #EBEEF5;
+    border-bottom: 1px solid #4b565b;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-size: 16px;
-    background-color: lightgrey;
+    background-color: #f3d999;
 }
 
 </style>
