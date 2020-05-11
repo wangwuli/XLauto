@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import HelloWorld from '@/components/HelloWorld'
-import HostM from '@/components/host_m'
+import HostM from '@/components/host_m/host_m'
 
 Vue.use(VueRouter)
 

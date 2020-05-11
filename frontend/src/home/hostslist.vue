@@ -117,7 +117,7 @@ export default {
   methods: {
     hoststableClick (row) {
       this.edittableClickValue = row
-      this.$message.success('点击标记：' + row.host_ip + '  成功')
+      this.$message.success('点击标记：' + row.host_ip + '  成功，正在载入，请稍后')
     },
     handleSizeChange (val) {
       this.host_date_size = val

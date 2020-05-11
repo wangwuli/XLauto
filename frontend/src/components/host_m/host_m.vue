@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-tabs :tab-position="tabPosition" style="height: 100%">
+    <el-tabs :tab-position="tabPosition" style="height: 100%" @tab-click="tabs_switch">
       <el-tab-pane label="主机信息">
         <el-button v-text="ip_addr" size="mini" style="margin-right: 20px" @input="initWebSocket"></el-button>
         <el-radio v-model="radio" label="2" @change="if_stop_flush">停止刷新</el-radio>
@@ -43,12 +43,12 @@
 </template>
 <script>
 import Echarts from 'echarts'
-import dark from '../plugins/dark.json'
+import dark from '../../plugins/dark.json'
 import { mapState } from 'vuex'
 // import * as Request from '@/general/request.js'
 
 export default {
-  name: 'host_m',
+  // name: 'host_m',
   data () {
     return {
       is_setInterval: '',
@@ -216,7 +216,7 @@ export default {
           {
             itemStyle: {
               normal: {
-                color: '#91c7ae'
+                color: '#8dc1a9'
               }
               // normal: { // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
               //   color: function (params) {
@@ -237,7 +237,7 @@ export default {
           {
             itemStyle: {
               normal: {
-                color: '#c23531'
+                color: '#dd6b66'
               }
             },
             name: '使用(M)',
@@ -313,6 +313,14 @@ export default {
     })
   },
   methods: {
+    tabs_switch (tab) {
+      if (tab.label === '主机信息') {
+        // this.initWebSocket()
+        this.is_setInterval = setInterval(this.websocketonopen, this.flush_time * 1000)
+      } else {
+        clearInterval(this.is_setInterval)
+      }
+    },
     if_stop_flush () {
       if (this.radio === '2') {
         clearInterval(this.is_setInterval)

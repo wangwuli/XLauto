@@ -141,7 +141,7 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `sta
 	(1, NULL, '主页', 'home', NULL, 'el-icon-s-home', NULL, NULL),
 	(2, NULL, '工具', 'instrument', NULL, 'el-icon-s-cooperation', NULL, NULL),
 	(3, 2, '网络', 'network', '/network', 'el-icon-place', NULL, NULL),
-	(4, 2, '主机', 'host_m', '/host_m', 'el-icon-place', NULL, NULL),
+	(4, 2, '主机', 'host', '/host', 'el-icon-place', NULL, NULL),
 	(5, NULL, '部署', 'deploy', NULL, 'el-icon-s-claim', NULL, NULL),
 	(6, NULL, '维护', 'info_record', NULL, 'el-icon-s-custom', NULL, NULL);
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
