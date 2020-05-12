@@ -344,13 +344,13 @@ export default {
       this.websock.onclose = this.websocketclose
     },
     websocketonopen () { // 连接建立之后执行send方法发送数据
-      if (this.websock.readyState === 3) {
-        this.$message.warning('连接意外关闭,正在重连')
-        this.initWebSocket()
-      }
       var value = this.table_click_value
       if (value === '') {
         return false
+      }
+      if (this.websock.readyState === 3) {
+        this.$message.warning('连接意外关闭,正在重连')
+        this.initWebSocket()
       }
       this.ip_addr = value.host_ip
       var actions = { host_id: value.host_id, flush_time: this.flush_time }
