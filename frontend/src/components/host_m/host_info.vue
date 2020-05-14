@@ -10,7 +10,7 @@
         <i class="el-icon-success" v-if="status_colour" style="color:#91c7ae;"></i>
         <i class="el-icon-error" v-else  style="color:#c23531;"></i>
         <el-divider size="mini"></el-divider>
-        <div style="float:left; height: 400px; width: 410px;">
+        <div style="float:left; height: 410px; width: 410px;">
           <div class="box-card-g">
           <el-card class="box-card">
             <div slot="header">
@@ -31,9 +31,9 @@
           <div id="mem_ta_show" class="chart-container grid-content"></div>
           <div id="mem_virtual_show" class="chart-container grid-content"></div>
         </div>
-          <div id="disk_show" class="chart-container grid-content" style="height: 400px; width: 400px;"></div>
-          <div id="cpu_loadaverage_show" class="chart-container grid-content" style="width: 400px;"></div>
-          <div id="connect_show" class="chart-container grid-content" style="width: 400px;"></div>
+          <div id="disk_show" class="chart-container grid-content" style="height: 410px; width: 405px;"></div>
+          <div id="cpu_loadaverage_show" class="chart-container grid-content" style="width: 405px;"></div>
+          <div id="connect_show" class="chart-container grid-content" style="width: 405px;"></div>
 
     </el-row>
 </template>

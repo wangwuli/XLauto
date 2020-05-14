@@ -1,17 +1,17 @@
 <template>
   <el-row>
       <div style="width: 100%">
-      <el-button type="primary" size="mini" @click="updatedialog = true">上传<i class="el-icon-upload el-icon--right"></i>
-      </el-button>
+        <el-button type="primary" size="mini" @click="updatedialog = true">添加<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
+        <el-button type="primary" size="mini" @click="updatedialog = true">上传<i class="el-icon-upload el-icon--right"></i></el-button>
       </div>
-    <div style="float:left; height: 100%; width: 320px;">
+    <div style="float:left; height: 100%; width: 410px;">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>已存脚本</span>
         </div>
         <el-table
           :data="tableData"
-          style="width: 500px; height: 200px"
+          style="width: 100%; height: 200px"
           size="mini">
           <el-table-column
             prop="date"
@@ -36,7 +36,7 @@
         </div>
         <el-table
           :data="tableData"
-          style="width: 300px; height: 200px"
+          style="width: 100%; height: 200px"
           size="mini">
           <el-table-column
             prop="date"
@@ -56,27 +56,27 @@
         </el-table>
       </el-card>
     </div>
-    <div style="float:left; height: 400px; width: 410px;">
-      <el-card class="box-card">
+    <div style="float:left; height: 500px; width: 410px;">
+      <el-card class="box-card-temporary-text">
         <div slot="header" class="clearfix">
           <span>临时脚本内容</span>
         </div>
         <el-input
           type="textarea"
-          :rows="6"
+          :rows="22"
           placeholder="请输入内容"
           v-model="textarea">
         </el-input>
       </el-card>
     </div>
-    <div style="float:left; height: 600px; width: 600px">
+    <div style="float:left; height: 600px; width: 405px">
       <el-card class="box-card-host-basket">
         <div slot="header" class="clearfix">
           <span>执行目标</span>
         </div>
         <el-table
           :data="tableData"
-          style="width: 300px; height: 200px"
+          style="width: 100%; height: 100%"
           size="mini">
           <el-table-column
             prop="date"
@@ -149,8 +149,8 @@ export default {
 
 <style scoped>
   .box-card {
-    width: 300px;
-    height: 200px;
+    width: 405px;
+    height: 226px;
     font-size: 5px;
     margin : 5px 5px 5px 5px;
     padding-bottom: 20px;
@@ -173,7 +173,7 @@ export default {
   }
 
   .box-card-temporary-text {
-    width: 400px;
+    width: 405px;
     height: 100%;
     font-size: 5px;
     margin : 5px 5px 5px 5px;
