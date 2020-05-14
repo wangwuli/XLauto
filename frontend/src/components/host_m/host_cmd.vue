@@ -1,31 +1,101 @@
 <template>
   <el-row>
-    <el-button type="primary" size="mini" @click="updatedialog = true">上传<i class="el-icon-upload el-icon--right"></i></el-button>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>已存脚本</span>
+      <div style="width: 100%">
+      <el-button type="primary" size="mini" @click="updatedialog = true">上传<i class="el-icon-upload el-icon--right"></i>
+      </el-button>
       </div>
-      <el-table
-      :data="tableData"
-      style="width: 300px; height: 200px"
-      size="mini">
-      <el-table-column
-        prop="date"
-        label="脚本名"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="类型"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="备注"
-      show-overflow-tooltip>
-      </el-table-column>
-    </el-table>
+    <div style="float:left; height: 100%; width: 320px;">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>已存脚本</span>
+        </div>
+        <el-table
+          :data="tableData"
+          style="width: 500px; height: 200px"
+          size="mini">
+          <el-table-column
+            prop="date"
+            label="脚本名"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="类型"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="备注"
+            show-overflow-tooltip>
+          </el-table-column>
+        </el-table>
       </el-card>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>历史记录</span>
+        </div>
+        <el-table
+          :data="tableData"
+          style="width: 300px; height: 200px"
+          size="mini">
+          <el-table-column
+            prop="date"
+            label="脚本名"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="类型"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="最后执行时间"
+            show-overflow-tooltip>
+          </el-table-column>
+        </el-table>
+      </el-card>
+    </div>
+    <div style="float:left; height: 400px; width: 410px;">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>临时脚本内容</span>
+        </div>
+        <el-input
+          type="textarea"
+          :rows="6"
+          placeholder="请输入内容"
+          v-model="textarea">
+        </el-input>
+      </el-card>
+    </div>
+    <div style="float:left; height: 600px; width: 600px">
+      <el-card class="box-card-host-basket">
+        <div slot="header" class="clearfix">
+          <span>执行目标</span>
+        </div>
+        <el-table
+          :data="tableData"
+          style="width: 300px; height: 200px"
+          size="mini">
+          <el-table-column
+            prop="date"
+            label="脚本名"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="类型"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="最后执行时间"
+            show-overflow-tooltip>
+          </el-table-column>
+        </el-table>
+      </el-card>
+    </div>
 
     <el-dialog title="脚本上传" :visible.sync="updatedialog" class="update-dialog" width="500px" >
       <el-upload
@@ -53,6 +123,8 @@
 export default {
   data () {
     return {
+      page_height: document.documentElement.clientHeight - 150,
+      // page_width: document.documentElement.clientWidth - 220,
       updatedialog: false,
       fileList: [
       ]
@@ -80,9 +152,11 @@ export default {
     width: 300px;
     height: 200px;
     font-size: 5px;
+    margin : 5px 5px 5px 5px;
+    padding-bottom: 20px;
   }
   .update-dialog .el-dialog__body {
-    width: 50px;
+    /*width: 50px;*/
   }
    .el-card /deep/ .el-card__header {
     padding: 10px 20px;
@@ -90,5 +164,18 @@ export default {
 
   .el-card /deep/ .el-card__body {
     padding: 0px;
+  }
+  .box-card-host-basket {
+    width: 500px;
+    height: 500px;
+    font-size: 5px;
+    margin : 5px 5px 5px 5px;
+  }
+
+  .box-card-temporary-text {
+    width: 400px;
+    height: 100%;
+    font-size: 5px;
+    margin : 5px 5px 5px 5px;
   }
 </style>
