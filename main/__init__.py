@@ -16,8 +16,8 @@ def create_app():
     db.init_app(xlauto)        #db绑定app
 
     #使用current_app全局变量
-    xlauto.xlautoenv = {}
-    xlauto.xlautoenv['project_path'] = os.path.dirname(__file__)
+    xlauto.config.xlautoenv = {}
+    xlauto.config.xlautoenv['PROJECT_PATH'] = os.path.dirname(__file__)
 
     return xlauto
 

@@ -138,8 +138,8 @@
       <el-upload
         style="height: 200px"
         class="upload-demo"
-        ref="uplo--color-primaryad"
-        action="/host_cmd/update_file"
+        ref="upload"
+        action="/hosts/update_script_file"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :file-list="fileList"
