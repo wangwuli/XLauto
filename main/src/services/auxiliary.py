@@ -1,5 +1,4 @@
 from src.general.LinuxShell import ServerInfo
-from src.general.Sql_G import mysql_sql_exec
 from src.general.Sqla import Sqla
 from flask import current_app
 
