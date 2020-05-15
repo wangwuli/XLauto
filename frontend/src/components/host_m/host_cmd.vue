@@ -1,13 +1,29 @@
 <template>
   <el-row>
       <div style="width: 100%">
-        <el-button type="primary" size="mini" @click="updatedialog = true">添加<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
-        <el-button type="primary" size="mini" @click="updatedialog = true">上传<i class="el-icon-upload el-icon--right"></i></el-button>
+        <el-button type="primary" size="mini" @click="updatedialog = true">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
+        <el-button type="primary" size="mini" @click="updatedialog = true">上传脚本<i class="el-icon-upload el-icon--right"></i></el-button>
       </div>
     <div style="float:left; height: 100%; width: 410px;">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>已存脚本</span>
+          <el-select v-model="value" placeholder="类型" size="mini" style="float: right; width: 100px; margin-top: -5px ;margin-right: 0px ">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="value" placeholder="组" size="mini" style="float: right; width: 100px; margin-top: -5px ;margin-right: 0px ">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </div>
         <el-table
           :data="tableData"
@@ -33,6 +49,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>历史记录</span>
+          <el-input v-model="input" placeholder="搜索" size="mini" style="width: 150px; float: right; margin-top: -5px "></el-input>
         </div>
         <el-table
           :data="tableData"
@@ -59,11 +76,11 @@
     <div style="float:left; height: 500px; width: 410px;">
       <el-card class="box-card-temporary-text">
         <div slot="header" class="clearfix">
-          <span>临时脚本内容</span>
+          <span>临时指令内容</span>
         </div>
         <el-input
           type="textarea"
-          :rows="22"
+          :rows="21"
           placeholder="请输入内容"
           v-model="textarea">
         </el-input>
@@ -76,7 +93,7 @@
         </div>
         <el-table
           :data="tableData"
-          style="width: 100%; height: 100%"
+          style="width: 100%; height: 455px"
           size="mini">
           <el-table-column
             prop="date"
