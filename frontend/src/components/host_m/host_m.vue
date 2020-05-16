@@ -5,7 +5,7 @@
         <HostInfo ref="hotsInfo"></HostInfo>
       </el-tab-pane>
       <el-tab-pane label="命令推送">
-        <HostCmd/>
+        <HostCmd ref="hotsCmd"></HostCmd>>
       </el-tab-pane>
       <el-tab-pane label="待开发">角色管理</el-tab-pane>
     </el-tabs>
@@ -36,6 +36,9 @@ export default {
         this.$refs.hotsInfo.start_fulsh()
       } else {
         this.$refs.hotsInfo.stop_flush()
+      }
+      if (tab.label === '命令推送') {
+        this.$refs.hotsCmd.created_tabs_switch()
       }
     }
   },

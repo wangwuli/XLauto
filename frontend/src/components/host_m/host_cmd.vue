@@ -8,41 +8,55 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>已存脚本</span>
-          <el-select v-model="value" placeholder="类型" size="mini" class="select-box-card-head">
+          <el-select v-model="execute_script_group_code_key" placeholder="组" size="mini" class="select-box-card-head">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="item in execute_script_group_list"
+              :key="item.code_key"
+              :label="item.code_name"
+              :value="item.code_key">
             </el-option>
           </el-select>
-          <el-select v-model="value" placeholder="组" size="mini" class="select-box-card-head">
+          <el-select v-model="execute_script_type_code_key" placeholder="类型" size="mini" class="select-box-card-head">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="item in execute_script_type_list"
+              :key="item.code_key"
+              :label="item.code_name"
+              :value="item.code_key">
             </el-option>
           </el-select>
         </div>
         <el-table
-          :data="tableData"
+          :data="update_script_list"
           style="width: 100%; height: 200px"
           size="mini">
           <el-table-column
-            prop="date"
+            prop="file_name"
             label="脚本名"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="file_type"
             label="类型"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="备注"
+            prop="file_group"
+            label="组"
             show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="comment"
+            label="操作"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)" icon="el-icon-edit" style="padding: 0px" circle></el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="RmScriptDialog(scope.$index, scope.row)"  icon="el-icon-delete" style="padding: 0px" circle></el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-card>
@@ -98,7 +112,8 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-button type="primary" style="padding: 5px 5px;margin-top: -4px; margin-right: 5px; float: right">绑定</el-button>
+          <el-button type="primary" style="padding: 5px 20px;margin-top: -4px; margin-right: 5px; float: right">绑定</el-button>
+          <el-button type="warning" style="padding: 5px 5px;margin-top: -4px; margin-right: 50px; float: right">执行</el-button>
         </div>
         <el-table
           :data="tableData"
@@ -154,14 +169,32 @@
     </el-upload>
     </el-dialog>
 
+    <el-dialog
+      title="提示"
+      :visible.sync="if_dialog_rm_script"
+      width="20%"
+      :before-close="handleClose">
+      <span>确认删除脚本</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="if_dialog_rm_script = false" size="mini">取 消</el-button>
+    <el-button type="primary" @click="RmScript" size="mini">确 定</el-button>
+  </span>
+    </el-dialog>
   </el-row>
 </template>
 <script>
+import * as Request from '@/general/request.js'
+
 export default {
   data () {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
+      if_dialog_rm_script: false,
+      execute_script_group_list: [],
+      execute_script_type_list: [],
+      execute_script_group_code_key: '',
+      execute_script_type_code_key: '',
       target_options_value: '',
       temporary_script_text: '',
       updatedialog: false,
@@ -179,10 +212,18 @@ export default {
       }, {
         value: 'temporary_script',
         label: '临时指令'
-      }]
+      }],
+      update_script_list: [],
+      del_script_index: '',
+      del_script_row: ''
     }
   },
   methods: {
+    created_tabs_switch () {
+      this.UpdateScriptQuery()
+      this.ScriptGroupQuery()
+      this.ScriptTypeQuery()
+    },
     exceed_updte () {
       this.$message.warning('最多只能上传3个脚本')
     },
@@ -194,6 +235,57 @@ export default {
     },
     handlePreview (file) {
       console.log(file)
+    },
+    async UpdateScriptQuery () {
+      const response = await Request.GET('/hosts/update_script_query')
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.update_script_list = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async ScriptGroupQuery () {
+      const response = await Request.GET('/general/code_query', { code_type: 'execute_script_group' })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.execute_script_group_list = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async ScriptTypeQuery () {
+      const response = await Request.GET('/general/code_query', { code_type: 'execute_script_type' })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.execute_script_type_list = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    RmScriptDialog (index, row) {
+      this.if_dialog_rm_script = true
+      this.del_script_index = index
+      this.del_script_row = row
+    },
+    async RmScript () {
+      const response = await Request.DELETE('/hosts/rm_script', { id: this.del_script_row.id })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+          this.update_script_list.splice(this.del_script_index, 1)
+          this.if_dialog_rm_script = false
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     }
   }
 }

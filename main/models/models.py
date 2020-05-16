@@ -1,9 +1,24 @@
 # coding: utf-8
 from sqlalchemy import Column, DateTime, Integer, SmallInteger, String
+from sqlalchemy.schema import FetchedValue
 from flask_sqlalchemy import SQLAlchemy
 
 
 db = SQLAlchemy()
+
+
+
+class DocumentCabinet(db.Model):
+    __tablename__ = 'document_cabinet'
+
+    id = db.Column(db.Integer, primary_key=True)
+    file_path = db.Column(db.String(300))
+    file_name = db.Column(db.String(50))
+    file_group = db.Column(db.String(50))
+    file_type = db.Column(db.String(50))
+    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    comment = db.Column(db.String(50))
 
 
 
@@ -59,8 +74,8 @@ class ServerSoftware(db.Model):
     restart_soft_cmd = db.Column(db.String(50))
     soft_log_path = db.Column(db.String(50))
     is_remove = db.Column(db.Integer)
-    create_time = db.Column(db.DateTime)
-    modify_time = db.Column(db.DateTime)
+    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
     comments = db.Column(db.String(50))
 
 
