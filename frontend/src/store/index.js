@@ -11,7 +11,7 @@ export default new Vuex.Store({
     }],
     TabsValue: '',
     host_table_click_value: '',
-    host_table_click_values: ''
+    hosts_table_click_values: ''
   },
   mutations: {
     editableTabs: (state, obj) => {

@@ -217,10 +217,10 @@ export default {
     },
     HostTableClickValues: {
       get () {
-        return this.$store.state.host_table_click_values
+        return this.$store.state.hosts_table_click_values
       },
       set (val) {
-        this.$store.state.host_table_click_values = val
+        this.$store.state.hosts_table_click_values = val
       }
     }
   }

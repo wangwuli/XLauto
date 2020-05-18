@@ -126,7 +126,7 @@
           <el-button type="warning" style="padding: 5px 5px;margin-top: -4px; margin-right: 50px; float: right">执行</el-button>
         </div>
         <el-table
-          :data="tableData"
+          :data="hosts_table_data"
           style="width: 100%; height: 455px"
           size="mini">
           <el-table-column
@@ -230,6 +230,7 @@ export default {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
+      hosts_table_data: [],
       edit_script_group_code_key: '',
       edit_script_type_code_key: '',
       if_dialog_edit_script: false,
@@ -265,7 +266,7 @@ export default {
   },
   computed: {
     ...mapState({
-      table_click_value: 'host_table_click_value'
+      table_click_value: 'hosts_table_click_values'
     })
   },
   methods: {
@@ -365,7 +366,7 @@ export default {
     },
     hosts_add_target () {
       debugger
-      this.target_options_value = this.table_click_value
+      this.hosts_table_data = this.table_click_value
     }
   }
 }
