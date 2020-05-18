@@ -1,14 +1,15 @@
 <template>
   <el-row>
       <div style="width: 100%">
-        <el-button type="primary" size="mini" @click="if_dialog_edit_script = true">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
+        <el-button type="primary" size="mini" @click="hosts_add_target">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
         <el-button type="primary" size="mini" @click="updatedialog = true">上传脚本<i class="el-icon-upload el-icon--right"></i></el-button>
       </div>
     <div style="float:left; height: 500px; width: 410px; margin-bottom: 10px">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>已存脚本</span>
-          <el-select v-model="execute_script_group_code_key" placeholder="组" size="mini" class="select-box-card-head">
+          <el-select @change="UpdateScriptQuery" v-model="execute_script_group_code_key" placeholder="组" size="mini"
+                     class="select-box-card-head" filterable default-first-option>
             <el-option
               v-for="item in execute_script_group_list"
               :key="item.code_key"
@@ -16,7 +17,8 @@
               :value="item.code_key">
             </el-option>
           </el-select>
-          <el-select v-model="execute_script_type_code_key" placeholder="类型" size="mini" class="select-box-card-head">
+          <el-select @change="UpdateScriptQuery" v-model="execute_script_type_code_key" placeholder="类型" size="mini"
+                     class="select-box-card-head" filterable default-first-option>
             <el-option
               v-for="item in execute_script_type_list"
               :key="item.code_key"
@@ -29,6 +31,10 @@
           :data="update_script_list"
           style="width: 100%; height: 200px"
           size="mini">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
           <el-table-column
             prop="file_name"
             label="脚本名"
@@ -69,6 +75,10 @@
           :data="tableData"
           style="width: 100%; height: 200px"
           size="mini">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
           <el-table-column
             prop="date"
             label="脚本名"
@@ -119,6 +129,10 @@
           :data="tableData"
           style="width: 100%; height: 455px"
           size="mini">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
           <el-table-column
             prop="date"
             label="主机名"
@@ -183,7 +197,7 @@
     <el-dialog
       title="设置"
       :visible.sync="if_dialog_edit_script"
-      width="400px">
+      width="300px">
         <el-select v-model="edit_script_group_code_key" placeholder="组" size="mini" style="width: 100px">
           <el-option
             v-for="item in execute_script_group_list"
@@ -209,6 +223,7 @@
 </template>
 <script>
 import * as Request from '@/general/request.js'
+import { mapState } from 'vuex'
 
 export default {
   data () {
@@ -248,6 +263,11 @@ export default {
       del_script_row: ''
     }
   },
+  computed: {
+    ...mapState({
+      table_click_value: 'host_table_click_value'
+    })
+  },
   methods: {
     created_tabs_switch () {
       this.UpdateScriptQuery()
@@ -268,7 +288,10 @@ export default {
       console.log(file)
     },
     async UpdateScriptQuery () {
-      const response = await Request.GET('/hosts/update_script_query')
+      const response = await Request.GET('/hosts/update_script_query', {
+        file_type: this.execute_script_type_code_key,
+        file_group: this.execute_script_group_code_key
+      })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -326,19 +349,24 @@ export default {
     async EditScript () {
       const response = await Request.POST('/hosts/edit_script', {
         id: this.edit_script_row.id,
-        script_group: this.edit_script_group_code_key,
-        script_type: this.edit_script_type_code_key
+        file_group: this.edit_script_group_code_key,
+        file_type: this.edit_script_type_code_key
       })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
           this.$message.success(data.msg)
           this.if_dialog_edit_script = false
+          this.UpdateScriptQuery()
         } else {
           this.$message.error(data.msg)
         }
       }
     },
+    hosts_add_target () {
+      debugger
+      this.target_options_value = this.table_click_value
+    }
   }
 }
 </script>
@@ -379,5 +407,8 @@ export default {
     width: 100px;
     margin-top: -5px;
     margin-right: 0px
+  }
+  .el-select-dropdown__item {
+    font-size: 1px
   }
 </style>

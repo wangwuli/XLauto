@@ -99,7 +99,6 @@ export default {
       drawer: false,
       direction: 'ltr',
       tableData: [],
-      multipleSelection: [],
       value: '',
       hosttypelist: [],
       projectslist: [],
@@ -152,7 +151,8 @@ export default {
       }
     },
     handleSelectionChange (val) {
-      this.multipleSelection = val
+      // this.multipleSelection = val
+      this.HostTableClickValues = val
     },
     async hostslistQuery () {
       var datas = JSON.parse(JSON.stringify(this.host_filter_form))
@@ -213,6 +213,14 @@ export default {
       },
       set (val) {
         this.$store.state.host_table_click_value = val
+      }
+    },
+    HostTableClickValues: {
+      get () {
+        return this.$store.state.host_table_click_values
+      },
+      set (val) {
+        this.$store.state.host_table_click_values = val
       }
     }
   }
