@@ -229,6 +229,7 @@ export default {
     },
     submitUpload () {
       this.$refs.upload.submit()
+      this.UpdateScriptQuery()
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
