@@ -14,7 +14,6 @@ from models.models import DocumentCabinet, db, SysCode
 from src.general.General import Result
 from src.general.Transform import model_to_dict
 from src.hosts import hosts
-from pypinyin import lazy_pinyin
 
 
 @hosts.route('/hosts/update_script_file', methods=['POST'])
@@ -51,6 +50,21 @@ def update_script_query():
 def rm_script():
     id = request.json.get('id')
     delete_script_obj = DocumentCabinet.query.filter(DocumentCabinet.id==id).first()
+
+    os.remove(delete_script_obj.file_path)
+
+    db.session.delete(delete_script_obj)
+    db.session.commit()
+    db.session.close()
+
+    return Result.success_response(msg='删除成功')
+
+
+@hosts.route('/hosts/edit_script', methods=['POST'])
+def rm_script():
+    data_dict = request.get_json()
+
+    delete_script_obj = DocumentCabinet.query.filter(DocumentCabinet.id==data_dict['id']).update(DocumentCabinet.script_group==data_dict['script_group'],DocumentCabinet.script_type==data_dict['script_type'])
 
     os.remove(delete_script_obj.file_path)
 
