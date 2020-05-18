@@ -1,7 +1,7 @@
 <template>
   <el-row>
       <div style="width: 100%">
-        <el-button type="primary" size="mini" @click="updatedialog = true">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
+        <el-button type="primary" size="mini" @click="if_dialog_edit_script = true">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
         <el-button type="primary" size="mini" @click="updatedialog = true">上传脚本<i class="el-icon-upload el-icon--right"></i></el-button>
       </div>
     <div style="float:left; height: 500px; width: 410px; margin-bottom: 10px">
@@ -51,7 +51,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)" icon="el-icon-edit" style="padding: 0px" circle></el-button>
+                @click="ScriptEdit(scope.$index, scope.row)" icon="el-icon-edit" style="padding: 0px" circle></el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -172,13 +172,38 @@
     <el-dialog
       title="提示"
       :visible.sync="if_dialog_rm_script"
-      width="20%"
-      :before-close="handleClose">
+      width="20%">
       <span>确认删除脚本</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="if_dialog_rm_script = false" size="mini">取 消</el-button>
-    <el-button type="primary" @click="RmScript" size="mini">确 定</el-button>
-  </span>
+        <el-button @click="if_dialog_rm_script = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="RmScript" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="设置"
+      :visible.sync="if_dialog_edit_script"
+      width="400px">
+        <el-select v-model="edit_script_group_code_key" placeholder="组" size="mini" style="width: 100px">
+          <el-option
+            v-for="item in execute_script_group_list"
+            :key="item.code_key"
+            :label="item.code_name"
+            :value="item.code_key">
+          </el-option>
+        </el-select>
+        <el-select v-model="edit_script_type_code_key" placeholder="类型" size="mini" style="width: 100px; padding-left: 20px">
+          <el-option
+            v-for="item in execute_script_type_list"
+            :key="item.code_key"
+            :label="item.code_name"
+            :value="item.code_key">
+          </el-option>
+          </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="if_dialog_edit_script = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="EditScript" size="mini">确 定</el-button>
+      </span>
     </el-dialog>
   </el-row>
 </template>
@@ -190,6 +215,11 @@ export default {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
+      edit_script_group_code_key: '',
+      edit_script_type_code_key: '',
+      if_dialog_edit_script: false,
+      edit_script_index: '',
+      edit_script_row: '',
       if_dialog_rm_script: false,
       execute_script_group_list: [],
       execute_script_type_list: [],
@@ -286,7 +316,28 @@ export default {
           this.$message.error(data.msg)
         }
       }
-    }
+    },
+    ScriptEdit (index, row) {
+      this.if_dialog_edit_script = true
+      this.edit_script_index = index
+      this.edit_script_row = row
+    },
+    async EditScript () {
+      const response = await Request.POST('/hosts/edit_script', {
+        id: this.edit_script_row.id,
+        script_group: this.edit_script_group_code_key,
+        script_type: this.edit_script_type_code_key
+      })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+          this.if_dialog_edit_script = false
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
   }
 }
 </script>
