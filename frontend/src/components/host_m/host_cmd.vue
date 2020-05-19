@@ -134,8 +134,13 @@
             width="55">
           </el-table-column>
           <el-table-column
-            prop="date"
+            prop="host_name"
             label="主机名"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="host_ip"
+            label="主机IP"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column

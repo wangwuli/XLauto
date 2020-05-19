@@ -41,16 +41,23 @@ def update_script_query():
     file_group = request.args.get('file_group')
     file_type = request.args.get('file_type')
 
-    sql_file_group = '%%%s%%' %file_group if file_group else  '%'
-    sql_file_type = '%%%s%%' % file_type if file_type else '%'
+    if file_group:
+         sql_file_group, sql_file_group_null = '%%%s%%' % file_group, ''
+    else:
+        sql_file_group, sql_file_group_null = '%', 'OR a.file_type IS NULL'
+
+    if file_type:
+        sql_file_type, sql_file_type_null = '%%%s%%' % file_type, ''
+    else:
+        sql_file_type, sql_file_type_null = '%', 'OR a.file_group IS NULL'
 
 
     sql_parameter = {"file_group" :sql_file_group, "file_type": sql_file_type}
     sql = """
     SELECT * FROM document_cabinet a
-    WHERE a.file_type LIKE :file_type
-    AND a.file_group LIKE :file_group
-    """
+    WHERE (a.file_type LIKE :file_type %s)
+    AND (a.file_group LIKE :file_group %s)
+    """ %(sql_file_type_null, sql_file_group_null)
     sqla = Sqla(current_app)
     data = sqla.fetch_to_dict(sql, sql_parameter)
 
