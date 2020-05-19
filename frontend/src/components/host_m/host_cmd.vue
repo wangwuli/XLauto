@@ -7,6 +7,7 @@
     <div style="float:left; height: 500px; width: 410px; margin-bottom: 10px">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
+          <i class="el-icon-upload" style="font-size: 15px; color: #91ca8c"/>
           <span>已存脚本</span>
           <el-select @change="UpdateScriptQuery" v-model="execute_script_group_code_key" placeholder="组" size="mini"
                      class="select-box-card-head" filterable default-first-option>
@@ -29,6 +30,7 @@
         </div>
         <el-table
           :data="update_script_list"
+          ref = "update_script_list_value"
           style="width: 100%; height: 200px"
           size="mini">
           <el-table-column
@@ -68,12 +70,14 @@
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
+          <i class="el-icon-video-camera" style="font-size: 15px; color: #7289ab"/>
           <span>历史记录</span>
-          <el-input v-model="input" placeholder="搜索" size="mini" style="width: 150px; float: right; margin-top: -5px "></el-input>
+          <el-input v-model="search_history_value" placeholder="搜索" size="mini" style="width: 150px; float: right; margin-top: -5px "></el-input>
         </div>
         <el-table
-          :data="tableData"
+          :data="history_script_list"
           style="width: 100%; height: 200px"
+          ref="history_script_list_value"
           size="mini">
           <el-table-column
             type="selection"
@@ -100,6 +104,7 @@
     <div style="float:left; height: 500px; width: 410px; margin-bottom: 10px">
       <el-card class="box-card-temporary-text">
         <div slot="header" class="clearfix">
+          <i class="el-icon-edit-outline" style="font-size: 15px; color: #eedd78"></i>
           <span>临时指令内容</span>
         </div>
         <el-input
@@ -122,12 +127,13 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-button type="primary" style="padding: 5px 20px;margin-top: -4px; margin-right: 5px; float: right">绑定</el-button>
+          <el-button @click="BindScript" type="primary" style="padding: 5px 20px;margin-top: -4px; margin-right: 5px; float: right">绑定</el-button>
           <el-button type="warning" style="padding: 5px 5px;margin-top: -4px; margin-right: 50px; float: right">执行</el-button>
         </div>
         <el-table
           :data="hosts_table_data"
           style="width: 100%; height: 455px"
+          ref = "host_multiple_table_value"
           size="mini">
           <el-table-column
             type="selection"
@@ -144,9 +150,19 @@
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="name"
             label="执行动作"
             show-overflow-tooltip>
+            <template slot-scope='if_host_execution_icon'>
+              <el-tooltip v-if="if_host_execution_icon.row.existing_script_total" class="item" effect="dark" :content="if_host_execution_icon.row.existing_script_content_str" placement="top-start">
+                <i class="el-icon-upload" style="font-size: 15px; color: #eedd78"/>
+              </el-tooltip>
+              <el-tooltip v-if="if_host_execution_icon.row.history_script_total" class="item" effect="dark" :content="if_host_execution_icon.row.history_script_content_str" placement="top-start">
+                <i class="el-icon-video-camera" style="font-size: 15px; color: #7289ab"/>
+              </el-tooltip>
+              <el-tooltip  v-if="if_host_execution_icon.row.temporary_script_total" class="item" effect="dark" :content="if_host_execution_icon.row.temporary_script_content_str" placement="top-start">
+                <i class="el-icon-edit-outline" style="font-size: 15px; color: #91ca8c"/>
+              </el-tooltip>
+           </template>
           </el-table-column>
           <el-table-column
             prop="address"
@@ -161,7 +177,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="HostDelete(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -235,6 +251,8 @@ export default {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
+      history_script_list: [],
+      search_history_value: '',
       hosts_table_data: [],
       edit_script_group_code_key: '',
       edit_script_type_code_key: '',
@@ -369,9 +387,68 @@ export default {
         }
       }
     },
+    HostDelete (index, row) {
+      this.hosts_table_data.splice(index, 1)
+    },
     hosts_add_target () {
-      debugger
-      this.hosts_table_data = this.table_click_value
+      if (this.table_click_value) {
+        this.hosts_table_data = JSON.parse(JSON.stringify(this.table_click_value))
+      } else {
+        this.$message.warning('标靶中无选中服务器')
+      }
+    },
+    ExistingScriptProcess (addDict) {
+      var existingScriptContentList = []
+      for (let ai = 0; ai < this.$refs.update_script_list_value.selection.length; ai++) {
+        existingScriptContentList.push(this.$refs.update_script_list_value.selection[ai].file_name)
+      }
+      addDict = Object.assign(addDict, {
+        existing_script_content_str: existingScriptContentList.join('\n'),
+        existing_script_total: this.$refs.update_script_list_value.selection
+      })
+      return addDict
+    },
+    HistoryScriptProcess (addDict) {
+      var historyScriptContentList = []
+      for (let hi = 0; hi < this.$refs.history_script_list_value.selection.length; hi++) {
+        historyScriptContentList.push(this.$refs.history_script_list_value.selection[hi].file_name)
+      }
+      addDict = Object.assign(addDict, {
+        history_script_content_str: historyScriptContentList.join('\n'),
+        history_script_total: this.$refs.history_script_list_value.selection
+      })
+      return addDict
+    },
+    TemporaryScriptProcess (addDict) {
+      addDict = Object.assign(addDict, {
+        temporary_script_content_str: '临时指令',
+        temporary_script_total: this.temporary_script_text
+      })
+      return addDict
+    },
+    BindScript () {
+      var HostMultipleTableSelection = this.$refs.host_multiple_table_value.selection
+      if (HostMultipleTableSelection.length === 0) {
+        this.$message.warning('请选择绑定主机')
+        return false
+      }
+      var addDict = {}
+      if (this.target_options_value === 'existing_script') {
+        addDict = this.ExistingScriptProcess(addDict)
+      } else if (this.target_options_value === 'history_script') {
+        console.log()
+      } else if (this.target_options_value === 'temporary_script') {
+        console.log()
+      } else {
+        console.log()
+      }
+      for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
+        for (let si = 0; si < HostMultipleTableSelection.length; si++) {
+          if (this.hosts_table_data[hi].host_id === HostMultipleTableSelection[si].host_id) {
+            this.$set(this.hosts_table_data, hi, Object.assign(this.hosts_table_data[hi], addDict))
+          }
+        }
+      }
     }
   }
 }
