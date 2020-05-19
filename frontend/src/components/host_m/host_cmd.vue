@@ -436,11 +436,13 @@ export default {
       if (this.target_options_value === 'existing_script') {
         addDict = this.ExistingScriptProcess(addDict)
       } else if (this.target_options_value === 'history_script') {
-        console.log()
+        addDict = this.HistoryScriptProcess(addDict)
       } else if (this.target_options_value === 'temporary_script') {
-        console.log()
+        addDict = this.TemporaryScriptProcess(addDict)
       } else {
-        console.log()
+        addDict = this.ExistingScriptProcess(addDict)
+        addDict = this.HistoryScriptProcess(addDict)
+        addDict = this.TemporaryScriptProcess(addDict)
       }
       for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
         for (let si = 0; si < HostMultipleTableSelection.length; si++) {
