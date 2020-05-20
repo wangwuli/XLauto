@@ -18,10 +18,10 @@ CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */ /*
 USE `xlauto`;
 
 -- 导出  表 xlauto.document_cabinet 结构
-DROP TABLE IF EXISTS `document_cabinet`;
-CREATE TABLE IF NOT EXISTS `document_cabinet` (
+DROP TABLE IF EXISTS `script_file_cabinet`;
+CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `file_path` varchar(300) DEFAULT NULL,
+  `script_file_path` varchar(300) DEFAULT NULL,
   `file_name` varchar(50) DEFAULT NULL,
   `file_type` varchar(50) DEFAULT NULL,
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS `document_cabinet` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.document_cabinet 的数据：~0 rows (大约)
-DELETE FROM `document_cabinet`;
-/*!40000 ALTER TABLE `document_cabinet` DISABLE KEYS */;
-/*!40000 ALTER TABLE `document_cabinet` ENABLE KEYS */;
+-- 正在导出表  xlauto.script_file_cabinet 的数据：~0 rows (大约)
+DELETE FROM `script_file_cabinet`;
+/*!40000 ALTER TABLE `script_file_cabinet` DISABLE KEYS */;
+/*!40000 ALTER TABLE `script_file_cabinet` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_instance 结构
 DROP TABLE IF EXISTS `host_instance`;

@@ -9,7 +9,7 @@ import os
 import uuid
 
 from flask import request, current_app
-from models.models import DocumentCabinet, db, SysCode
+from models.models import ScriptFileCabinet, db, SysCode
 from src.general.General import Result
 from src.general.Sqla import Sqla
 from src.general.Transform import model_to_dict
@@ -26,7 +26,7 @@ def update_script_file():
 
     script_path_file = os.path.join(script_path, str(uuid.uuid1()))
 
-    file_sql_obj = DocumentCabinet(file_path=script_path_file, file_name=f_obj.filename)
+    file_sql_obj = ScriptFileCabinet(script_file_path=script_path_file, script_file_name=f_obj.filename)
     db.session.add(file_sql_obj)
     db.session.commit()
     db.session.close()
@@ -38,31 +38,31 @@ def update_script_file():
 
 @hosts.route('/hosts/update_script_query', methods=['GET'])
 def update_script_query():
-    file_group = request.args.get('file_group')
-    file_type = request.args.get('file_type')
+    script_file_group = request.args.get('script_file_group')
+    script_file_type = request.args.get('script_file_type')
 
-    if file_group:
-         sql_file_group, sql_file_group_null = '%%%s%%' % file_group, ''
+    if script_file_group:
+         sql_file_group, sql_file_group_null = '%%%s%%' % script_file_group, ''
     else:
-        sql_file_group, sql_file_group_null = '%', 'OR a.file_type IS NULL'
+        sql_file_group, sql_file_group_null = '%', 'OR a.script_file_type IS NULL'
 
-    if file_type:
-        sql_file_type, sql_file_type_null = '%%%s%%' % file_type, ''
+    if script_file_type:
+        sql_file_type, sql_file_type_null = '%%%s%%' % script_file_type, ''
     else:
-        sql_file_type, sql_file_type_null = '%', 'OR a.file_group IS NULL'
+        sql_file_type, sql_file_type_null = '%', 'OR a.script_file_group IS NULL'
 
 
-    sql_parameter = {"file_group" :sql_file_group, "file_type": sql_file_type}
+    sql_parameter = {"script_file_group" :sql_file_group, "script_file_type": sql_file_type}
     sql = """
-    SELECT * FROM document_cabinet a
-    WHERE (a.file_type LIKE :file_type %s)
-    AND (a.file_group LIKE :file_group %s)
+    SELECT * FROM script_file_cabinet a
+    WHERE (a.script_file_type LIKE :script_file_type %s)
+    AND (a.script_file_group LIKE :script_file_group %s)
     """ %(sql_file_type_null, sql_file_group_null)
     sqla = Sqla(current_app)
     data = sqla.fetch_to_dict(sql, sql_parameter)
 
-    # update_script_obj = db.session.query(DocumentCabinet.id, DocumentCabinet.file_path, DocumentCabinet.file_name,
-    #                                DocumentCabinet.file_group, DocumentCabinet.file_type, DocumentCabinet.comment, ).all()
+    # update_script_obj = db.session.query(ScriptFileCabinet.id, ScriptFileCabinet.script_file_path, DocumentCabinet.script_file_name,
+    #                                ScriptFileCabinet.script_file_group, ScriptFileCabinet.script_file_type, DocumentCabinet.comment, ).all()
     # db.session.close()
     # project_data = model_to_dict(update_script_obj)
 
@@ -72,9 +72,9 @@ def update_script_query():
 @hosts.route('/hosts/rm_script', methods=['DELETE'])
 def rm_script():
     id = request.json.get('id')
-    delete_script_obj = DocumentCabinet.query.filter(DocumentCabinet.id==id).first()
+    delete_script_obj = ScriptFileCabinet.query.filter(ScriptFileCabinet.id==id).first()
 
-    os.remove(delete_script_obj.file_path)
+    os.remove(delete_script_obj.script_file_path)
 
     db.session.delete(delete_script_obj)
     db.session.commit()
@@ -87,9 +87,9 @@ def rm_script():
 def edit_script():
     data_dict = request.get_json()
 
-    delete_script_obj = DocumentCabinet.query.filter_by(id=data_dict['id']).first()
-    delete_script_obj.file_group = data_dict['file_group']
-    delete_script_obj.file_type = data_dict['file_type']
+    delete_script_obj = ScriptFileCabinet.query.filter_by(id=data_dict['id']).first()
+    delete_script_obj.script_file_group = data_dict['script_file_group']
+    delete_script_obj.script_file_type = data_dict['script_file_type']
 
     db.session.commit()
     db.session.close()

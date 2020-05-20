@@ -8,20 +8,6 @@ db = SQLAlchemy()
 
 
 
-class DocumentCabinet(db.Model):
-    __tablename__ = 'document_cabinet'
-
-    id = db.Column(db.Integer, primary_key=True)
-    file_path = db.Column(db.String(300))
-    file_name = db.Column(db.String(50))
-    file_group = db.Column(db.String(50))
-    file_type = db.Column(db.String(50))
-    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    comment = db.Column(db.String(50))
-
-
-
 class HostInstance(db.Model):
     __tablename__ = 'host_instance'
 
@@ -62,6 +48,32 @@ class Project(db.Model):
 
 
 
+class ScriptFileCabinet(db.Model):
+    __tablename__ = 'script_file_cabinet'
+
+    script_file_id = db.Column(db.Integer, primary_key=True)
+    script_file_path = db.Column(db.String(300))
+    script_file_name = db.Column(db.String(50))
+    script_file_group = db.Column(db.String(50))
+    script_file_type = db.Column(db.String(50))
+    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    comment = db.Column(db.String(50))
+
+
+
+class ScriptFileExecuteEvent(db.Model):
+    __tablename__ = 'script_file_execute_event'
+
+    script_file_execute_event_id = db.Column(db.Integer, primary_key=True)
+    script_execute_event_batch_id = db.Column(db.Integer)
+    script_file_id = db.Column(db.Integer)
+    execute_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    execute_end_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    execute_result = db.Column(db.Integer, info='1为成功，0为失败')
+
+
+
 class ServerSoftware(db.Model):
     __tablename__ = 'server_software'
 
@@ -84,7 +96,7 @@ class SysCode(db.Model):
     __tablename__ = 'sys_code'
 
     code_id = db.Column(db.Integer, primary_key=True)
-    code_key = db.Column(db.String(50), nullable=False)
+    code_key = db.Column(db.String(50))
     code_name = db.Column(db.String(50), nullable=False)
     code_type = db.Column(db.String(50), nullable=False)
     f_code = db.Column(db.String(50))

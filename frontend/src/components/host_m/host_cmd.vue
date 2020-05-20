@@ -4,6 +4,7 @@
         <el-button type="primary" size="mini" @click="hosts_add_target">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
         <el-button type="primary" size="mini" @click="updatedialog = true">上传脚本<i class="el-icon-upload el-icon--right"></i></el-button>
       </div>
+    <el-divider size="mini"></el-divider>
     <div style="float:left; height: 500px; width: 410px; margin-bottom: 10px">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -38,17 +39,17 @@
             width="55">
           </el-table-column>
           <el-table-column
-            prop="file_name"
+            prop="script_file_name"
             label="脚本名"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="file_type"
+            prop="script_file_type"
             label="类型"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="file_group"
+            prop="script_file_group"
             label="组"
             show-overflow-tooltip>
           </el-table-column>
@@ -313,8 +314,8 @@ export default {
     },
     async UpdateScriptQuery () {
       const response = await Request.GET('/hosts/update_script_query', {
-        file_type: this.execute_script_type_code_key,
-        file_group: this.execute_script_group_code_key
+        script_file_type: this.execute_script_type_code_key,
+        script_file_group: this.execute_script_group_code_key
       })
       if (response && response.data) {
         var data = response.data
@@ -373,8 +374,8 @@ export default {
     async EditScript () {
       const response = await Request.POST('/hosts/edit_script', {
         id: this.edit_script_row.id,
-        file_group: this.edit_script_group_code_key,
-        file_type: this.edit_script_type_code_key
+        script_file_group: this.edit_script_group_code_key,
+        script_file_type: this.edit_script_type_code_key
       })
       if (response && response.data) {
         var data = response.data
@@ -400,7 +401,7 @@ export default {
     ExistingScriptProcess (addDict) {
       var existingScriptContentList = []
       for (let ai = 0; ai < this.$refs.update_script_list_value.selection.length; ai++) {
-        existingScriptContentList.push(this.$refs.update_script_list_value.selection[ai].file_name)
+        existingScriptContentList.push(this.$refs.update_script_list_value.selection[ai].script_file_name)
       }
       addDict = Object.assign(addDict, {
         existing_script_content_str: existingScriptContentList.join('\n'),
@@ -411,7 +412,7 @@ export default {
     HistoryScriptProcess (addDict) {
       var historyScriptContentList = []
       for (let hi = 0; hi < this.$refs.history_script_list_value.selection.length; hi++) {
-        historyScriptContentList.push(this.$refs.history_script_list_value.selection[hi].file_name)
+        historyScriptContentList.push(this.$refs.history_script_list_value.selection[hi].script_file_name)
       }
       addDict = Object.assign(addDict, {
         history_script_content_str: historyScriptContentList.join('\n'),
@@ -421,7 +422,7 @@ export default {
     },
     TemporaryScriptProcess (addDict) {
       addDict = Object.assign(addDict, {
-        temporary_script_content_str: '临时指令',
+        temporary_script_content_str: '{临时指令内容..}',
         temporary_script_total: this.temporary_script_text
       })
       return addDict
@@ -433,7 +434,10 @@ export default {
         return false
       }
       var addDict = {}
-      if (this.target_options_value === 'existing_script') {
+      if (this.target_options_value === '') {
+        this.$message.warning('请选择绑定的类型')
+        return false
+      } else if (this.target_options_value === 'existing_script') {
         addDict = this.ExistingScriptProcess(addDict)
       } else if (this.target_options_value === 'history_script') {
         addDict = this.HistoryScriptProcess(addDict)
