@@ -137,10 +137,6 @@
           ref = "host_multiple_table_value"
           size="mini">
           <el-table-column
-            type="selection"
-            width="55">
-          </el-table-column>
-          <el-table-column
             prop="host_name"
             label="主机名"
             show-overflow-tooltip>
@@ -180,6 +176,10 @@
                 type="danger"
                 @click="HostDelete(scope.$index, scope.row)">删除</el-button>
             </template>
+          </el-table-column>
+          <el-table-column
+            type="selection"
+            width="55">
           </el-table-column>
         </el-table>
       </el-card>
@@ -465,7 +465,7 @@ export default {
     width: 405px;
     height: 226px;
     font-size: 5px;
-    margin : 5px 5px 5px 5px;
+    /*margin : 5px 5px 5px 5px;*/
     padding-bottom: 20px;
   }
   .update-dialog .el-dialog__body {
@@ -480,16 +480,16 @@ export default {
   }
   .box-card-host-basket {
     width: 815px;
-    height: 500px;
+    height: 495px;
     font-size: 5px;
-    margin : 5px 5px 5px 5px;
+    /*margin : 5px 5px 5px 5px;*/
   }
 
   .box-card-temporary-text {
     width: 405px;
-    height: 100%;
+    height: 495px;
     font-size: 5px;
-    margin : 5px 5px 5px 5px;
+    /*margin : 5px 5px 5px 5px;*/
   }
   .select-box-card-head {
     float: right;
@@ -499,5 +499,8 @@ export default {
   }
   .el-select-dropdown__item {
     font-size: 1px
+  }
+  .el-divider--horizontal {
+    margin: 10px 0;
   }
 </style>

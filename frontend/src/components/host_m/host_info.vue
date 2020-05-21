@@ -481,4 +481,8 @@ export default {
     background-color: #ccc;
 }
 
+.el-divider--horizontal {
+  margin: 10px 0;
+}
+
 </style>

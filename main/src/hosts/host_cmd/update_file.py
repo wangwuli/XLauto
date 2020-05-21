@@ -95,3 +95,34 @@ def edit_script():
     db.session.close()
 
     return Result.success_response(msg='修改成功')
+
+
+
+@hosts.route('/hosts/script_execute_query_history', methods=['GET'])
+def script_execute_query_history():
+    script_file_name = request.args.get('script_file_name')
+
+    if script_file_name:
+        sql_fragment = "WHERE b.script_file_name LIKE  '%%:script_file_name%%'"
+    else:
+        sql_fragment = ''
+
+    sql = """
+    SELECT 
+    a.script_file_execute_event_id,
+    a.script_execute_event_batch_id,
+    a.execute_time,
+    a.execute_end_time,
+    a.script_file_id,
+    a.script_file_content,
+    b.script_file_name,
+    c.code_name AS script_file_execute_result_text
+    FROM script_file_execute_event a
+    LEFT JOIN  script_file_cabinet b ON a.script_file_id = b.script_file_id
+    LEFT JOIN sys_code c ON c.code_key = a.execute_result AND c.code_type = "script_file_execute_result_ype"
+    %s
+    """ %sql_fragment
+    sqla = Sqla(current_app)
+    data = sqla.fetch_to_dict(sql, {'script_file_name': script_file_name})
+
+    return Result.success_response(data=data, msg='查询成功')
