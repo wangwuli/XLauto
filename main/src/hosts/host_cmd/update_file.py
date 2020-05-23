@@ -103,7 +103,7 @@ def script_execute_query_history():
     script_file_name = request.args.get('script_file_name')
 
     if script_file_name:
-        sql_fragment = "WHERE b.script_file_name LIKE  '%%:script_file_name%%'"
+        sql_fragment = "WHERE b.script_file_name LIKE  :script_file_name"
     else:
         sql_fragment = ''
 
@@ -123,6 +123,7 @@ def script_execute_query_history():
     %s
     """ %sql_fragment
     sqla = Sqla(current_app)
-    data = sqla.fetch_to_dict(sql, {'script_file_name': script_file_name})
+
+    data = sqla.fetch_to_dict(sql, {'script_file_name': '%%%s%%' %script_file_name})
 
     return Result.success_response(data=data, msg='查询成功')

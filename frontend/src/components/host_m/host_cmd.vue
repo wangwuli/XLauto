@@ -73,7 +73,8 @@
         <div slot="header" class="clearfix">
           <i class="el-icon-video-camera" style="font-size: 15px; color: #7289ab"/>
           <span>历史记录</span>
-          <el-input v-model="search_history_value" placeholder="搜索" size="mini" style="width: 150px; float: right; margin-top: -5px "></el-input>
+          <el-input v-model="search_script_file_name" @input="ScriptExecuteQueryHistory" placeholder="搜索" size="mini"
+                    style="width: 150px; float: right; margin-top: -5px "></el-input>
         </div>
         <el-table
           :data="history_script_list"
@@ -85,18 +86,19 @@
             width="55">
           </el-table-column>
           <el-table-column
-            prop="date"
+            prop="script_file_name"
             label="脚本名"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="name"
-            label="类型"
+            prop="script_file_execute_result_text"
+            label="结果"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="最后执行时间"
+            prop="execute_time"
+            label="执行时间"
+            min-width="120px"
             show-overflow-tooltip>
           </el-table-column>
         </el-table>
@@ -252,6 +254,7 @@ export default {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
+      search_script_file_name: '',
       history_script_list: [],
       search_history_value: '',
       hosts_table_data: [],
@@ -298,6 +301,7 @@ export default {
       this.UpdateScriptQuery()
       this.ScriptGroupQuery()
       this.ScriptTypeQuery()
+      this.ScriptExecuteQueryHistory()
     },
     exceed_updte () {
       this.$message.warning('最多只能上传3个脚本')
@@ -383,6 +387,19 @@ export default {
           this.$message.success(data.msg)
           this.if_dialog_edit_script = false
           this.UpdateScriptQuery()
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async ScriptExecuteQueryHistory () {
+      const response = await Request.GET('/hosts/script_execute_query_history', {
+        script_file_name: this.search_script_file_name
+      })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.history_script_list = data.data
         } else {
           this.$message.error(data.msg)
         }
