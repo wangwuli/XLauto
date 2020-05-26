@@ -127,3 +127,18 @@ def script_execute_query_history():
     data = sqla.fetch_to_dict(sql, {'script_file_name': '%%%s%%' %script_file_name})
 
     return Result.success_response(data=data, msg='查询成功')
+
+
+
+@hosts.route('/hosts/execute_script', methods=['POST'])
+def execute_script():
+    data_dict = request.get_json()
+
+    delete_script_obj = ScriptFileCabinet.query.filter_by(id=data_dict['id']).first()
+    delete_script_obj.script_file_group = data_dict['script_file_group']
+    delete_script_obj.script_file_type = data_dict['script_file_type']
+
+    db.session.commit()
+    db.session.close()
+
+    return Result.success_response(msg='修改成功')

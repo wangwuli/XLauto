@@ -426,7 +426,8 @@ export default {
       }
       addDict = Object.assign(addDict, {
         existing_script_content_str: existingScriptContentList.join(','),
-        existing_script_total: this.$refs.update_script_list_value.selection
+        existing_script_total: this.$refs.update_script_list_value.selection,
+        existing_script_list: existingScriptContentList
       })
       return addDict
     },
@@ -441,13 +442,14 @@ export default {
       }
       addDict = Object.assign(addDict, {
         history_script_content_str: historyScriptContentList.join(','),
-        history_script_total: this.$refs.history_script_list_value.selection
+        history_script_total: this.$refs.history_script_list_value.selection,
+        history_script_list: historyScriptContentList
       })
       return addDict
     },
     TemporaryScriptProcess (addDict) {
-      if (this.temporary_script_text) {
-        this.$message.warning('未勾选历史脚本')
+      if (!this.temporary_script_text) {
+        this.$message.warning('临时脚本内容为空')
         return false
       }
       addDict = Object.assign(addDict, {
@@ -480,13 +482,17 @@ export default {
       for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
         for (let si = 0; si < HostMultipleTableSelection.length; si++) {
           if (this.hosts_table_data[hi].host_id === HostMultipleTableSelection[si].host_id) {
-            debugger
             if (addDict.existing_script_total !== undefined & this.hosts_table_data[hi].existing_script_total !== undefined) {
-              addDict.existing_script_total = addDict.existing_script_total.concat(this.hosts_table_data[hi].existing_script_total)
-              addDict.existing_script_content_str += ',' + this.hosts_table_data[hi].existing_script_content_str
+              if (addDict.existing_script_list.indexOf(this.hosts_table_data[hi].existing_script_content_str)) {
+                addDict.existing_script_total = addDict.existing_script_total.concat(this.hosts_table_data[hi].existing_script_total)
+                addDict.existing_script_content_str += ',' + this.hosts_table_data[hi].existing_script_content_str
+              }
             }
-            if (addDict.history_script_total !== undefined) {
-              addDict.history_script_total = addDict.history_script_total.concat(this.hosts_table_data[hi].history_script_total)
+            if (addDict.history_script_total !== undefined & this.hosts_table_data[hi].history_script_total !== undefined) {
+              if (addDict.history_script_list.indexOf(this.hosts_table_data[hi].history_script_content_str)) {
+                addDict.history_script_total = addDict.history_script_total.concat(this.hosts_table_data[hi].history_script_total)
+                addDict.history_script_content_str += ',' + this.hosts_table_data[hi].history_script_content_str
+              }
             }
             if (addDict.temporary_script_total !== undefined) {
               addDict.temporary_script_total = addDict.temporary_script_total.concat(this.hosts_table_data[hi].temporary_script_total)
@@ -496,7 +502,18 @@ export default {
         }
       }
     },
-
+    async ExecuteScript () {
+      const response = await Request.POST('/hosts/execute_script', { hosts_table_data: this.hosts_table_data })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+          this.if_dialog_rm_script = false
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
     Unique (arr) {
       const res = new Map()
       return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1))
