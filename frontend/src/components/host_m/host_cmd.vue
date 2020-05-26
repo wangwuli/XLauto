@@ -122,6 +122,7 @@
       <el-card class="box-card-host-basket">
         <div slot="header" class="clearfix" style="height: 16px">
           <span>执行目标</span>
+          <el-button @click="BindScript" type="primary" style="padding: 5px 20px;margin-top: -4px; margin-right: 5px; float: right">绑定</el-button>
           <el-select v-model="target_options_value" placeholder="绑定目标" size="mini" class="select-box-card-head" style="width: 150px">
             <el-option
               v-for="item in target_options"
@@ -130,7 +131,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-button @click="BindScript" type="primary" style="padding: 5px 20px;margin-top: -4px; margin-right: 5px; float: right">绑定</el-button>
           <el-button type="warning" style="padding: 5px 5px;margin-top: -4px; margin-right: 50px; float: right">执行</el-button>
         </div>
         <el-table
@@ -416,28 +416,40 @@ export default {
       }
     },
     ExistingScriptProcess (addDict) {
+      if (this.$refs.update_script_list_value.selection.length === 0) {
+        this.$message.warning('未勾选已存脚本项')
+        return false
+      }
       var existingScriptContentList = []
       for (let ai = 0; ai < this.$refs.update_script_list_value.selection.length; ai++) {
         existingScriptContentList.push(this.$refs.update_script_list_value.selection[ai].script_file_name)
       }
       addDict = Object.assign(addDict, {
-        existing_script_content_str: existingScriptContentList.join('\n'),
+        existing_script_content_str: existingScriptContentList.join(','),
         existing_script_total: this.$refs.update_script_list_value.selection
       })
       return addDict
     },
     HistoryScriptProcess (addDict) {
+      if (this.$refs.history_script_list_value.selection.length === 0) {
+        this.$message.warning('未勾选历史脚本')
+        return false
+      }
       var historyScriptContentList = []
       for (let hi = 0; hi < this.$refs.history_script_list_value.selection.length; hi++) {
         historyScriptContentList.push(this.$refs.history_script_list_value.selection[hi].script_file_name)
       }
       addDict = Object.assign(addDict, {
-        history_script_content_str: historyScriptContentList.join('\n'),
+        history_script_content_str: historyScriptContentList.join(','),
         history_script_total: this.$refs.history_script_list_value.selection
       })
       return addDict
     },
     TemporaryScriptProcess (addDict) {
+      if (this.temporary_script_text) {
+        this.$message.warning('未勾选历史脚本')
+        return false
+      }
       addDict = Object.assign(addDict, {
         temporary_script_content_str: '{临时指令内容..}',
         temporary_script_total: this.temporary_script_text
@@ -468,10 +480,26 @@ export default {
       for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
         for (let si = 0; si < HostMultipleTableSelection.length; si++) {
           if (this.hosts_table_data[hi].host_id === HostMultipleTableSelection[si].host_id) {
+            debugger
+            if (addDict.existing_script_total !== undefined & this.hosts_table_data[hi].existing_script_total !== undefined) {
+              addDict.existing_script_total = addDict.existing_script_total.concat(this.hosts_table_data[hi].existing_script_total)
+              addDict.existing_script_content_str += ',' + this.hosts_table_data[hi].existing_script_content_str
+            }
+            if (addDict.history_script_total !== undefined) {
+              addDict.history_script_total = addDict.history_script_total.concat(this.hosts_table_data[hi].history_script_total)
+            }
+            if (addDict.temporary_script_total !== undefined) {
+              addDict.temporary_script_total = addDict.temporary_script_total.concat(this.hosts_table_data[hi].temporary_script_total)
+            }
             this.$set(this.hosts_table_data, hi, Object.assign(this.hosts_table_data[hi], addDict))
           }
         }
       }
+    },
+
+    Unique (arr) {
+      const res = new Map()
+      return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1))
     }
   }
 }
@@ -512,7 +540,7 @@ export default {
     float: right;
     width: 100px;
     margin-top: -5px;
-    margin-right: 0px
+    margin-right: 5px
   }
   .el-select-dropdown__item {
     font-size: 1px
