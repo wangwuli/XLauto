@@ -144,10 +144,10 @@ def execute_script():
         history_script_total_list = hosts_table_data_one.get('history_script_total')
         temporary_script_total_str = hosts_table_data_one.get('temporary_script_total')
 
-    host_user_info = get_hotst_connect_info(host_id)
+    host_info_dict = get_hotst_connect_info(host_id)
 
     ssh = SCPMet()
-    ssh.set_info(host_user_info)
+    ssh.set_info(host_info_dict)
     ssh.execcmd()
 
 

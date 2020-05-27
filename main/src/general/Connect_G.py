@@ -8,6 +8,8 @@
 import os
 import shlex
 import subprocess
+import uuid
+
 import paramiko
 
 
@@ -91,6 +93,28 @@ class SCPMet(Sshmet):
         #     sftp.put(x, remote_filename)
 
         return des_file
+
+    def put_file_exec(self, src_file, des_file, param, type='sh',nohup=True):
+        """
+        上传文件并执行
+        :param src_file: 源文件
+        :param des_file: 目标文件
+        :param param: 脚本参数
+        :param type:  python or sh ?
+        :return:
+        """
+        self.put_file(src_file, des_file)
+
+        file_name = str(uuid.uuid1())
+        # cmd = 'nohup %s %s %s > /dev/null 2>&1 &' % (type, des_file, param)
+        if nohup:
+            cmd = 'nohup %s %s %s > %s 2>&1 &' % (type, des_file, param, file_name)
+        else:
+            cmd = '%s %s %s > %s 2>&1' % (type, des_file, param, file_name)
+
+        cmd_result = self.execcmd(cmd)
+
+        return cmd_result
 
     def list_dir(self, dir_name):
         return self.sftp.listdir(dir_name)
