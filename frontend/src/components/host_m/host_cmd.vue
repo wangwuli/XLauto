@@ -131,7 +131,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-button type="warning" style="padding: 5px 5px;margin-top: -4px; margin-right: 50px; float: right">执行</el-button>
+          <el-button type="warning" @click="ExecuteScript" style="padding: 5px 5px;margin-top: -4px; margin-right: 50px; float: right">执行</el-button>
         </div>
         <el-table
           :data="hosts_table_data"
@@ -495,7 +495,7 @@ export default {
               }
             }
             if (addDict.temporary_script_total !== undefined) {
-              addDict.temporary_script_total = addDict.temporary_script_total.concat(this.hosts_table_data[hi].temporary_script_total)
+              addDict.temporary_script_total = this.temporary_script_text
             }
             this.$set(this.hosts_table_data, hi, Object.assign(this.hosts_table_data[hi], addDict))
           }

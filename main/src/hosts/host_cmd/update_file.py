@@ -10,6 +10,8 @@ import uuid
 
 from flask import request, current_app
 from models.models import ScriptFileCabinet, db, SysCode
+from src.dao.hosts import get_hotst_connect_info
+from src.general.Connect_G import Sshmet
 from src.general.General import Result
 from src.general.Sqla import Sqla
 from src.general.Transform import model_to_dict
@@ -134,11 +136,17 @@ def script_execute_query_history():
 def execute_script():
     data_dict = request.get_json()
 
-    delete_script_obj = ScriptFileCabinet.query.filter_by(id=data_dict['id']).first()
-    delete_script_obj.script_file_group = data_dict['script_file_group']
-    delete_script_obj.script_file_type = data_dict['script_file_type']
+    hosts_table_data = data_dict['hosts_table_data']
 
-    db.session.commit()
-    db.session.close()
+    for hosts_table_data_one in hosts_table_data:
+        host_id = hosts_table_data_one['host_id']
+        existing_script_total_list = hosts_table_data_one['existing_script_total']
+        history_script_total_list = hosts_table_data_one['history_script_total']
+        temporary_script_total_str = hosts_table_data_one['temporary_script_total']
 
-    return Result.success_response(msg='修改成功')
+    host_user_info = get_hotst_connect_info(host_id)
+
+    Sshmet.connect()
+
+
+    return Result.success_response(msg='执行成功')
