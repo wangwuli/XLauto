@@ -11,7 +11,7 @@ import uuid
 from flask import request, current_app
 from models.models import ScriptFileCabinet, db, SysCode
 from src.dao.hosts import get_hotst_connect_info
-from src.general.Connect_G import Sshmet
+from src.general.Connect_G import Sshmet, SCPMet
 from src.general.General import Result
 from src.general.Sqla import Sqla
 from src.general.Transform import model_to_dict
@@ -140,13 +140,16 @@ def execute_script():
 
     for hosts_table_data_one in hosts_table_data:
         host_id = hosts_table_data_one['host_id']
-        existing_script_total_list = hosts_table_data_one['existing_script_total']
-        history_script_total_list = hosts_table_data_one['history_script_total']
-        temporary_script_total_str = hosts_table_data_one['temporary_script_total']
+        existing_script_total_list = hosts_table_data_one.get('existing_script_total')
+        history_script_total_list = hosts_table_data_one.get('history_script_total')
+        temporary_script_total_str = hosts_table_data_one.get('temporary_script_total')
 
     host_user_info = get_hotst_connect_info(host_id)
 
-    Sshmet.connect()
+    ssh = SCPMet()
+    ssh.set_info(host_user_info)
+    ssh.execcmd()
+
 
 
     return Result.success_response(msg='执行成功')
