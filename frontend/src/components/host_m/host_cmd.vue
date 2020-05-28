@@ -172,7 +172,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="HostEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -243,6 +243,26 @@
         <el-button type="primary" @click="EditScript" size="mini">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="已绑定脚本编辑" :visible.sync="script_file_edit_dialog" >
+      <el-table :data="script_file_edit_dialog_tables" size="mini" :default-sort = "{prop: 'order', order: 'descending'}">
+        <el-table-column property="script_file_name" label="脚本名" width="100px" show-overflow-tooltip></el-table-column>
+        <el-table-column property="order" label="执行顺序"  sortable show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-input v-if="scope.row.seen" v-model="scope.row.order" size="mini"
+                      @blur="scriptFileNameOrderedit(scope)"></el-input>
+            <div style="width: 100%;height: 30px;" @dblclick="scriptFileNameOrdershow(scope)" size="mini"
+                 v-else>{{ scope.row.order }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column property="order" label="操作">
+              <el-button
+                size="mini"
+                type="danger"
+                @click="HostScriptDelete(scope.$index, scope.row)">删除</el-button>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </el-row>
 </template>
 <script>
@@ -254,6 +274,9 @@ export default {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
+      script_file_edit_dialog_tables: [],
+      script_file_edit_dialog: false,
+      activeName: '',
       search_script_file_name: '',
       history_script_list: [],
       search_history_value: '',
@@ -297,6 +320,16 @@ export default {
     })
   },
   methods: {
+    scriptFileNameOrdershow (scope) {
+      debugger
+      scope.row.seen = true
+      this.$set(this.script_file_edit_dialog_tables, scope.$index, scope.row)
+    },
+    scriptFileNameOrderedit (scope) {
+      debugger
+      scope.row.seen = false
+      this.$set(this.script_file_edit_dialog_tables, scope.$index, scope.row)
+    },
     created_tabs_switch () {
       this.UpdateScriptQuery()
       this.ScriptGroupQuery()
@@ -408,6 +441,11 @@ export default {
     HostDelete (index, row) {
       this.hosts_table_data.splice(index, 1)
     },
+    HostEdit (index, row) {
+      debugger
+      this.script_file_edit_dialog = true
+      this.script_file_edit_dialog_tables = row.script_file_edit_dialog_tables
+    },
     hosts_add_target () {
       if (this.table_click_value) {
         this.hosts_table_data = JSON.parse(JSON.stringify(this.table_click_value))
@@ -464,7 +502,7 @@ export default {
         this.$message.warning('请选择绑定主机')
         return false
       }
-      var addDict = {}
+      var addDict = { script_file_edit_dialog_tables: [] } // 排序记录列表
       if (this.target_options_value === '') {
         this.$message.warning('请选择绑定的类型')
         return false
@@ -479,25 +517,45 @@ export default {
         addDict = this.HistoryScriptProcess(addDict)
         addDict = this.TemporaryScriptProcess(addDict)
       }
+      // 合并已添加脚本之前脚本并去重
       for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
         for (let si = 0; si < HostMultipleTableSelection.length; si++) {
           if (this.hosts_table_data[hi].host_id === HostMultipleTableSelection[si].host_id) {
-            if (addDict.existing_script_total !== undefined & this.hosts_table_data[hi].existing_script_total !== undefined) {
-              if (addDict.existing_script_list.indexOf(this.hosts_table_data[hi].existing_script_content_str)) {
+            if (addDict.existing_script_total !== undefined) {
+              if (this.hosts_table_data[hi].existing_script_total !== undefined) {
                 addDict.existing_script_total = addDict.existing_script_total.concat(this.hosts_table_data[hi].existing_script_total)
-                addDict.existing_script_content_str += ',' + this.hosts_table_data[hi].existing_script_content_str
+                addDict.existing_script_total = this.UniqueDict(addDict.existing_script_total)
+
+                addDict.existing_script_lis = addDict.existing_script_list.concat(this.hosts_table_data[hi].existing_script_list)
+                addDict.existing_script_lis = this.UniqueGourp(addDict.existing_script_lis)
+
+                addDict.existing_script_content_str = addDict.existing_script_lis.join(',')
               }
+              addDict.script_file_edit_dialog_tables = addDict.script_file_edit_dialog_tables.concat(addDict.existing_script_total)
             }
-            if (addDict.history_script_total !== undefined & this.hosts_table_data[hi].history_script_total !== undefined) {
-              if (addDict.history_script_list.indexOf(this.hosts_table_data[hi].history_script_content_str)) {
+            if (addDict.history_script_total !== undefined) {
+              if (this.hosts_table_data[hi].history_script_total !== undefined) {
                 addDict.history_script_total = addDict.history_script_total.concat(this.hosts_table_data[hi].history_script_total)
-                addDict.history_script_content_str += ',' + this.hosts_table_data[hi].history_script_content_str
+                addDict.history_script_total = this.UniqueDict(addDict.history_script_total)
+
+                addDict.history_script_list = addDict.history_script_list.concat(this.hosts_table_data[hi].history_script_list)
+                addDict.history_script_list = this.UniqueGourp(addDict.history_script_list)
+
+                addDict.history_script_content_str = addDict.history_script_list.join(',')
               }
+              addDict.script_file_edit_dialog_tables = addDict.script_file_edit_dialog_tables.concat(addDict.history_script_total)
             }
             if (addDict.temporary_script_total !== undefined) {
-              addDict.temporary_script_total = this.temporary_script_text
+              addDict.temporary_script_total = [{ script_file_name: '临时脚本', script_file_content: this.temporary_script_text, script_file_id: 0 }]
+              addDict.script_file_edit_dialog_tables = addDict.script_file_edit_dialog_tables.concat(addDict.temporary_script_total)
             }
+            // 汇总后更新的table中
             this.$set(this.hosts_table_data, hi, Object.assign(this.hosts_table_data[hi], addDict))
+
+            // 设置排序
+            for (let ai = 0; ai < addDict.script_file_edit_dialog_tables.length; ai++) {
+              addDict.script_file_edit_dialog_tables[ai].order = ai
+            }
           }
         }
       }
@@ -514,9 +572,19 @@ export default {
         }
       }
     },
-    Unique (arr) {
+    UniqueDict (arr) {
       const res = new Map()
-      return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1))
+      return arr.filter((arr) => !res.has(arr.script_file_id) && res.set(arr.script_file_id, 1))
+    },
+    UniqueGourp (arr) {
+      var newArr = []
+      for (var i = 0; i < arr.length; i++) {
+        var index = arr[i]
+        if (newArr.indexOf(index) === -1) {
+          newArr.push(index)
+        }
+      }
+      return newArr
     }
   }
 }
