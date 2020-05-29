@@ -245,14 +245,17 @@
     </el-dialog>
 
     <el-dialog title="已绑定脚本编辑" :visible.sync="script_file_edit_dialog" >
-      <el-table :data="script_file_edit_dialog_tables" size="mini" :default-sort = "{prop: 'order', order: 'descending'}">
+<!--      <el-table :data="script_file_edit_dialog_tables" size="mini" :default-sort = "{prop: 'order', order: 'ascending'}">-->
+      <el-table :data="script_file_edit_dialog_tables" size="mini">
         <el-table-column property="script_file_name" label="脚本名" width="100px" show-overflow-tooltip></el-table-column>
-        <el-table-column property="order" label="执行顺序"  sortable show-overflow-tooltip>
+        <el-table-column property="order" label="执行顺序" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-input v-if="scope.row.seen" v-model="scope.row.order" size="mini"
-                      @blur="scriptFileNameOrderedit(scope)"></el-input>
+            <input v-if="scope.row.seen" v-model="scope.row.order" size="mini"
+                      @blur="scriptFileNameOrderedit(scope)"/>
             <div style="width: 100%;height: 30px;" @dblclick="scriptFileNameOrdershow(scope)" size="mini"
-                 v-else>{{ scope.row.order }}</div>
+                 v-else>
+              {{ scope.row.order }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column property="order" label="操作">
@@ -320,13 +323,16 @@ export default {
     })
   },
   methods: {
+    inputOninput (e) {
+      this.$nextTick(() => {
+        this.$forceUpdate(e)
+      })
+    },
     scriptFileNameOrdershow (scope) {
-      debugger
       scope.row.seen = true
       this.$set(this.script_file_edit_dialog_tables, scope.$index, scope.row)
     },
     scriptFileNameOrderedit (scope) {
-      debugger
       scope.row.seen = false
       this.$set(this.script_file_edit_dialog_tables, scope.$index, scope.row)
     },
@@ -555,6 +561,7 @@ export default {
             // 设置排序
             for (let ai = 0; ai < addDict.script_file_edit_dialog_tables.length; ai++) {
               addDict.script_file_edit_dialog_tables[ai].order = ai
+              addDict.script_file_edit_dialog_tables[ai].seen = false
             }
           }
         }

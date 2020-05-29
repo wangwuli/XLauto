@@ -81,8 +81,14 @@ class SCPMet(Sshmet):
         self.sftp.get(src_file, des_file)
         return des_file
 
+    def progress_bar(self, transferred, toBeTransferred, suffix=''):
+        bar_len = 100
+        filled_len = int(round(bar_len * transferred / float(toBeTransferred)))
+        percents = round(100.0 * transferred / float(toBeTransferred), 1)
+        self.percents = percents
+
     def put_file(self, src_file, des_file):
-        self.sftp.put(src_file, des_file)
+        self.sftp.put(src_file, des_file, callback=self.progress_bar)
 
         # all_files = self.__get_all_files_in_local_dir(local_dir)
         # for x in all_files:
