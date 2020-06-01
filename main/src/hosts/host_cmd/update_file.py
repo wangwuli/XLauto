@@ -6,6 +6,7 @@
 @desc:
 '''
 import os
+import threading
 import uuid
 
 from flask import request, current_app
@@ -16,6 +17,7 @@ from src.general.General import Result
 from src.general.Sqla import Sqla
 from src.general.Transform import model_to_dict
 from src.hosts import hosts
+from src.hosts.host_cmd.auxiliary import run_script_worker
 
 
 @hosts.route('/hosts/update_script_file', methods=['POST'])
@@ -139,17 +141,27 @@ def execute_script():
     hosts_table_data = data_dict['hosts_table_data']
 
     for hosts_table_data_one in hosts_table_data:
-        host_id = hosts_table_data_one['host_id']
+
         existing_script_total_list = hosts_table_data_one.get('existing_script_total')
         history_script_total_list = hosts_table_data_one.get('history_script_total')
         temporary_script_total_str = hosts_table_data_one.get('temporary_script_total')
 
-    host_info_dict = get_hotst_connect_info(host_id)
+        #获取主机信息
+        host_id = hosts_table_data_one['host_id']
+        host_info_dict = get_hotst_connect_info(host_id)
 
-    ssh = SCPMet()
-    ssh.set_info(host_info_dict)
-    ssh.execcmd()
+        #拼接此主机下各类脚本信息
+        script_total_list = []
+        if existing_script_total_list:
+            script_total_list += existing_script_total_list
+        if history_script_total_list:
+            script_total_list += existing_script_total_list
+        if temporary_script_total_str:
+            script_total_list += existing_script_total_list
+
+        p = threading.Thread(target=run_script_worker, args=(host_info_dict, script_total_list, 3600))
+        p.start()
 
 
 
-    return Result.success_response(msg='执行成功')
+    return Result.success_response(msg='请求成功')

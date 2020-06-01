@@ -5,7 +5,7 @@ database_service_ip="127.0.0.1"
 database_service_port=3306
 database_name="xlauto"
 database_user="root"
-database_pwd="wangwuli"
+database_pwd="123456"
 
 database_url = "mysql+pymysql://{username}:{password}@{host}:{port}/{db}?charset=utf8".format(username=database_user,password=database_pwd, host=database_service_ip,port=database_service_port, db=database_name)
 
@@ -40,3 +40,5 @@ PASS_KEY = 'xlauto'
 
 #项目生成文件目录
 DATA_PATH = 'src/data'
+
+TMP_PATH = 'src/tmp'

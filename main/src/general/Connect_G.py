@@ -5,6 +5,7 @@
 @time: 2019/12/5 17:02
 @desc:
 '''
+from itertools import zip_longest
 import os
 import shlex
 import subprocess
@@ -20,6 +21,7 @@ class Sshmet():
         self.password = None
         self.port = None
         self.timeout = 30
+        self.execcmd_out = ''
 
     def set_info(self, host_info_dict):
         self.ip = host_info_dict["host_ip"]
@@ -36,7 +38,7 @@ class Sshmet():
 
     def execcmd(self, cmd):
         """/
-        执行单条命令
+        执行单条命令,等待完成输出
         :param cmd:
         :return:
         """
@@ -51,19 +53,42 @@ class Sshmet():
             result = False
         return result
 
-    def execrealtime(self, shell_cmd, object_):
+    def run(self, command, callback):
+        stdin, stdout, stderr = self.ssh.exec_command(
+            command, bufsize=1
+        )
+
+        stdout_iter = iter(stdout.readline, '')
+        stderr_iter = iter(stderr.readline, '')
+
+        for out, err in zip_longest(stdout_iter, stderr_iter):
+            if out: callback(out.strip())
+            if err: callback(err.strip())
+
+        return stdin, stdout, stderr
+
+    def execrealtime(self, shell_cmd, object_=None):
         """
-        实时获取命令执行结果
+        执行单条命令, 实时获取命令执行结果
         :param shell_cmd:
         :param object_: 实时接收处理消息的方法
+                         比如：
+                             def object_(text):
+                                print(text)
         :return:
         """
+        if not object_:
+            object_ = self.execcmdout
         cmd = shlex.split(shell_cmd)
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, bufsize=1)
         for line in iter(p.stdout.readline, b''):
             object_(line)
         p.stdout.close()
         p.wait()
+
+    def execcmdout(self, text):
+        self.execcmd_out += str(text)
+
 
     def close(self):
         self.ssh.close()
@@ -112,7 +137,7 @@ class SCPMet(Sshmet):
         self.put_file(src_file, des_file)
 
         file_name = str(uuid.uuid1())
-        # cmd = 'nohup %s %s %s > /dev/null 2>&1 &' % (type, des_file, param)
+
         if nohup:
             cmd = 'nohup %s %s %s > %s 2>&1 &' % (type, des_file, param, file_name)
         else:
