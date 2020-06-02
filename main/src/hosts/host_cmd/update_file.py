@@ -13,6 +13,7 @@ from flask import request, current_app
 from models.models import ScriptFileCabinet, db, SysCode
 from src.dao.hosts import get_hotst_connect_info
 from src.general.Connect_G import Sshmet, SCPMet
+from src.general.File import str_save_file
 from src.general.General import Result
 from src.general.Sqla import Sqla
 from src.general.Transform import model_to_dict
@@ -163,12 +164,16 @@ def execute_script():
         if existing_script_total_list:
             script_total_list += existing_script_total_list
         if history_script_total_list:
-            script_total_list += existing_script_total_list
+            script_total_list += history_script_total_list
         if temporary_script_total_str:
-            script_total_list += existing_script_total_list
+            for temporary_script_total_str_one in temporary_script_total_str:
+                temporary_script_total_str_one['script_file_path'] = str_save_file(temporary_script_total_str_one['script_file_content'])
 
-        p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout))
-        p.start()
+            script_total_list += temporary_script_total_str
+
+        run_script_worker(info_dict, script_total_list, timeout)
+        # p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout))
+        # p.start()
 
 
 

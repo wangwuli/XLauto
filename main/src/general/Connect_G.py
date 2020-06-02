@@ -18,7 +18,7 @@ class Sshmet():
     #测试调整，待完善
     def __init__(self):
         self.execcmd_out = ''   #执行结果
-        self.execute_result = 0   # 0失败 1成功 2警告
+        self.execute_result = False   # -1失败 1成功 2警告
 
         self.ip = None
         self.username = None
@@ -88,7 +88,7 @@ class Sshmet():
         if out_status == 1 and err_status == 1:
             self.execute_result = 2
         elif err_status == 1:
-            self.execute_result = 0
+            self.execute_result = -1
         else:
             self.execute_result = 1
 
