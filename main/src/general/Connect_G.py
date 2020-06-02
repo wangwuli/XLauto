@@ -15,13 +15,16 @@ import paramiko
 
 
 class Sshmet():
+    #测试调整，待完善
     def __init__(self):
+        self.execcmd_out = ''   #执行结果
+        self.execute_result = 0   # 0失败 1成功 2警告
+
         self.ip = None
         self.username = None
         self.password = None
         self.port = None
         self.timeout = 30
-        self.execcmd_out = ''
 
     def set_info(self, host_info_dict):
         self.ip = host_info_dict["host_ip"]
@@ -53,7 +56,17 @@ class Sshmet():
             result = False
         return result
 
-    def run(self, command, callback):
+    def runcrealtime(self, command, callback=None):
+        """
+        实时执行命令
+        :param command:  命令
+        :param callback: 回调函数
+        :return:
+        """
+        #回调函数默认收集为class.execcmd_out变量
+        if not callback:
+            callback = self.execcmdout
+
         stdin, stdout, stderr = self.ssh.exec_command(
             command, bufsize=1
         )
@@ -61,38 +74,34 @@ class Sshmet():
         stdout_iter = iter(stdout.readline, '')
         stderr_iter = iter(stderr.readline, '')
 
-        test = zip_longest(stdout_iter, stderr_iter)
+        err_status = 0
+        out_status = 0
+        #标准输出
+        for line in stdout_iter:
+            callback(line.strip())
+            out_status = 1
+        #标准输出结束后收集错误输出
+        for line in stderr_iter:
+            callback(line.strip())
+            err_status = 1
 
-        for line in test:
-            print(line.strip())
+        if out_status == 1 and err_status == 1:
+            self.execute_result = 2
+        elif err_status == 1:
+            self.execute_result = 0
+        else:
+            self.execute_result = 1
 
-        # for out, err in zip_longest(stdout_iter, stderr_iter):
+        # test = zip_longest(stdout_iter, stderr_iter)
+        # for out, err in zip(stdout_iter, stderr_iter):
         #     if out: callback(out.strip())
         #     if err: callback(err.strip())
 
         return stdin, stdout, stderr
 
-    def execrealtime(self, shell_cmd, object_=None):
-        """
-        执行单条命令, 实时获取命令执行结果
-        :param shell_cmd:
-        :param object_: 实时接收处理消息的方法
-                         比如：
-                             def object_(text):
-                                print(text)
-        :return:
-        """
-        if not object_:
-            object_ = self.execcmdout
-        cmd = shlex.split(shell_cmd)
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, bufsize=1)
-        for line in iter(p.stdout.readline, b''):
-            object_(line)
-        p.stdout.close()
-        p.wait()
-
     def execcmdout(self, text):
         self.execcmd_out += str(text)
+        print(str(text))
 
 
     def close(self):
@@ -130,7 +139,7 @@ class SCPMet(Sshmet):
 
         return des_file
 
-    def put_file_exec(self, src_file, des_file, param, type='sh',nohup=True):
+    def put_file_exec(self, src_file, des_file, param, type='sh',nohup=True, callback=None):
         """
         上传文件并执行
         :param src_file: 源文件
@@ -145,10 +154,10 @@ class SCPMet(Sshmet):
 
         if nohup:
             cmd = 'nohup %s %s %s > %s 2>&1 &' % (type, des_file, param, file_name)
+            cmd_result = self.execcmd(cmd)
         else:
-            cmd = '%s %s %s > %s 2>&1' % (type, des_file, param, file_name)
-
-        cmd_result = self.execcmd(cmd)
+            cmd = '%s %s %s' % (type, des_file, param)
+            cmd_result = self.runcrealtime(cmd, callback)
 
         return cmd_result
 

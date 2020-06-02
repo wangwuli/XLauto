@@ -139,6 +139,13 @@ def execute_script():
     data_dict = request.get_json()
 
     hosts_table_data = data_dict['hosts_table_data']
+    timeout = data_dict['hosts_table_data']
+
+    if not timeout:
+        timeout = 3600
+
+    #生成执行批次ID
+    script_execute_event_batch_id = str(uuid.uuid1())
 
     for hosts_table_data_one in hosts_table_data:
 
@@ -148,7 +155,8 @@ def execute_script():
 
         #获取主机信息
         host_id = hosts_table_data_one['host_id']
-        host_info_dict = get_hotst_connect_info(host_id)
+        info_dict = get_hotst_connect_info(host_id)
+        info_dict['script_execute_event_batch_id'] = script_execute_event_batch_id
 
         #拼接此主机下各类脚本信息
         script_total_list = []
@@ -159,7 +167,7 @@ def execute_script():
         if temporary_script_total_str:
             script_total_list += existing_script_total_list
 
-        p = threading.Thread(target=run_script_worker, args=(host_info_dict, script_total_list, 3600))
+        p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout))
         p.start()
 
 
