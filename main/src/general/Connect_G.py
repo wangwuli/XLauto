@@ -61,9 +61,14 @@ class Sshmet():
         stdout_iter = iter(stdout.readline, '')
         stderr_iter = iter(stderr.readline, '')
 
-        for out, err in zip_longest(stdout_iter, stderr_iter):
-            if out: callback(out.strip())
-            if err: callback(err.strip())
+        test = zip_longest(stdout_iter, stderr_iter)
+
+        for line in test:
+            print(line.strip())
+
+        # for out, err in zip_longest(stdout_iter, stderr_iter):
+        #     if out: callback(out.strip())
+        #     if err: callback(err.strip())
 
         return stdin, stdout, stderr
 
