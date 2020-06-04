@@ -274,7 +274,7 @@ import * as Request from '@/general/request.js'
 import { mapState } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
@@ -373,7 +373,7 @@ export default {
       }
     },
     async ScriptGroupQuery () {
-      const response = await Request.GET('/general/code_query', {code_type: 'execute_script_group'})
+      const response = await Request.GET('/general/code_query', { code_type: 'execute_script_group' })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -384,7 +384,7 @@ export default {
       }
     },
     async ScriptTypeQuery () {
-      const response = await Request.GET('/general/code_query', {code_type: 'execute_script_type'})
+      const response = await Request.GET('/general/code_query', { code_type: 'execute_script_type' })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -400,7 +400,7 @@ export default {
       this.del_script_row = row
     },
     async RmScript () {
-      const response = await Request.DELETE('/hosts/rm_script', {id: this.del_script_row.id})
+      const response = await Request.DELETE('/hosts/rm_script', { id: this.del_script_row.id })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -575,7 +575,7 @@ export default {
       }
     },
     async ExecuteScript () {
-      const response = await Request.POST('/hosts/execute_script', {hosts_table_data: this.hosts_table_data})
+      const response = await Request.POST('/hosts/execute_script', { hosts_table_data: this.hosts_table_data })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
