@@ -66,11 +66,13 @@ class ScriptFileExecuteEvent(db.Model):
     __tablename__ = 'script_file_execute_event'
 
     script_file_execute_event_id = db.Column(db.Integer, primary_key=True)
-    script_execute_event_batch_id = db.Column(db.Integer)
+    script_execute_event_batch_id = db.Column(db.String(50))
     script_file_id = db.Column(db.Integer)
     execute_time = db.Column(db.DateTime, server_default=db.FetchedValue())
     execute_end_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    execute_result = db.Column(db.Integer, info='1为成功，0为失败')
+    execute_result = db.Column(db.Integer, info='sys_code.script_file_execute_result_ype   1为成功，0为失败')
+    script_file_content = db.Column(db.String)
+    host_id = db.Column(db.Integer)
 
 
 
@@ -79,16 +81,16 @@ class ServerSoftware(db.Model):
 
     soft_id = db.Column(db.Integer, primary_key=True)
     host_id = db.Column(db.Integer, index=True)
-    soft_type = db.Column(db.String(50), index=True)
+    soft_type = db.Column(db.String(50, 'latin1_swedish_ci'), index=True)
     soft_port = db.Column(db.Integer)
-    start_soft_cmd = db.Column(db.String(50))
-    stop_soft_cmd = db.Column(db.String(50))
-    restart_soft_cmd = db.Column(db.String(50))
-    soft_log_path = db.Column(db.String(50))
+    start_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    stop_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    restart_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    soft_log_path = db.Column(db.String(50, 'latin1_swedish_ci'))
     is_remove = db.Column(db.Integer)
     create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
     modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    comments = db.Column(db.String(50))
+    comments = db.Column(db.String(50, 'latin1_swedish_ci'))
 
 
 

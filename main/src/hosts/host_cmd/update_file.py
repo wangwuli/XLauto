@@ -59,7 +59,10 @@ def update_script_query():
 
     sql_parameter = {"script_file_group" :sql_file_group, "script_file_type": sql_file_type}
     sql = """
-    SELECT * FROM script_file_cabinet a
+    SELECT a.`*`,b.code_name AS script_file_type_text,c.code_name AS  script_file_group_text 
+    FROM script_file_cabinet a
+    LEFT JOIN sys_code c ON a.script_file_group = c.code_key AND c.code_type = 'execute_script_group'
+    LEFT JOIN sys_code b ON a.script_file_type = b.code_key AND b.code_type = 'execute_script_type'
     WHERE (a.script_file_type LIKE :script_file_type %s)
     AND (a.script_file_group LIKE :script_file_group %s)
     """ %(sql_file_type_null, sql_file_group_null)
@@ -140,7 +143,7 @@ def execute_script():
     data_dict = request.get_json()
 
     hosts_table_data = data_dict['hosts_table_data']
-    timeout = data_dict['hosts_table_data']
+    timeout = data_dict.get('execute_timeout')
 
     if not timeout:
         timeout = 3600
@@ -171,10 +174,7 @@ def execute_script():
 
             script_total_list += temporary_script_total_str
 
-        run_script_worker(info_dict, script_total_list, timeout)
-        # p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout))
-        # p.start()
-
-
-
-    return Result.success_response(msg='请求成功')
+        # run_script_worker(info_dict, script_total_list, timeout)
+        p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout))
+        p.start()
+    return Result.success_response(data=script_execute_event_batch_id, msg='请求成功')

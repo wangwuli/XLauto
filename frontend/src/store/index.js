@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    background_socket: 'localhost:5000',
     tabsPage: [{
       title: '主页',
       name: 'home'

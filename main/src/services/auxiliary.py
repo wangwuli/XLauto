@@ -1,3 +1,4 @@
+from models.models import ScriptFileExecuteEvent
 from src.dao.hosts import get_hotst_connect_info
 from src.general.LinuxShell import ServerInfo
 from src.general.Sqla import Sqla

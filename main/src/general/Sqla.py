@@ -1,3 +1,5 @@
+from sqlalchemy import text
+
 from main.models.models import db
 
 class Sqla():
@@ -73,15 +75,39 @@ class Sqla():
             db.session.rollback()
             raise Exception("execute sql fail ,is rollback")
         db.session.remove()
-#https://www.cnblogs.com/gongnanxiong/p/11743055.html
+    #https://www.cnblogs.com/gongnanxiong/p/11743055.html
+    #加密
     def sql_encryption(self, str):
         sql = """
         select HEX(AES_ENCRYPT(:str, 'key')) AS passwd;
         """
         return self.fetch_to_dict(sql,{'str':str, 'key': self.current_app.config['PASS_KEY']})[0]['passwd']
-
+    # 解密
     def sql_decrypt(self, unhex_str):
         sql = """
         select AES_DECRYPT(UNHEX(:str), :key) AS passwd;
         """
         return self.fetch_to_dict(sql,{'str':unhex_str, 'key': self.current_app.config['PASS_KEY']})[0]['passwd']
+
+
+    def GetInsertOrUpdateObj(self, cls, strFilter, **kw):
+        '''
+        cls:            Model 类名
+        strFilter:      filter的参数.eg:"name='name-14'"
+        **kw:           【属性、值】字典,用于构建新实例，或修改存在的记录
+        '''
+        existing = db.session.query(cls).filter_by(text(strFilter)).first()
+        if not existing:
+            res = cls()
+            for k, v in kw.items():
+                if hasattr(res, k):
+                    setattr(res, k, v)
+        else:
+            res = existing
+            for k, v in kw.items():
+                if hasattr(res, k):
+                    setattr(res, k, v)
+
+        db.session.commit()
+        db.session.close()
+        return res

@@ -44,12 +44,12 @@
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="script_file_type"
+            prop="script_file_type_text"
             label="类型"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="script_file_group"
+            prop="script_file_group_text"
             label="组"
             show-overflow-tooltip>
           </el-table-column>
@@ -77,8 +77,9 @@
                     style="width: 150px; float: right; margin-top: -5px "></el-input>
         </div>
         <el-table
+          height="200px"
           :data="history_script_list"
-          style="width: 100%; height: 200px"
+          style="width: 100%;"
           ref="history_script_list_value"
           size="mini">
           <el-table-column
@@ -164,7 +165,7 @@
            </template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="execute_result"
             label="结果"
             show-overflow-tooltip>
           </el-table-column>
@@ -273,10 +274,12 @@ import * as Request from '@/general/request.js'
 import { mapState } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       // page_height: document.documentElement.clientHeight - 150,
       // page_width: document.documentElement.clientWidth - 220,
+      flush_time: 10,
+      script_execute_event_batch_id: '',
       script_file_edit_dialog_tables: [],
       script_file_edit_dialog: false,
       activeName: '',
@@ -297,8 +300,7 @@ export default {
       target_options_value: '',
       temporary_script_text: '',
       updatedialog: false,
-      fileList: [
-      ],
+      fileList: [],
       target_options: [{
         value: 'all',
         label: '所有选择'
@@ -319,7 +321,8 @@ export default {
   },
   computed: {
     ...mapState({
-      table_click_value: 'hosts_table_click_values'
+      table_click_value: 'hosts_table_click_values',
+      background_socket: 'background_socket'
     })
   },
   methods: {
@@ -370,7 +373,7 @@ export default {
       }
     },
     async ScriptGroupQuery () {
-      const response = await Request.GET('/general/code_query', { code_type: 'execute_script_group' })
+      const response = await Request.GET('/general/code_query', {code_type: 'execute_script_group'})
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -381,7 +384,7 @@ export default {
       }
     },
     async ScriptTypeQuery () {
-      const response = await Request.GET('/general/code_query', { code_type: 'execute_script_type' })
+      const response = await Request.GET('/general/code_query', {code_type: 'execute_script_type'})
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -397,7 +400,7 @@ export default {
       this.del_script_row = row
     },
     async RmScript () {
-      const response = await Request.DELETE('/hosts/rm_script', { id: this.del_script_row.id })
+      const response = await Request.DELETE('/hosts/rm_script', {id: this.del_script_row.id})
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -552,7 +555,11 @@ export default {
               addDict.script_file_edit_dialog_tables = addDict.script_file_edit_dialog_tables.concat(addDict.history_script_total)
             }
             if (addDict.temporary_script_total !== undefined) {
-              addDict.temporary_script_total = [{ script_file_name: '临时脚本', script_file_content: this.temporary_script_text, script_file_id: 0 }]
+              addDict.temporary_script_total = [{
+                script_file_name: '临时脚本',
+                script_file_content: this.temporary_script_text,
+                script_file_id: 0
+              }]
               addDict.script_file_edit_dialog_tables = addDict.script_file_edit_dialog_tables.concat(addDict.temporary_script_total)
             }
             // 汇总后更新的table中
@@ -568,12 +575,16 @@ export default {
       }
     },
     async ExecuteScript () {
-      const response = await Request.POST('/hosts/execute_script', { hosts_table_data: this.hosts_table_data })
+      const response = await Request.POST('/hosts/execute_script', {hosts_table_data: this.hosts_table_data})
       if (response && response.data) {
         var data = response.data
         if (data.success) {
           this.$message.success(data.msg)
           this.if_dialog_rm_script = false
+
+          this.script_execute_event_batch_id = data.data
+          this.initWebSocket()
+          this.is_setInterval = setInterval(this.websocketonopen, this.flush_time * 1000)
         } else {
           this.$message.error(data.msg)
         }
@@ -592,6 +603,53 @@ export default {
         }
       }
       return newArr
+    },
+    initWebSocket () {
+      const wsuri = 'ws://' + this.background_socket + '/socket/hosts/execute_script_query'
+      this.websock = new WebSocket(wsuri)
+      this.websock.onmessage = this.websocketonmessage
+      this.websock.onopen = this.websocketonopen
+      this.websock.onerror = this.websocketonerror
+      this.websock.onclose = this.websocketclose
+    },
+    websocketonopen () { // 连接建立之后执行send方法发送数据
+      var value = this.script_execute_event_batch_id
+      if (value === '') {
+        return false
+      }
+      if (this.websock.readyState === 3) {
+        this.$message.warning('连接意外关闭,正在重连')
+        this.initWebSocket()
+      }
+      var actions = { script_execute_event_batch_id: this.script_execute_event_batch_id }
+      this.websocketsend(JSON.stringify(actions))
+    },
+    websocketonerror () { // 连接建立失败重连
+      this.initWebSocket()
+    },
+    websocketonmessage (e) { // 数据接收
+      const data = JSON.parse(e.data)
+      if (data.success) {
+        this.$message.success(data.msg)
+        this.datassetOption(data.data)
+      } else {
+        this.$message.error(data.msg)
+      }
+    },
+    websocketsend (Data) { // 数据发送
+      this.websock.send(Data)
+    },
+    websocketclose (e) { // 关闭
+      console.log('断开连接', e)
+    },
+    datassetOption (data) {
+      for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
+        for (let di = 0; di < data.length; di++) {
+          if (this.hosts_table_data[hi].host_id === data[di].host_id && this.hosts_table_data[hi].script_file_id === data[di].script_file_id) {
+            this.hosts_table_data[hi].execute_result = data[di].execute_result
+          }
+        }
+      }
     }
   }
 }

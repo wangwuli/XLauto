@@ -329,7 +329,7 @@ export default {
     },
     // 初始化weosocket https://www.jianshu.com/p/9d8b2e42328c
     initWebSocket () {
-      const wsuri = 'ws://localhost:5000/socket/hosts/info_query'
+      const wsuri = 'ws://' + this.background_socket + '/socket/hosts/info_query'
       this.websock = new WebSocket(wsuri)
       this.websock.onmessage = this.websocketonmessage
       this.websock.onopen = this.websocketonopen
@@ -430,7 +430,8 @@ export default {
   },
   computed: {
     ...mapState({
-      table_click_value: 'host_table_click_value'
+      table_click_value: 'host_table_click_value',
+      background_socket: 'background_socket'
     })
   }
 }

@@ -60,7 +60,7 @@ class Sshmet():
         """
         实时执行命令
         :param command:  命令
-        :param callback: 回调函数
+        :param callback: 回调函数 必填：{readline_text:XXX}
         :return:
         """
         #回调函数默认收集为class.execcmd_out变量
@@ -110,10 +110,11 @@ class Sshmet():
 
 class SCPMet(Sshmet):
 
-    def connect(self):
-        self.ssh = paramiko.Transport((self.ip, self.port))
-        self.connect(username=self.username, password=self.password)
-        self.sftp = paramiko.SFTPClient.from_transport(self.ssh)
+    def cp_connect(self):
+        self.ssh = self.connect()
+        self.ssht = paramiko.Transport((self.ip, self.port))
+        self.ssht.connect(username=self.username, password=self.password)
+        self.sftp = paramiko.SFTPClient.from_transport(self.ssht)
         return self.sftp
 
     def get_file(self, src_file, des_file):
@@ -148,6 +149,9 @@ class SCPMet(Sshmet):
         :param type:  python or sh ?
         :return:
         """
+        src_file = src_file.replace('\\','/')
+        des_file = des_file.replace('\\','/')
+
         self.put_file(src_file, des_file)
 
         file_name = str(uuid.uuid1())
@@ -174,6 +178,10 @@ class SCPMet(Sshmet):
             else:
                 all_files.append(filename)
         return all_files
+
+    def close(self):
+        self.sftp.close()
+        self.ssh.close()
 
 
 
