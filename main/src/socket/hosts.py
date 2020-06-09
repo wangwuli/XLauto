@@ -9,7 +9,6 @@ from src.socket import socket
 from src.services.auxiliary import host_info_query
 
 
-# @services.route('/hosts/info_query', methods=['GET'])
 @socket.route('/socket/hosts/info_query')
 def hostinfo_query(ws):
     while not ws.closed:

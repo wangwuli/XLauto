@@ -5,20 +5,17 @@
 @time: 2020/5/15 14:41
 @desc:
 '''
-import os
-import threading
-import uuid
-
-from flask import request, current_app
-from models.models import ScriptFileCabinet, db, SysCode
+from src.hosts.host_cmd.auxiliary import run_script_worker
+from models.models import ScriptFileCabinet, db
 from src.dao.hosts import get_hotst_connect_info
-from src.general.Connect_G import Sshmet, SCPMet
 from src.general.File import str_save_file
 from src.general.General import Result
+from flask import request, current_app
 from src.general.Sqla import Sqla
-from src.general.Transform import model_to_dict
 from src.hosts import hosts
-from src.hosts.host_cmd.auxiliary import run_script_worker
+import threading
+import uuid
+import os
 
 
 @hosts.route('/hosts/update_script_file', methods=['POST'])
@@ -174,7 +171,9 @@ def execute_script():
 
             script_total_list += temporary_script_total_str
 
+        xlauto = current_app._get_current_object()
         # run_script_worker(info_dict, script_total_list, timeout)
-        p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout))
+        p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout, xlauto))
         p.start()
+
     return Result.success_response(data=script_execute_event_batch_id, msg='请求成功')

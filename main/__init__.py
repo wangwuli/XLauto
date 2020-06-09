@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, current_app
+from flask import Flask
 from . import routes
 from exts import db
 from flask_sockets import Sockets

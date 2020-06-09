@@ -154,13 +154,13 @@
             show-overflow-tooltip>
             <template slot-scope='if_host_execution_icon'>
               <el-tooltip v-if="if_host_execution_icon.row.existing_script_total" class="item" effect="dark" :content="if_host_execution_icon.row.existing_script_content_str" placement="top-start">
-                <i class="el-icon-upload" style="font-size: 15px; color: #eedd78"/>
+                <i class="el-icon-upload" style="font-size: 15px; color: #91ca8c"/>
               </el-tooltip>
               <el-tooltip v-if="if_host_execution_icon.row.history_script_total" class="item" effect="dark" :content="if_host_execution_icon.row.history_script_content_str" placement="top-start">
                 <i class="el-icon-video-camera" style="font-size: 15px; color: #7289ab"/>
               </el-tooltip>
               <el-tooltip  v-if="if_host_execution_icon.row.temporary_script_total" class="item" effect="dark" :content="if_host_execution_icon.row.temporary_script_content_str" placement="top-start">
-                <i class="el-icon-edit-outline" style="font-size: 15px; color: #91ca8c"/>
+                <i class="el-icon-edit-outline" style="font-size: 15px; color: #eedd78"/>
               </el-tooltip>
            </template>
           </el-table-column>
@@ -643,12 +643,19 @@ export default {
       console.log('断开连接', e)
     },
     datassetOption (data) {
+      var whetherCompletelist = []
       for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
         for (let di = 0; di < data.length; di++) {
           if (this.hosts_table_data[hi].host_id === data[di].host_id && this.hosts_table_data[hi].script_file_id === data[di].script_file_id) {
             this.hosts_table_data[hi].execute_result = data[di].execute_result
+            whetherCompletelist.push(this.hosts_table_data[hi].execute_result)
           }
         }
+      }
+      if (whetherCompletelist.indexOf(0) === -1) {
+        this.websocketclose()
+        this.script_execute_event_batch_id = ''
+        clearInterval(this.is_setInterval)
       }
     }
   }
