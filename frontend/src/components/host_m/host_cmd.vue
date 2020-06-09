@@ -526,6 +526,9 @@ export default {
         addDict = this.HistoryScriptProcess(addDict)
         addDict = this.TemporaryScriptProcess(addDict)
       }
+      if (addDict === false) {
+        return false
+      }
       // 合并已添加脚本之前脚本并去重
       for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
         for (let si = 0; si < HostMultipleTableSelection.length; si++) {
