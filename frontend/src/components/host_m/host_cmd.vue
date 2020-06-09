@@ -655,7 +655,7 @@ export default {
           }
         }
       }
-      if (whetherCompletelist.indexOf(0) === -1) {
+      if (whetherCompletelist.indexOf(0) === -1 && whetherCompletelist !== []) {
         this.websocketclose()
         this.script_execute_event_batch_id = ''
         clearInterval(this.is_setInterval)
