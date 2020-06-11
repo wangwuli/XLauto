@@ -30,7 +30,7 @@ def execute_script_query(ws):
         message = ws.receive()
         try:
             parameter_dict = eval(message)
-            data = {'data': query_execute_batch_status(parameter_dict['script_execute_event_batch_id']), "success":1, "msg": "加载主机信息成功"}
+            data = {'data': query_execute_batch_status(parameter_dict['script_execute_event_batch_id']), "success":1, "msg": "监听执行结果成功"}
             # {"msg": "%s" %e, "success":0, "data": host_info_query(parameter_dict['host_id'])}
         except Exception as e:
             data = {"msg": "%s" %e, "success":0,}

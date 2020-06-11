@@ -165,9 +165,14 @@
            </template>
           </el-table-column>
           <el-table-column
-            prop="execute_result"
             label="结果"
             show-overflow-tooltip>
+            <template slot-scope='if_execute_result_icon'>
+              <i class="el-icon-error" v-if="if_execute_result_icon.row.execute_result == -1" style="font-size: 15px; color: #F56C6C"/>
+              <i class="el-icon-success" v-if="if_execute_result_icon.row.execute_result == 1" style="font-size: 15px; color: #67C23A"/>
+              <i class="el-icon-warning" v-if="if_execute_result_icon.row.execute_result == 2" style="font-size: 15px; color: #E6A23C"/>
+              <i class="el-icon-question" v-if="if_execute_result_icon.row.execute_result == 0" style="font-size: 15px; color: #909399"/>
+            </template>
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -648,18 +653,40 @@ export default {
     datassetOption (data) {
       var whetherCompletelist = []
       for (let hi = 0; hi < this.hosts_table_data.length; hi++) {
+        this.hosts_table_data[hi].execute_result_list = []
         for (let di = 0; di < data.length; di++) {
-          if (this.hosts_table_data[hi].host_id === data[di].host_id && this.hosts_table_data[hi].script_file_id === data[di].script_file_id) {
-            this.hosts_table_data[hi].execute_result = data[di].execute_result
-            whetherCompletelist.push(this.hosts_table_data[hi].execute_result)
+          if (this.hosts_table_data[hi].host_id === data[di].host_id) {
+            for (let sfi = 0; sfi < this.hosts_table_data[hi].script_file_edit_dialog_tables.length; sfi++) {
+              if (this.hosts_table_data[hi].script_file_edit_dialog_tables[sfi].script_file_id === data[di].script_file_id) {
+                this.hosts_table_data[hi].execute_result_list.push(data[di].execute_result)
+                this.hosts_table_data[hi].script_file_edit_dialog_tables[sfi].execute_result = data[di].execute_result
+                whetherCompletelist.push(data[di].execute_result)
+              }
+            }
           }
         }
+        // 综合主机所有脚本状态，给与状态显示
+        if (this.hosts_table_data[hi].execute_result_list.indexOf(2) !== -1) {
+          this.hosts_table_data[hi].execute_result = 2
+        } else if (this.hosts_table_data[hi].execute_result_list.indexOf(-1) !== -1 && this.hosts_table_data[hi].execute_result_list.indexOf(1) !== -1) {
+          this.hosts_table_data[hi].execute_result = 2
+        } else if (this.hosts_table_data[hi].execute_result_list.indexOf(-1) === -1 && this.hosts_table_data[hi].execute_result_list.indexOf(1) !== -1) {
+          this.hosts_table_data[hi].execute_result = 1
+        } else if (this.hosts_table_data[hi].execute_result_list.indexOf(-1) !== -1 && this.hosts_table_data[hi].execute_result_list.indexOf(1) === -1) {
+          this.hosts_table_data[hi].execute_result = -1
+        } else {
+          this.hosts_table_data[hi].execute_result = 0
+        }
+        // 重新渲染
+        this.$set(this.hosts_table_data, hi, this.hosts_table_data[hi])
       }
-      if (whetherCompletelist.indexOf(0) === -1 && whetherCompletelist !== []) {
+      if (whetherCompletelist.indexOf(0) === -1 && whetherCompletelist.length !== 0) {
+        // debugger
         this.websocketclose()
         this.script_execute_event_batch_id = ''
         clearInterval(this.is_setInterval)
       }
+      // debugger
     }
   }
 }
