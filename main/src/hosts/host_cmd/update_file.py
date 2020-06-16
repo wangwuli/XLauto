@@ -168,11 +168,10 @@ def execute_script():
         if temporary_script_total_str:
             for temporary_script_total_str_one in temporary_script_total_str:
                 temporary_script_total_str_one['script_file_path'] = str_save_file(temporary_script_total_str_one['script_file_content'])
-
             script_total_list += temporary_script_total_str
 
         xlauto = current_app._get_current_object()
-        # run_script_worker(info_dict, script_total_list, timeout)
+        # run_script_worker(info_dict, script_total_list, timeout, xlauto)
         p = threading.Thread(target=run_script_worker, args=(info_dict, script_total_list, timeout, xlauto))
         p.start()
 
