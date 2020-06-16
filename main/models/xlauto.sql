@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `host_instance` (
 DELETE FROM `host_instance`;
 /*!40000 ALTER TABLE `host_instance` DISABLE KEYS */;
 INSERT INTO `host_instance` (`host_id`, `host_ip`, `host_name`, `host_port`, `host_type_key`, `host_project`, `is_remove`, `comment`) VALUES
-	(1, '192.168.0.100', '测试主机', 22, 'docker', '1', NULL, NULL);
+	(1, '192.168.10.134', '测试主机', 22, 'docker', '1', NULL, NULL);
 /*!40000 ALTER TABLE `host_instance` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_users 结构
@@ -104,20 +104,47 @@ INSERT INTO `script_file_cabinet` (`script_file_id`, `script_file_path`, `script
 DROP TABLE IF EXISTS `script_file_execute_event`;
 CREATE TABLE IF NOT EXISTS `script_file_execute_event` (
   `script_file_execute_event_id` int NOT NULL AUTO_INCREMENT,
-  `script_execute_event_batch_id` tinyint DEFAULT NULL,
+  `script_execute_event_batch_id` varchar(50) DEFAULT NULL,
   `script_file_id` int DEFAULT NULL,
   `execute_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `execute_end_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `execute_result` char(50) DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
+  `execute_result` tinyint DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
   `script_file_content` mediumtext,
+  `host_id` int DEFAULT NULL,
   PRIMARY KEY (`script_file_execute_event_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
 
--- 正在导出表  xlauto.script_file_execute_event 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.script_file_execute_event 的数据：~21 rows (大约)
 DELETE FROM `script_file_execute_event`;
 /*!40000 ALTER TABLE `script_file_execute_event` DISABLE KEYS */;
-INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script_execute_event_batch_id`, `script_file_id`, `execute_time`, `execute_end_time`, `execute_result`, `script_file_content`) VALUES
-	(1, 1, 1, '2020-05-21 15:26:42', '2020-05-21 15:27:07', '1', NULL);
+INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script_execute_event_batch_id`, `script_file_id`, `execute_time`, `execute_end_time`, `execute_result`, `script_file_content`, `host_id`) VALUES
+	(1, '1', 1, '2020-05-21 15:26:42', '2020-05-21 15:27:07', 1, NULL, NULL),
+	(44, '967375ee-a618-11ea-bded-38d547addffb', 0, '2020-06-04 12:05:42', '2020-06-04 12:05:42', -1, 'sh: /tmp9682fba8-a618-11ea-a476-38d547addffb: No such file or directory', NULL),
+	(45, '04603cd8-a619-11ea-bf67-38d547addffb', 0, '2020-06-04 12:08:57', '2020-06-04 12:08:57', -1, 'sh: /tmp0466c722-a619-11ea-b7fb-38d547addffb: No such file or directory', NULL),
+	(46, '2bae8300-a63c-11ea-9a7b-38d547addffb', 0, '2020-06-04 16:20:27', '2020-06-04 16:20:27', -1, 'sh: /tmp2bbb24a4-a63c-11ea-b699-38d547addffb: No such file or directory', 1),
+	(47, '1b9077d0-a63d-11ea-a8c1-38d547addffb', 0, '2020-06-04 16:27:11', '2020-06-04 16:27:11', -1, 'sh: /tmp1b97509c-a63d-11ea-a4fd-38d547addffb: No such file or directory', 1),
+	(48, '58775d92-a63d-11ea-acf2-38d547addffb', 0, '2020-06-04 16:28:50', '2020-06-04 16:28:50', 0, '', 1),
+	(49, 'bbb8986e-a63d-11ea-9842-38d547addffb', 0, '2020-06-04 16:31:36', '2020-06-04 16:31:36', -1, 'sh: /tmpbbca181c-a63d-11ea-8f6c-38d547addffb: No such file or directory', 1),
+	(50, 'fe239e64-a63d-11ea-95dd-38d547addffb', 0, '2020-06-04 16:33:28', '2020-06-04 16:33:48', -1, 'sh: /tmpfe3066c8-a63d-11ea-aef1-38d547addffb: No such file or directory', 1),
+	(51, '49007c36-a63e-11ea-9214-38d547addffb', 0, '2020-06-04 16:35:33', '2020-06-04 16:35:33', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(52, 'fda7261c-aa21-11ea-aafa-38d547addffb', 0, '2020-06-09 15:23:06', '2020-06-09 15:23:06', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(53, 'af80bce2-aa26-11ea-8008-38d547addffb', 0, '2020-06-09 15:56:42', '2020-06-09 15:56:42', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(54, 'caca4ba6-aa26-11ea-b807-38d547addffb', 0, '2020-06-09 15:57:28', '2020-06-09 15:57:38', 1, 'PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.64 bytes from 192.168.1.1: icmp_seq=1 ttl=127 time=0.403 ms64 bytes from 192.168.1.1: icmp_seq=2 ttl=127 time=0.249 ms64 bytes from 192.168.1.1: icmp_seq=3 ttl=127 time=0.972 ms64 bytes from 192.168.1.1: icmp_seq=4 ttl=127 time=0.363 ms64 bytes from 192.168.1.1: icmp_seq=5 ttl=127 time=0.399 ms64 bytes from 192.168.1.1: icmp_seq=6 ttl=127 time=0.351 ms64 bytes from 192.168.1.1: icmp_seq=7 ttl=127 time=0.652 ms64 bytes from 192.168.1.1: icmp_seq=8 ttl=127 time=0.292 ms64 bytes from 192.168.1.1: icmp_seq=9 ttl=127 time=0.421 ms64 bytes from 192.168.1.1: icmp_seq=10 ttl=127 time=0.347 ms64 bytes from 192.168.1.1: icmp_seq=11 ttl=127 time=0.293 ms64 bytes from 192.168.1.1: icmp_seq=12 ttl=127 time=0.995 ms64 bytes from 192.168.1.1: icmp_seq=13 ttl=127 time=4.07 ms64 bytes from 192.168.1.1: icmp_seq=14 ttl=127 time=5.70 ms64 bytes from 192.168.1.1: icmp_seq=15 ttl=127 time=1.39 ms64 bytes from 192.168.1.1: icmp_seq=16 ttl=127 time=0.345 ms64 bytes from 192.168.1.1: icmp_seq=17 ttl=127 time=1.33 ms64 bytes from 192.168.1.1: icmp_seq=18 ttl=127 time=1.54 ms64 bytes from 192.168.1.1: icmp_seq=19 ttl=127 time=7.64 ms64 bytes from 192.168.1.1: icmp_seq=20 ttl=127 time=0.794 ms--- 192.168.1.1 ping statistics ---20 packets transmitted, 20 received, 0% packet loss, time 19012msrtt min/avg/max/mdev = 0.249/1.428/7.645/1.963 ms', 1),
+	(55, 'b8b65e24-aa27-11ea-8dce-38d547addffb', 0, '2020-06-09 16:04:07', '2020-06-09 16:05:38', 1, 'PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.64 bytes from 192.168.1.1: icmp_seq=1 ttl=127 time=0.415 ms64 bytes from 192.168.1.1: icmp_seq=2 ttl=127 time=0.250 ms64 bytes from 192.168.1.1: icmp_seq=3 ttl=127 time=0.251 ms64 bytes from 192.168.1.1: icmp_seq=4 ttl=127 time=1.72 ms64 bytes from 192.168.1.1: icmp_seq=5 ttl=127 time=6.67 ms64 bytes from 192.168.1.1: icmp_seq=6 ttl=127 time=2.50 ms64 bytes from 192.168.1.1: icmp_seq=7 ttl=127 time=2.57 ms64 bytes from 192.168.1.1: icmp_seq=8 ttl=127 time=0.251 ms64 bytes from 192.168.1.1: icmp_seq=9 ttl=127 time=1.50 ms64 bytes from 192.168.1.1: icmp_seq=10 ttl=127 time=1.92 ms64 bytes from 192.168.1.1: icmp_seq=11 ttl=127 time=0.309 ms64 bytes from 192.168.1.1: icmp_seq=12 ttl=127 time=0.277 ms64 bytes from 192.168.1.1: icmp_seq=13 ttl=127 time=0.314 ms64 bytes from 192.168.1.1: icmp_seq=14 ttl=127 time=0.381 ms64 bytes from 192.168.1.1: icmp_seq=15 ttl=127 time=0.346 ms64 bytes from 192.168.1.1: icmp_seq=16 ttl=127 time=0.336 ms64 bytes from 192.168.1.1: icmp_seq=17 ttl=127 time=0.334 ms64 bytes from 192.168.1.1: icmp_seq=18 ttl=127 time=10.1 ms64 bytes from 192.168.1.1: icmp_seq=19 ttl=127 time=0.285 ms64 bytes from 192.168.1.1: icmp_seq=20 ttl=127 time=0.316 ms64 bytes from 192.168.1.1: icmp_seq=21 ttl=127 time=0.266 ms64 bytes from 192.168.1.1: icmp_seq=22 ttl=127 time=1.43 ms64 bytes from 192.168.1.1: icmp_seq=23 ttl=127 time=0.468 ms64 bytes from 192.168.1.1: icmp_seq=24 ttl=127 time=0.289 ms64 bytes from 192.168.1.1: icmp_seq=25 ttl=127 time=0.300 ms64 bytes from 192.168.1.1: icmp_seq=26 ttl=127 time=0.585 ms64 bytes from 192.168.1.1: icmp_seq=27 ttl=127 time=0.289 ms64 bytes from 192.168.1.1: icmp_seq=28 ttl=127 time=0.313 ms64 bytes from 192.168.1.1: icmp_seq=29 ttl=127 time=0.591 ms64 bytes from 192.168.1.1: icmp_seq=30 ttl=127 time=0.257 ms64 bytes from 192.168.1.1: icmp_seq=31 ttl=127 time=0.651 ms64 bytes from 192.168.1.1: icmp_seq=32 ttl=127 time=0.274 ms64 bytes from 192.168.1.1: icmp_seq=33 ttl=127 time=0.300 ms64 bytes from 192.168.1.1: icmp_seq=34 ttl=127 time=0.359 ms64 bytes from 192.168.1.1: icmp_seq=35 ttl=127 time=0.334 ms64 bytes from 192.168.1.1: icmp_seq=36 ttl=127 time=0.475 ms64 bytes from 192.168.1.1: icmp_seq=37 ttl=127 time=0.312 ms64 bytes from 192.168.1.1: icmp_seq=38 ttl=127 time=0.322 ms64 bytes from 192.168.1.1: icmp_seq=39 ttl=127 time=0.307 ms64 bytes from 192.168.1.1: icmp_seq=40 ttl=127 time=7.75 ms64 bytes from 192.168.1.1: icmp_seq=41 ttl=127 time=7.50 ms64 bytes from 192.168.1.1: icmp_seq=42 ttl=127 time=1.51 ms64 bytes from 192.168.1.1: icmp_seq=43 ttl=127 time=0.447 ms64 bytes from 192.168.1.1: icmp_seq=44 ttl=127 time=0.293 ms64 bytes from 192.168.1.1: icmp_seq=45 ttl=127 time=0.287 ms64 bytes from 192.168.1.1: icmp_seq=46 ttl=127 time=0.363 ms64 bytes from 192.168.1.1: icmp_seq=47 ttl=127 time=0.275 ms64 bytes from 192.168.1.1: icmp_seq=48 ttl=127 time=0.289 ms64 bytes from 192.168.1.1: icmp_seq=49 ttl=127 time=0.278 ms64 bytes from 192.168.1.1: icmp_seq=50 ttl=127 time=0.402 ms64 bytes from 192.168.1.1: icmp_seq=51 ttl=127 time=0.334 ms64 bytes from 192.168.1.1: icmp_seq=52 ttl=127 time=0.653 ms64 bytes from 192.168.1.1: icmp_seq=53 ttl=127 time=0.384 ms64 bytes from 192.168.1.1: icmp_seq=54 ttl=127 time=0.317 ms64 bytes from 192.168.1.1: icmp_seq=55 ttl=127 time=0.425 ms64 bytes from 192.168.1.1: icmp_seq=56 ttl=127 time=4.35 ms64 bytes from 192.168.1.1: icmp_seq=57 ttl=127 time=0.576 ms64 bytes from 192.168.1.1: icmp_seq=58 ttl=127 time=0.294 ms64 bytes from 192.168.1.1: icmp_seq=59 ttl=127 time=0.312 ms64 bytes from 192.168.1.1: icmp_seq=60 ttl=127 time=0.285 ms64 bytes from 192.168.1.1: icmp_seq=61 ttl=127 time=0.308 ms64 bytes from 192.168.1.1: icmp_seq=62 ttl=127 time=0.268 ms64 bytes from 192.168.1.1: icmp_seq=63 ttl=127 time=0.276 ms64 bytes from 192.168.1.1: icmp_seq=64 ttl=127 time=0.289 ms64 bytes from 192.168.1.1: icmp_seq=65 ttl=127 time=2.03 ms64 bytes from 192.168.1.1: icmp_seq=66 ttl=127 time=5.50 ms64 bytes from 192.168.1.1: icmp_seq=67 ttl=127 time=2.74 ms64 bytes from 192.168.1.1: icmp_seq=68 ttl=127 time=5.73 ms64 bytes from 192.168.1.1: icmp_seq=69 ttl=127 time=0.602 ms64 bytes from 192.168.1.1: icmp_seq=70 ttl=127 time=1.92 ms64 bytes from 192.168.1.1: icmp_seq=71 ttl=127 time=0.848 ms64 bytes from 192.168.1.1: icmp_seq=72 ttl=127 time=0.408 ms64 bytes from 192.168.1.1: icmp_seq=73 ttl=127 time=0.316 ms64 bytes from 192.168.1.1: icmp_seq=74 ttl=127 time=0.315 ms64 bytes from 192.168.1.1: icmp_seq=75 ttl=127 time=4.07 ms64 bytes from 192.168.1.1: icmp_seq=76 ttl=127 time=0.343 ms64 bytes from 192.168.1.1: icmp_seq=77 ttl=127 time=0.285 ms64 bytes from 192.168.1.1: icmp_seq=78 ttl=127 time=0.286 ms64 bytes from 192.168.1.1: icmp_seq=79 ttl=127 time=10.2 ms64 bytes from 192.168.1.1: icmp_seq=80 ttl=127 time=1.02 ms64 bytes from 192.168.1.1: icmp_seq=81 ttl=127 time=0.272 ms64 bytes from 192.168.1.1: icmp_seq=82 ttl=127 time=0.298 ms64 bytes from 192.168.1.1: icmp_seq=83 ttl=127 time=8.47 ms64 bytes from 192.168.1.1: icmp_seq=84 ttl=127 time=6.57 ms64 bytes from 192.168.1.1: icmp_seq=85 ttl=127 time=0.367 ms64 bytes from 192.168.1.1: icmp_seq=86 ttl=127 time=7.87 ms64 bytes from 192.168.1.1: icmp_seq=87 ttl=127 time=0.298 ms64 bytes from 192.168.1.1: icmp_seq=88 ttl=127 time=5.99 ms64 bytes from 192.168.1.1: icmp_seq=89 ttl=127 time=1.16 ms64 bytes from 192.168.1.1: icmp_seq=90 ttl=127 time=8.22 ms64 bytes from 192.168.1.1: icmp_seq=91 ttl=127 time=4.44 ms64 bytes from 192.168.1.1: icmp_seq=92 ttl=127 time=0.376 ms64 bytes from 192.168.1.1: icmp_seq=93 ttl=127 time=2.79 ms64 bytes from 192.168.1.1: icmp_seq=94 ttl=127 time=0.257 ms64 bytes from 192.168.1.1: icmp_seq=95 ttl=127 time=0.580 ms64 bytes from 192.168.1.1: icmp_seq=96 ttl=127 time=0.367 ms64 bytes from 192.168.1.1: icmp_seq=97 ttl=127 time=0.467 ms64 bytes from 192.168.1.1: icmp_seq=98 ttl=127 time=0.390 ms64 bytes from 192.168.1.1: icmp_seq=99 ttl=127 time=0.962 ms64 bytes from 192.168.1.1: icmp_seq=100 ttl=127 time=3.34 ms--- 192.168.1.1 ping statistics ---100 packets transmitted, 100 received, 0% packet loss, time 99050msrtt min/avg/max/mdev = 0.250/1.578/10.220/2.432 ms', 1),
+	(56, 'cd7c3324-aa37-11ea-95dc-38d547addffb', 0, '2020-06-09 17:59:14', '2020-06-09 17:59:14', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(57, '051ad9ee-aa38-11ea-aed8-38d547addffb', 0, '2020-06-09 18:00:47', '2020-06-09 18:00:47', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(58, '233b4d62-aa38-11ea-97f5-38d547addffb', 0, '2020-06-09 18:01:38', '2020-06-09 18:01:38', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(59, 'f7d810cc-aba1-11ea-99f2-38d547addffb', 0, '2020-06-11 13:11:42', '2020-06-11 13:11:42', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(60, '2038a93a-aba2-11ea-9d33-38d547addffb', 0, '2020-06-11 13:12:50', '2020-06-11 13:12:50', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(61, '4311d8a2-aba3-11ea-998e-38d547addffb', 0, '2020-06-11 13:20:58', '2020-06-11 13:20:58', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(62, 'db65089e-aba4-11ea-b8cb-38d547addffb', 0, '2020-06-11 13:32:23', '2020-06-11 13:32:23', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(63, 'ef39b092-aba6-11ea-a597-38d547addffb', 0, '2020-06-11 13:47:15', '2020-06-11 13:47:15', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(64, 'e73c0864-abb0-11ea-a26d-38d547addffb', 0, '2020-06-11 14:58:37', '2020-06-11 14:58:37', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(65, 'b9cb38c2-abb5-11ea-9ae1-38d547addffb', 0, '2020-06-11 15:33:08', '2020-06-11 15:33:08', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(66, '89ecd1f0-abb6-11ea-a871-38d547addffb', 0, '2020-06-11 15:38:57', '2020-06-11 15:38:57', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(67, '36d317d2-abb7-11ea-84c6-38d547addffb', 0, '2020-06-11 15:43:48', '2020-06-11 15:43:48', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(68, 'd35e19f4-abb7-11ea-9eee-38d547addffb', 0, '2020-06-11 15:48:10', '2020-06-11 15:48:10', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(69, 'd306fa74-abb8-11ea-ac85-38d547addffb', 0, '2020-06-11 15:55:19', '2020-06-11 15:55:19', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1);
 /*!40000 ALTER TABLE `script_file_execute_event` ENABLE KEYS */;
 
 -- 导出  表 xlauto.server_software 结构
@@ -156,9 +183,9 @@ CREATE TABLE IF NOT EXISTS `sys_code` (
   `order_queue` smallint DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`code_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.sys_code 的数据：~7 rows (大约)
+-- 正在导出表  xlauto.sys_code 的数据：~9 rows (大约)
 DELETE FROM `sys_code`;
 /*!40000 ALTER TABLE `sys_code` DISABLE KEYS */;
 INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code`, `order_queue`, `comments`) VALUES
@@ -172,7 +199,8 @@ INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code
 	(8, 'shell', 'Shell脚本', 'execute_script_type', NULL, NULL, NULL),
 	(9, 'favorites', '收藏', 'execute_script_group', NULL, NULL, NULL),
 	(10, '1', '成功', 'script_file_execute_result_ype', NULL, NULL, NULL),
-	(11, '0', '失败', 'script_file_execute_result_ype', NULL, NULL, NULL);
+	(11, '-1', '失败', 'script_file_execute_result_ype', NULL, NULL, NULL),
+	(12, '2', '警告', 'script_file_execute_result_ype', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `sys_code` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_menu 结构
