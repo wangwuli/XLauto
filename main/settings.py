@@ -41,4 +41,8 @@ PASS_KEY = 'xlauto'
 #项目生成文件目录
 DATA_PATH = 'src/data'
 
+#项目零时目录
 TMP_PATH = 'src/tmp'
+
+#临时日志
+HAPPENED_LOG = 'log/xlauto.log'

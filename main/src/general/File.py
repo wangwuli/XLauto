@@ -10,6 +10,7 @@ import uuid
 import settings
 
 
+#将字符串保存为文件
 def str_save_file(file_content_str, file_path=None):
     if not file_path:
         file_path = os.path.join(settings.TMP_PATH, "temporary_file","%s" %str(uuid.uuid1()))

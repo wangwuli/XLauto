@@ -405,7 +405,7 @@ export default {
       this.del_script_row = row
     },
     async RmScript () {
-      const response = await Request.DELETE('/hosts/rm_script', { id: this.del_script_row.id })
+      const response = await Request.DELETE('/hosts/rm_script', { script_file_id: this.del_script_row.script_file_id })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
@@ -424,7 +424,7 @@ export default {
     },
     async EditScript () {
       const response = await Request.POST('/hosts/edit_script', {
-        id: this.edit_script_row.id,
+        script_file_id: this.edit_script_row.script_file_id,
         script_file_group: this.edit_script_group_code_key,
         script_file_type: this.edit_script_type_code_key
       })

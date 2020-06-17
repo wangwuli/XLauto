@@ -76,10 +76,13 @@ def update_script_query():
 
 @hosts.route('/hosts/rm_script', methods=['DELETE'])
 def rm_script():
-    id = request.json.get('id')
-    delete_script_obj = ScriptFileCabinet.query.filter(ScriptFileCabinet.id==id).first()
+    id = request.json.get('script_file_id')
+    delete_script_obj = ScriptFileCabinet.query.filter(ScriptFileCabinet.script_file_id==id).first()
 
-    os.remove(delete_script_obj.script_file_path)
+    try:
+        os.remove(delete_script_obj.script_file_path)
+    except FileNotFoundError as e:
+        current_app.logger.warning(e)
 
     db.session.delete(delete_script_obj)
     db.session.commit()
@@ -92,7 +95,7 @@ def rm_script():
 def edit_script():
     data_dict = request.get_json()
 
-    delete_script_obj = ScriptFileCabinet.query.filter_by(id=data_dict['id']).first()
+    delete_script_obj = ScriptFileCabinet.query.filter_by(script_file_id=data_dict['script_file_id']).first()
     delete_script_obj.script_file_group = data_dict['script_file_group']
     delete_script_obj.script_file_type = data_dict['script_file_type']
 

@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 import json
-
-from flask import request
-
-from src.general.General import Result
 from src.hosts.host_cmd.auxiliary import query_execute_batch_status
 from src.socket import socket
 from src.services.auxiliary import host_info_query
