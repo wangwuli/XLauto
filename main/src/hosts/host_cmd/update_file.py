@@ -128,6 +128,7 @@ def script_execute_query_history():
     FROM script_file_execute_event a
     LEFT JOIN  script_file_cabinet b ON a.script_file_id = b.script_file_id
     LEFT JOIN sys_code c ON c.code_key = a.execute_result AND c.code_type = "script_file_execute_result_ype"
+    ORDER BY execute_time DESC
     %s
     """ %sql_fragment
     sqla = Sqla(current_app)

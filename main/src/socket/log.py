@@ -23,9 +23,11 @@ def execute_script_query(ws):
             line = f.readline()     #从末尾开始读取
             if len(line) == 0:     #假如空等待几秒在读取
                 time.sleep(3)
+                data = {'data': '', "success": 1, "msg": "日志查询成功"}
+                ws.send(json.dumps(data))
             else:
-                log_text = line.decode('utf-8')
-                data = {'data': log_text, "success": 1, "msg": "加载主机信息成功"}
+                log_text = line
+                data = {'data': log_text, "success": 1, "msg": "日志查询成功"}
                 # data = {"msg": "%s" %e, "success":0,}
                 ws.send(json.dumps(data))
     f.close()

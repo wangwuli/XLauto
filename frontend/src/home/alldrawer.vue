@@ -6,9 +6,9 @@
       :direction="direction"
       :before-close="handleClose">
       <el-tooltip class="item" effect="dark" content="开始收集" placement="top-start">
-        <el-button type="primary" size="mini" icon="el-icon-edit" @click="" circle></el-button>
+        <el-button type="primary" size="mini" icon="el-icon-edit" @click="start_collection" circle></el-button>
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="清空此次收集" placement="top-start">
+      <el-tooltip class="item" effect="dark" content="暂停此次收集" @click="end_llection" placement="top-start">
         <el-button type="danger" size="mini" icon="el-icon-delete" circle></el-button>
       </el-tooltip>
       <el-input
