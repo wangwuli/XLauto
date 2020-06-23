@@ -5,12 +5,20 @@
       :visible.sync="drawer"
       :direction="direction"
       :before-close="handleClose">
-      <el-tooltip class="item" effect="dark" content="开始收集" placement="top-start">
+      <el-alert
+        style="height: 25px"
+        :closable="false"
+        :title="log_info_text"
+        :type="log_info_type"
+        show-icon>
+      </el-alert>
+      <el-tooltip class="item button_location" effect="dark" content="开始收集" placement="top-start">
         <el-button type="primary" size="mini" icon="el-icon-edit" @click="start_collection" circle></el-button>
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="暂停此次收集" @click="end_llection" placement="top-start">
-        <el-button type="danger" size="mini" icon="el-icon-delete" circle></el-button>
+      <el-tooltip class="item button_location" effect="dark" content="暂停此次收集" placement="top-start">
+        <el-button type="danger" size="mini" icon="el-icon-delete" @click="end_llection"  circle></el-button>
       </el-tooltip>
+      <!--<el-divider size="mini"></el-divider>-->
       <el-input
         :rows="textarea_rows"
         type="textarea"
@@ -42,6 +50,8 @@ export default {
   },
   data () {
     return {
+      log_info_text: '未开始',
+      log_info_type: 'info',
       textarea_rows: Math.floor((window.innerHeight - 80) / 24),
       screenheight: window.innerHeight,
       drawer: false,
@@ -65,7 +75,10 @@ export default {
       this.initWebSocket()
     },
     end_llection () {
-      this.initWebSocket()
+      this.websock.close()
+      this.log_info_type = 'warning'
+      this.log_info_text = '收集停止'
+      // this.websocketclose()
     },
     datassetOption (data) {
       this.happened_text += data
@@ -88,10 +101,14 @@ export default {
     websocketonmessage (e) { // 数据接收
       const data = JSON.parse(e.data)
       if (data.success) {
-        this.$message.success(data.msg)
+        // this.$message.success(data.msg)
+        this.log_info_type = 'success'
+        this.log_info_text = '收集成功'
         this.datassetOption(data.data)
       } else {
         this.$message.error(data.msg)
+        this.log_info_type = 'error'
+        this.log_info_text = '收集失败'
       }
     },
     websocketsend (Data) { // 数据发送
@@ -108,4 +125,10 @@ export default {
   /*.textarea >>> .el-textarea__inner {*/
   /*  height: 100px; !important;*/
   /*}*/
+  .el-divider--horizontal {
+    margin: 10px 0;
+  }
+  .button_location {
+    margin: 6px;
+  }
 </style>
