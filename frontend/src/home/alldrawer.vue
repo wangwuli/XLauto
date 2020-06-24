@@ -13,9 +13,9 @@
         show-icon>
       </el-alert>
       <el-tooltip class="item button_location" effect="dark" content="开始收集" placement="top-start">
-        <el-button type="primary" size="mini" icon="el-icon-edit" @click="start_collection" circle></el-button>
+        <el-button type="primary" size="mini" icon="el-icon-video-camera-solid" @click="start_collection" circle></el-button>
       </el-tooltip>
-      <el-tooltip class="item button_location" effect="dark" content="暂停此次收集" placement="top-start">
+      <el-tooltip class="item button_location" effect="dark" content="暂停收集" placement="top-start">
         <el-button type="danger" size="mini" icon="el-icon-delete" @click="end_llection"  circle></el-button>
       </el-tooltip>
       <!--<el-divider size="mini"></el-divider>-->
@@ -103,7 +103,7 @@ export default {
       if (data.success) {
         // this.$message.success(data.msg)
         this.log_info_type = 'success'
-        this.log_info_text = '收集成功'
+        this.log_info_text = '正在收集'
         this.datassetOption(data.data)
       } else {
         this.$message.error(data.msg)

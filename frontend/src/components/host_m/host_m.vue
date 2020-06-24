@@ -5,7 +5,7 @@
         <HostInfo ref="hotsInfo"></HostInfo>
       </el-tab-pane>
       <el-tab-pane label="命令推送">
-        <HostCmd ref="hotsCmd"></HostCmd>>
+        <HostCmd ref="hotsCmd"></HostCmd>
       </el-tab-pane>
       <el-tab-pane label="待开发">角色管理</el-tab-pane>
     </el-tabs>
