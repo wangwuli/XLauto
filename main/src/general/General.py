@@ -51,14 +51,15 @@ class Result():
         return response
 
     @staticmethod
-    def fail(data=[], msg="查询失败"):
+    def fail(data, status, msg):
         result = {"code": Result.fail_code, "msg": msg, "success": False, 'data': data}
         return json.dumps(result, cls=DateEncoder)
 
     @staticmethod
-    def fail_response(data=[], msg="", status=200):
+    def fail_response(data="", msg="", status=200):
         result = Result.fail(data, Result.fail_code, msg)
-        return make_response(jsonify(result, status))
+        # return make_response(jsonify(result, status))
+        return make_response(result, status)
 
     @staticmethod
     def warning(data=[], msg=""):
@@ -68,4 +69,5 @@ class Result():
     @staticmethod
     def warning_response(data=[], msg="", status=200):
         result = Result.fail(data, Result.warning_code, msg)
-        return make_response(jsonify(result, status))
+        # return make_response(jsonify(result, status))
+        return make_response(result, status)

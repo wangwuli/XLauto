@@ -19,11 +19,10 @@
             <el-input v-model="host_add_form.hosts_input_text" size="mini" placeholder="IP支持.1-254与1，2..输入" class="add_input_style"></el-input>
             </el-form-item>
             <el-form-item size="mini" label="用户名" style="padding-left: 13px;">
-            <el-input v-model="host_add_form.username" size="mini" placeholder="请输入" class="add_input_style"></el-input>
+            <el-input v-model="host_add_form.user_name" size="mini" placeholder="请输入" class="add_input_style"></el-input>
             </el-form-item>
             <el-form-item size="mini" label="密码" style="padding-left: 28px;">
-            <el-input v-model="host_add_form.password" size="mini" placeholder="请输入" class="add_input_style"></el-input>
-            <el-button size="mini" icon="el-icon-finished" circle style="margin-left:30px;" @click="addhost_dialog_visible = true"></el-button>
+            <el-input v-model="host_add_form.password" size="mini" placeholder="请输入" class="add_input_style" show-password></el-input>
             </el-form-item>
             <el-form-item size="mini" label="选择项目">
               <el-select v-model="host_add_form.host_project" placeholder="请选择" size="mini" class="add_input_style">
@@ -46,6 +45,7 @@
               </el-select>
             </el-form-item>
           </el-form>
+          <el-button size="mini" icon="el-icon-finished" circle style="margin-right:30px;float: right" @click="addhost_dialog_visible = true"></el-button>
         </el-drawer>
       </div>
       <el-row>
@@ -129,11 +129,11 @@
       :modal-append-to-body='false'
       title="提示"
       :visible.sync="addhost_dialog_visible"
-      width="30%">
+      width="20%">
       <span>提交创建主机</span>
       <span slot="footer" class="dialog-footer">
-      <el-button @click="addhost_dialog_visible = false">取 消</el-button>
-      <el-button type="primary" @click="addHostrequest">确 定</el-button>
+      <el-button @click="addhost_dialog_visible = false" size="mini">取 消</el-button>
+      <el-button type="primary" @click="addHostrequest" size="mini">确 定</el-button>
       </span>
     </el-dialog>
   </el-row>
@@ -160,8 +160,8 @@ export default {
         host_project: '',
         host_type: '',
         hosts_input_text: '',
-        username: '',
-        password: ''
+        user_name: '',
+        user_pass: ''
       },
       drawer: false,
       direction: 'ltr',
