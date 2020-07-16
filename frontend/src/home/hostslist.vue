@@ -45,7 +45,7 @@
               </el-select>
             </el-form-item>
           </el-form>
-          <el-button size="mini" icon="el-icon-finished" circle style="margin-right:30px;float: right" @click="addhost_dialog_visible = true"></el-button>
+          <el-button type="primary" size="mini" icon="el-icon-finished" circle style="margin-right:30px;float: right" @click="addhost_dialog_visible = true"></el-button>
         </el-drawer>
       </div>
       <el-row>
@@ -77,7 +77,7 @@
         <el-form-item size="mini" label="主机IP">
           <el-input v-model="host_filter_form.host_ip" placeholder="请选择" class="select_input_style"></el-input>
           <el-button icon="el-icon-search" circle style="margin-left:30px;" @click="getnewHostsinfo"></el-button>
-          <el-button icon="el-icon-circle-plus-outline" circle style="margin-left:30px;" @click="add_host_drawer = true"></el-button>
+          <el-button icon="el-icon-circle-plus-outline" circle style="margin-left:30px;" @click="add_host_drawer = true" type="primary"></el-button>
         </el-form-item>
       </el-form>
     <el-table

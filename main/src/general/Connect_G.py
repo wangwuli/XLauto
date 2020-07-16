@@ -199,7 +199,7 @@ class Ip_c():
         for ipstr_one in ipstr.split(','):
             if ipstr_one.find('-') != -1:
                 basket_dict_one_separation = ipstr_one.split('-')
-                if self.if_ipaddr(basket_dict_one_separation[0]) and len(str(basket_dict_one_separation[1]) < 4):
+                if self.if_ipaddr(basket_dict_one_separation[0]) and len(str(basket_dict_one_separation[1])) < 4:
                     start_number = basket_dict_one_separation[0].split(".")[-1]
                     start_number_s = basket_dict_one_separation[0].rstrip(start_number)
                     for number_one in range(int(start_number) , int(basket_dict_one_separation[1]) + 1):
