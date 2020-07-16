@@ -18,4 +18,6 @@ cd ./main & python manage.py<br>
 
 
 # 介绍
+![image](https://github.com/wangwuli/XLauto/blob/master/other/20200716104352.png?raw=true)
 ![image](https://github.com/wangwuli/XLauto/blob/master/other/20200716104244.png?raw=true)
+![image](https://github.com/wangwuli/XLauto/blob/master/other/20200716104333.png?raw=true)
