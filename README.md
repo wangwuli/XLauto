@@ -15,3 +15,7 @@ npm -i <br>
 启动命令/start command<br>
 cd ./frontend & npm run serve<br>
 cd ./main & python manage.py<br>
+
+
+# 介绍
+![image](https://github.com/wangwuli/XLauto/blob/master/other/20200716104244.png?raw=true)
