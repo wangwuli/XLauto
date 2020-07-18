@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import HelloWorld from '@/components/HelloWorld'
 import HostM from '@/components/host_m/host_m'
+import SoftD from '@/components/soft_m/soft_deploy'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/host_m',
     name: 'host_m',
     component: HostM
+  },
+  {
+    path: '/soft_d',
+    name: 'soft_d',
+    component: SoftD
   }
 ]
 
