@@ -22,7 +22,11 @@ def create_app():
 
     #日志
     xlauto.debug = True
-    handler = logging.FileHandler('./log/xlauto.log', encoding='UTF-8')  # 输出句柄
+    try:
+        handler = logging.FileHandler('./log/xlauto.log', encoding='UTF-8')  # 输出句柄
+    except FileNotFoundError:
+        os.makedirs('./log')
+        handler = logging.FileHandler('./log/xlauto.log', encoding='UTF-8')
     logging_format = logging.Formatter(
         '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s')  # 打印格式
     handler.setFormatter(logging_format)   # 设置格式

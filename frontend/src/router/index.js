@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import HelloWorld from '@/components/HelloWorld'
 import HostM from '@/components/host_m/host_m'
-import SoftD from '@/components/soft_m/soft_deploy'
+import SoftD from '@/components/soft_m/soft_m'
 
 Vue.use(VueRouter)
 
