@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-button type="primary" size="mini">角色查询</el-button>
+    <el-button type="primary" size="mini">角色校验</el-button>
     <el-select v-model="value" placeholder="可选角色" size="mini" style="padding-left: 10px">
       <el-option
         v-for="item in options"
@@ -10,6 +10,18 @@
       </el-option>
     </el-select>
     <el-button type="primary" size="mini">绑定</el-button>
+
+    <el-select v-model="value" placeholder="角色" size="mini" style="padding-left: 10px">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
+    <el-button type="primary" size="mini">过滤</el-button>
+
+    <el-button type="primary" size="mini">配置</el-button>
     <el-button type="danger" size="mini">卸载</el-button>
     <el-button type="warning" size="mini">部署</el-button>
     <el-table
@@ -24,18 +36,18 @@
         width="55">
       </el-table-column>
       <el-table-column
-        label="日期"
+        label="IP"
         width="120">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
         prop="name"
-        label="姓名"
+        label="项目"
         width="120">
       </el-table-column>
       <el-table-column
         prop="address"
-        label="地址"
+        label="现有角色"
         show-overflow-tooltip>
       </el-table-column>
     </el-table>
@@ -64,33 +76,33 @@ export default {
         label: '北京烤鸭'
       }],
       tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '192.168.1.1',
+        name: '本部',
+        address: 'Master'
       }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '192.168.1.2',
+        name: '本部',
+        address: 'Node'
       }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '192.168.1.3',
+        name: '本部',
+        address: 'Node'
       }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '192.168.1.4',
+        name: '本部',
+        address: 'Node'
       }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '192.168.1.5',
+        name: '本部',
+        address: 'Node'
       }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '192.168.1.6',
+        name: '本部',
+        address: 'Node'
       }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '192.168.1.7',
+        name: '本部',
+        address: 'Node'
       }],
       multipleSelection: []
     }
