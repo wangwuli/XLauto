@@ -50,6 +50,11 @@
         label="现有角色"
         show-overflow-tooltip>
       </el-table-column>
+      <el-table-column
+        prop="status"
+        label="运行状态"
+        show-overflow-tooltip>
+      </el-table-column>
     </el-table>
   </el-row>
 </template>
