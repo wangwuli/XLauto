@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- 主机:                           127.0.0.1
--- 服务器版本:                        8.0.20 - MySQL Community Server - GPL
--- 服务器操作系统:                      Win64
--- HeidiSQL 版本:                  10.2.0.5599
+-- 服务器版本:                        5.7.21 - MySQL Community Server (GPL)
+-- 服务器操作系统:                      Win32
+-- HeidiSQL 版本:                  10.3.0.5771
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -14,57 +14,63 @@
 
 -- 导出 xlauto 的数据库结构
 DROP DATABASE IF EXISTS `xlauto`;
-CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `xlauto`;
 
 -- 导出  表 xlauto.host_instance 结构
 DROP TABLE IF EXISTS `host_instance`;
 CREATE TABLE IF NOT EXISTS `host_instance` (
-  `host_id` int NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_ip` varchar(50) NOT NULL,
   `host_name` varchar(50) DEFAULT NULL,
-  `host_port` int DEFAULT NULL,
+  `host_port` int(11) DEFAULT NULL,
   `host_type_key` varchar(50) NOT NULL,
   `host_project` varchar(50) DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`host_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.host_instance 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.host_instance 的数据：~3 rows (大约)
 DELETE FROM `host_instance`;
 /*!40000 ALTER TABLE `host_instance` DISABLE KEYS */;
 INSERT INTO `host_instance` (`host_id`, `host_ip`, `host_name`, `host_port`, `host_type_key`, `host_project`, `is_remove`, `comment`) VALUES
-	(1, '192.168.10.134', '测试主机', 22, 'docker', '1', NULL, NULL);
+	(1, '192.168.10.134', '测试主机', 22, 'docker', '1', NULL, NULL),
+	(2, '192.168.10.133', NULL, 22, '', '', NULL, NULL),
+	(3, '192.168.10.134', NULL, 22, '', '', NULL, NULL),
+	(4, '192.168.10.135', NULL, 22, '', '', NULL, NULL);
 /*!40000 ALTER TABLE `host_instance` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_users 结构
 DROP TABLE IF EXISTS `host_users`;
 CREATE TABLE IF NOT EXISTS `host_users` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int NOT NULL,
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) NOT NULL,
   `user_name` varchar(50) NOT NULL,
   `user_pass` varchar(50) NOT NULL,
   `user_role` varchar(50) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- 正在导出表  xlauto.host_users 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.host_users 的数据：~3 rows (大约)
 DELETE FROM `host_users`;
 /*!40000 ALTER TABLE `host_users` DISABLE KEYS */;
 INSERT INTO `host_users` (`user_id`, `host_id`, `user_name`, `user_pass`, `user_role`) VALUES
-	(1, 1, 'root', '661602611BD6C5A7B531121B4BCC8535', 'root');
+	(1, 1, 'root', '661602611BD6C5A7B531121B4BCC8535', 'root'),
+	(2, 2, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(3, 3, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(4, 4, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root');
 /*!40000 ALTER TABLE `host_users` ENABLE KEYS */;
 
 -- 导出  表 xlauto.projects 结构
 DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
-  `project_id` int NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(50) DEFAULT NULL,
   `project_code` varchar(50) DEFAULT NULL,
   `controller_ip` varchar(50) DEFAULT NULL,
-  `order_id` int DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `modify_time` datetime DEFAULT NULL,
   `comments` varchar(500) DEFAULT NULL,
@@ -81,7 +87,7 @@ INSERT INTO `projects` (`project_id`, `project_name`, `project_code`, `controlle
 -- 导出  表 xlauto.script_file_cabinet 结构
 DROP TABLE IF EXISTS `script_file_cabinet`;
 CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
-  `script_file_id` int NOT NULL AUTO_INCREMENT,
+  `script_file_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_file_path` varchar(300) DEFAULT NULL,
   `script_file_name` varchar(50) DEFAULT NULL,
   `script_file_group` varchar(50) DEFAULT NULL,
@@ -90,37 +96,33 @@ CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
   `modify_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`script_file_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.script_file_cabinet 的数据：~2 rows (大约)
+-- 正在导出表  xlauto.script_file_cabinet 的数据：~1 rows (大约)
 DELETE FROM `script_file_cabinet`;
 /*!40000 ALTER TABLE `script_file_cabinet` DISABLE KEYS */;
 INSERT INTO `script_file_cabinet` (`script_file_id`, `script_file_path`, `script_file_name`, `script_file_group`, `script_file_type`, `create_time`, `modify_time`, `comment`) VALUES
-	(1, 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\src/data\\scriptfiles\\b2c98548-9894-11ea-a689-001a7dda7113', 'test.sh', 'favorites', 'python', '2020-05-18 07:18:21', '2020-05-18 17:29:11', NULL),
-	(2, 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\src/data\\scriptfiles\\02e7c73a-9895-11ea-8e59-001a7dda7113', '导入脚本示例.sh', 'favorites', 'shell', '2020-05-18 07:20:35', '2020-05-18 17:51:25', NULL);
+	(1, 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\src/data\\scriptfiles\\b2c98548-9894-11ea-a689-001a7dda7113', 'test.sh', 'favorites', 'python', '2020-05-18 07:18:21', '2020-05-18 17:29:11', NULL);
 /*!40000 ALTER TABLE `script_file_cabinet` ENABLE KEYS */;
 
 -- 导出  表 xlauto.script_file_execute_event 结构
 DROP TABLE IF EXISTS `script_file_execute_event`;
 CREATE TABLE IF NOT EXISTS `script_file_execute_event` (
-  `script_file_execute_event_id` int NOT NULL AUTO_INCREMENT,
+  `script_file_execute_event_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_execute_event_batch_id` varchar(50) DEFAULT NULL,
-  `script_file_id` int DEFAULT NULL,
+  `script_file_id` int(11) DEFAULT NULL,
   `execute_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `execute_end_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `execute_result` tinyint DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
+  `execute_result` tinyint(4) DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
   `script_file_content` mediumtext,
-  `host_id` int DEFAULT NULL,
+  `host_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`script_file_execute_event_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
 
--- 正在导出表  xlauto.script_file_execute_event 的数据：~21 rows (大约)
+-- 正在导出表  xlauto.script_file_execute_event 的数据：~27 rows (大约)
 DELETE FROM `script_file_execute_event`;
 /*!40000 ALTER TABLE `script_file_execute_event` DISABLE KEYS */;
 INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script_execute_event_batch_id`, `script_file_id`, `execute_time`, `execute_end_time`, `execute_result`, `script_file_content`, `host_id`) VALUES
-	(1, '1', 1, '2020-05-21 15:26:42', '2020-05-21 15:27:07', 1, NULL, NULL),
-	(44, '967375ee-a618-11ea-bded-38d547addffb', 0, '2020-06-04 12:05:42', '2020-06-04 12:05:42', -1, 'sh: /tmp9682fba8-a618-11ea-a476-38d547addffb: No such file or directory', NULL),
-	(45, '04603cd8-a619-11ea-bf67-38d547addffb', 0, '2020-06-04 12:08:57', '2020-06-04 12:08:57', -1, 'sh: /tmp0466c722-a619-11ea-b7fb-38d547addffb: No such file or directory', NULL),
 	(46, '2bae8300-a63c-11ea-9a7b-38d547addffb', 0, '2020-06-04 16:20:27', '2020-06-04 16:20:27', -1, 'sh: /tmp2bbb24a4-a63c-11ea-b699-38d547addffb: No such file or directory', 1),
 	(47, '1b9077d0-a63d-11ea-a8c1-38d547addffb', 0, '2020-06-04 16:27:11', '2020-06-04 16:27:11', -1, 'sh: /tmp1b97509c-a63d-11ea-a4fd-38d547addffb: No such file or directory', 1),
 	(48, '58775d92-a63d-11ea-acf2-38d547addffb', 0, '2020-06-04 16:28:50', '2020-06-04 16:28:50', 0, '', 1),
@@ -144,24 +146,26 @@ INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script
 	(66, '89ecd1f0-abb6-11ea-a871-38d547addffb', 0, '2020-06-11 15:38:57', '2020-06-11 15:38:57', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
 	(67, '36d317d2-abb7-11ea-84c6-38d547addffb', 0, '2020-06-11 15:43:48', '2020-06-11 15:43:48', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
 	(68, 'd35e19f4-abb7-11ea-9eee-38d547addffb', 0, '2020-06-11 15:48:10', '2020-06-11 15:48:10', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
-	(69, 'd306fa74-abb8-11ea-ac85-38d547addffb', 0, '2020-06-11 15:55:19', '2020-06-11 15:55:19', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1);
+	(69, 'd306fa74-abb8-11ea-ac85-38d547addffb', 0, '2020-06-11 15:55:19', '2020-06-11 15:55:19', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(70, '610a2ea2-af66-11ea-8a1f-001a7dda7113', 3, '2020-06-16 08:15:14', '2020-06-16 08:15:14', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1),
+	(71, '82c582ee-af66-11ea-a231-001a7dda7113', 3, '2020-06-16 08:16:11', '2020-06-16 08:16:11', 1, 'anaconda-ks.cfgens_messageheaderens_util_logos_info.json', 1);
 /*!40000 ALTER TABLE `script_file_execute_event` ENABLE KEYS */;
 
 -- 导出  表 xlauto.server_software 结构
 DROP TABLE IF EXISTS `server_software`;
 CREATE TABLE IF NOT EXISTS `server_software` (
-  `soft_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int DEFAULT NULL,
-  `soft_type` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `soft_port` int DEFAULT NULL,
-  `start_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `stop_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `restart_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `soft_log_path` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `soft_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) DEFAULT NULL,
+  `soft_type` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `soft_port` int(11) DEFAULT NULL,
+  `start_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `stop_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `restart_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `soft_log_path` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `modify_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `comments` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `comments` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`soft_id`),
   KEY `ix_server_software_host_id` (`host_id`),
   KEY `ix_server_software_soft_type` (`soft_type`)
@@ -175,17 +179,17 @@ DELETE FROM `server_software`;
 -- 导出  表 xlauto.sys_code 结构
 DROP TABLE IF EXISTS `sys_code`;
 CREATE TABLE IF NOT EXISTS `sys_code` (
-  `code_id` int NOT NULL AUTO_INCREMENT,
-  `code_key` varchar(50) DEFAULT NULL,
+  `code_id` int(11) NOT NULL AUTO_INCREMENT,
+  `code_key` varchar(500) DEFAULT NULL,
   `code_name` varchar(50) NOT NULL,
   `code_type` varchar(50) NOT NULL,
   `f_code` varchar(50) DEFAULT NULL,
-  `order_queue` smallint DEFAULT NULL,
+  `order_queue` smallint(6) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`code_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.sys_code 的数据：~9 rows (大约)
+-- 正在导出表  xlauto.sys_code 的数据：~8 rows (大约)
 DELETE FROM `sys_code`;
 /*!40000 ALTER TABLE `sys_code` DISABLE KEYS */;
 INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code`, `order_queue`, `comments`) VALUES
@@ -200,22 +204,24 @@ INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code
 	(9, 'favorites', '收藏', 'execute_script_group', NULL, NULL, NULL),
 	(10, '1', '成功', 'script_file_execute_result_ype', NULL, NULL, NULL),
 	(11, '-1', '失败', 'script_file_execute_result_ype', NULL, NULL, NULL),
-	(12, '2', '警告', 'script_file_execute_result_ype', NULL, NULL, NULL);
+	(12, '2', '警告', 'script_file_execute_result_ype', NULL, NULL, NULL),
+	(13, '[kuebrnetes]\r\nname=Kubernetes Repository\r\nbaseurl=http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el8-x86_64/\r\nenabled=1\r\ngpgcheck=0', 'Aliyun-Centos8', 'kubernetes_repository_type', NULL, NULL, NULL),
+	(14, '[kuebrnetes]\r\nname=Kubernetes Repository\r\nbaseurl=https://packages.cloud.google.com/yum/repos/kuebrnetes-el8-x86_64/\r\nenabled=1\r\ngpgcheck=0', '官方-Centos8', 'kubernetes_repository_type', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `sys_code` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_menu 结构
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE IF NOT EXISTS `sys_menu` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `parent_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `path` varchar(50) DEFAULT NULL,
   `icon` varchar(50) DEFAULT NULL,
-  `statu` int DEFAULT NULL,
+  `statu` int(11) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  xlauto.sys_menu 的数据：~6 rows (大约)
 DELETE FROM `sys_menu`;
@@ -226,7 +232,8 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `sta
 	(3, 2, '网络', 'network', '/network', 'el-icon-place', NULL, NULL),
 	(4, 2, '主机', 'host_m', '/host_m', 'el-icon-place', NULL, NULL),
 	(5, NULL, '部署', 'deploy', NULL, 'el-icon-s-claim', NULL, NULL),
-	(6, NULL, '维护', 'info_record', NULL, 'el-icon-s-custom', NULL, NULL);
+	(6, NULL, '维护', 'info_record', NULL, 'el-icon-s-custom', NULL, NULL),
+	(7, 5, '软件部署', 'soft_d', '/soft_d', 'el-icon-s-claim', NULL, NULL);
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
