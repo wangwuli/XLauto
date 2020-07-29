@@ -62,6 +62,10 @@
         <el-tabs v-model="activeName" @tab-click="configurationHandleclick">
           <el-tab-pane label="通用配置" name="configuration_general">
             <el-form :model="configuration_form" size="mini" :inline="true">
+              <el-form-item label="系统">
+                <el-radio v-model="configuration_form.system" label="centos">CentOS(RHEL)</el-radio>
+              </el-form-item>
+              <el-row>
               <el-form-item label="防火墙">
                 <el-switch
                   v-model="configuration_form.firewalld"
@@ -69,17 +73,22 @@
                   inactive-color="#ff4949">
                 </el-switch>
               </el-form-item>
-              <el-form-item label="SELinux">
+              <el-form-item label="SELinux" style="margin-left: 5vh">
                 <el-switch
                   v-model="configuration_form.selinux"
                   active-color="#13ce66"
                   inactive-color="#ff4949">
                 </el-switch>
               </el-form-item>
-              <el-form-item label="活动区域">
-                <el-select v-model="configuration_form.region" placeholder="请选择活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
+              </el-row>
+              <el-form-item label="仓库地址">
+                <el-select v-model="configuration_form.repository" placeholder="请选择使用的仓库">
+                  <el-option
+                  v-for="item in kubernetes_repository_all_type"
+                  :key="item.code_key"
+                  :label="item.code_name"
+                  :value="item.code_key">
+                </el-option>
                 </el-select>
               </el-form-item>
             </el-form>
@@ -99,13 +108,18 @@
 </template>
 
 <script>
+import * as Request from '@/general/request.js'
+
 export default {
   name: 'soft_deploy',
   data () {
     return {
+      kubernetes_repository_all_type: [],
       activeName: 'configuration_general',
       configuration_dialog: false,
       configuration_form: {
+        repository: '',
+        system: 'centos',
         firewalld: false,
         selinux: false
       },
@@ -157,12 +171,27 @@ export default {
       multipleSelection: []
     }
   },
+  created () {
+    this.kubernetesRepositoryQuery()
+  },
   methods: {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
     configurationHandleclick (tab, event) {
       console.log(tab, event)
+    },
+    async kubernetesRepositoryQuery () {
+      const response = await Request.GET('/general/code_query', { code_type: 'kubernetes_repository_type' })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          // this.$message.success(data.msg)
+          this.kubernetes_repository_all_type = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     }
   }
 }
