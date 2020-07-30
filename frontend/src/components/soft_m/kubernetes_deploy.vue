@@ -63,7 +63,7 @@
           <el-tab-pane label="通用配置" name="configuration_general">
             <el-form :model="configuration_form" size="mini" :inline="true">
               <el-form-item label="系统">
-                <el-radio v-model="configuration_form.system" label="centos">CentOS(RHEL)</el-radio>
+                <el-radio v-model="configuration_form.system" label="centos">CentOS8(RHEL8)</el-radio>
               </el-form-item>
               <el-row>
               <el-form-item label="防火墙">
@@ -100,7 +100,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false" size="mini">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false" size="mini">确 定</el-button>
+          <el-button type="primary" @click="kubernetesInstallSubmit" size="mini">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -188,6 +188,17 @@ export default {
         if (data.success) {
           // this.$message.success(data.msg)
           this.kubernetes_repository_all_type = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async kubernetesInstallSubmit () {
+      const response = await Request.POST('/deploy/kubernetes_install', this.configuration_form)
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
         } else {
           this.$message.error(data.msg)
         }
