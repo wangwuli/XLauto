@@ -90,3 +90,28 @@ class ServerInfo(Sshmet):
         return data
 
 
+class Cmds(Sshmet):
+    def set_system(self, system_name, versions):
+        self.system_name = system_name
+        self.versions = versions
+
+    def firewalld_control(self, switch):
+        """
+        :param switch: ture or false
+        :return:
+        """
+        if self.system_name in ("centos", "rhel"):
+            if switch:
+                if self.versions >= 7:
+                    info = self.execcmd("service firewalld start")
+                else:
+                    info = self.execcmd("service iptables start")
+            else:
+                if self.versions >= 7:
+                    info = self.execcmd("service firewalld stop")
+                else:
+                    info = self.execcmd("service iptables stop")
+            return info
+        else:
+            self.error_info = "不支持的系统版本"
+            return False
