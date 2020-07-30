@@ -100,18 +100,19 @@ class Cmds(Sshmet):
         :param switch: ture or false
         :return:
         """
-        if self.system_name in ("centos", "rhel"):
-            if switch:
-                if self.versions >= 7:
-                    info = self.execcmd("service firewalld start")
-                else:
-                    info = self.execcmd("service iptables start")
-            else:
-                if self.versions >= 7:
-                    info = self.execcmd("service firewalld stop")
-                else:
-                    info = self.execcmd("service iptables stop")
-            return info
-        else:
-            self.error_info = "不支持的系统版本"
-            return False
+        # if self.system_name in ("centos", "rhel"):
+        #     if switch:
+        #         if self.versions >= 7:
+        #             info = self.execcmd("service firewalld start")
+        #         else:
+        #             info = self.execcmd("service iptables start")
+        #     else:
+        #         if self.versions >= 7:
+        #             info = self.execcmd("service firewalld stop")
+        #         else:
+        #             info = self.execcmd("service iptables stop")
+        #     return info
+        # else:
+        #     self.error_info = "不支持的系统版本"
+        #     return False
+        使用数据库存储命令，便于维护。前端维护考虑多种情况组合，如文件，直接命令，以及两者交错。
