@@ -98,7 +98,7 @@ class SysCode(db.Model):
     __tablename__ = 'sys_code'
 
     code_id = db.Column(db.Integer, primary_key=True)
-    code_key = db.Column(db.String(50))
+    code_key = db.Column(db.String(500))
     code_name = db.Column(db.String(50), nullable=False)
     code_type = db.Column(db.String(50), nullable=False)
     f_code = db.Column(db.String(50))
@@ -118,3 +118,20 @@ class SysMenu(db.Model):
     icon = db.Column(db.String(50))
     statu = db.Column(db.Integer)
     comments = db.Column(db.String(50))
+
+
+
+class SystemFunction(db.Model):
+    __tablename__ = 'system_function'
+
+    system_function_id = db.Column(db.Integer, primary_key=True)
+    system_name = db.Column(db.String(50), nullable=False, info='操作系统名称')
+    system_version = db.Column(db.String(50), nullable=False, info='系统版本')
+    function_type = db.Column(db.String(50), nullable=False, info='文件新增、文件内容追加、指定内容替换、执行命令')
+    system_content = db.Column(db.String, nullable=False, info='操作文本内容')
+    system_content_file = db.Column(db.String(200), info='文件文本路径')
+    system_action = db.Column(db.String(50), nullable=False, info='动作归类')
+    system_action_name = db.Column(db.String(50), info='动作归类名')
+    action_service_switch = db.Column(db.Integer, info='服务类动作，启动，停止标记。1启动，2停止')
+    force = db.Column(db.Integer, info='标记为码值，禁止全部删除')
+    comment = db.Column(db.String(100), info='备注')

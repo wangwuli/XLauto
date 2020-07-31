@@ -1,5 +1,6 @@
 <template>
   <el-row>
+    <el-button type="primary" size="mini" @click="hosts_add_target">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
     <el-button type="primary" size="mini">角色校验</el-button>
     <el-select v-model="value" placeholder="可选角色" size="mini" style="padding-left: 10px">
       <el-option
@@ -20,10 +21,8 @@
       </el-option>
     </el-select>
     <el-button type="primary" size="mini">过滤</el-button>
-
-    <el-button type="primary" size="mini" @click="configuration_dialog = true">配置</el-button>
     <el-button type="danger" size="mini">卸载</el-button>
-    <el-button type="warning" size="mini">部署</el-button>
+    <el-button type="warning" size="mini" @click="configuration_dialog = true">部署</el-button>
     <el-table
       size="mini"
       ref="multipleTable"
@@ -37,16 +36,16 @@
       </el-table-column>
       <el-table-column
         label="IP"
+        prop="host_ip"
         width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="project_name"
         label="项目"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="k8s_role"
         label="现有角色"
         show-overflow-tooltip>
       </el-table-column>
@@ -62,8 +61,13 @@
         <el-tabs v-model="activeName" @tab-click="configurationHandleclick">
           <el-tab-pane label="通用配置" name="configuration_general">
             <el-form :model="configuration_form" size="mini" :inline="true">
-              <el-form-item label="系统">
-                <el-radio v-model="configuration_form.system" label="centos">CentOS8(RHEL8)</el-radio>
+              <el-row>
+                <el-form-item label="系统">
+                  <el-radio v-model="configuration_form.system_name" label="centos">CentOS(RHEL)</el-radio>
+                </el-form-item>
+              </el-row>
+              <el-form-item label="版本">
+                <el-radio v-model="configuration_form.system_version" label="8">8</el-radio>
               </el-form-item>
               <el-row>
               <el-form-item label="防火墙">
@@ -85,9 +89,9 @@
                 <el-select v-model="configuration_form.repository" placeholder="请选择使用的仓库">
                   <el-option
                   v-for="item in kubernetes_repository_all_type"
-                  :key="item.code_key"
-                  :label="item.code_name"
-                  :value="item.code_key">
+                  :key="item.system_function_id"
+                  :label="item.system_action_name"
+                  :value="item.system_function_id">
                 </el-option>
                 </el-select>
               </el-form-item>
@@ -109,6 +113,7 @@
 
 <script>
 import * as Request from '@/general/request.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'soft_deploy',
@@ -119,7 +124,8 @@ export default {
       configuration_dialog: false,
       configuration_form: {
         repository: '',
-        system: 'centos',
+        system_name: 'centos',
+        system_version: '8',
         firewalld: false,
         selinux: false
       },
@@ -139,42 +145,26 @@ export default {
         value: '选项5',
         label: '北京烤鸭'
       }],
-      tableData: [{
-        date: '192.168.1.1',
-        name: '本部',
-        address: 'Master'
-      }, {
-        date: '192.168.1.2',
-        name: '本部',
-        address: 'Node'
-      }, {
-        date: '192.168.1.3',
-        name: '本部',
-        address: 'Node'
-      }, {
-        date: '192.168.1.4',
-        name: '本部',
-        address: 'Node'
-      }, {
-        date: '192.168.1.5',
-        name: '本部',
-        address: 'Node'
-      }, {
-        date: '192.168.1.6',
-        name: '本部',
-        address: 'Node'
-      }, {
-        date: '192.168.1.7',
-        name: '本部',
-        address: 'Node'
-      }],
+      tableData: [],
       multipleSelection: []
     }
   },
   created () {
     this.kubernetesRepositoryQuery()
   },
+  computed: {
+    ...mapState({
+      table_click_value: 'hosts_table_click_values'
+    })
+  },
   methods: {
+    hosts_add_target () {
+      if (this.table_click_value) {
+        this.tableData = JSON.parse(JSON.stringify(this.table_click_value))
+      } else {
+        this.$message.warning('标靶中无选中服务器')
+      }
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
@@ -182,7 +172,7 @@ export default {
       console.log(tab, event)
     },
     async kubernetesRepositoryQuery () {
-      const response = await Request.GET('/general/code_query', { code_type: 'kubernetes_repository_type' })
+      const response = await Request.GET('/general/system_action_query', { system_action: 'kubernetes_repository' })
       if (response && response.data) {
         var data = response.data
         if (data.success) {

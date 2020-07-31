@@ -9,6 +9,6 @@ from flask import request
 
 @deploy.route('/deploy/kubernetes_install', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def kubernetes_install():
-
+    configuration_info = request.get_json()
 
     return Result.success_response(msg='安装成功')

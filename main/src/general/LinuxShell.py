@@ -95,7 +95,7 @@ class Cmds(Sshmet):
         self.system_name = system_name
         self.versions = versions
 
-    def firewalld_control(self, switch):
+    def execute(self, switch):
         """
         :param switch: ture or false
         :return:
@@ -115,4 +115,5 @@ class Cmds(Sshmet):
         # else:
         #     self.error_info = "不支持的系统版本"
         #     return False
-        使用数据库存储命令，便于维护。前端维护考虑多种情况组合，如文件，直接命令，以及两者交错。
+
+        #使用数据库存储命令，便于维护。前端维护考虑多种情况组合，如文件，直接命令，以及两者交错。
