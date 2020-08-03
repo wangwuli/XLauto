@@ -84,6 +84,14 @@
                   inactive-color="#ff4949">
                 </el-switch>
               </el-form-item>
+                <el-form-item label="Docker、kubelet(启动、开机启动)" style="margin-left: 5vh">
+                  <el-switch
+                    v-model="configuration_form.powerboot"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    disabled>
+                  </el-switch>
+                </el-form-item>
               </el-row>
               <el-form-item label="仓库地址">
                 <el-select v-model="configuration_form.repository" placeholder="请选择使用的仓库">
@@ -123,6 +131,7 @@ export default {
       activeName: 'configuration_general',
       configuration_dialog: false,
       configuration_form: {
+        powerboot: true,
         repository: '',
         system_name: 'centos',
         system_version: '8',
