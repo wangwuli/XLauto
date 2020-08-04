@@ -41,7 +41,21 @@ def host_action_execute(host_id, system_function_ids):
             ssh_m = Sshmet()
             ssh_m.set_info(host_user_info)
             ssh_m.connect()
-            info = ssh_m.execcmd(system_function_one[''])
+            info = ssh_m.execcmd(system_function_one['system_content'])
             ssh_m.close()
+
+            current_app.logger.info("[system_function]执行：%s 结果：%s" % (system_function_one['system_content'], info))
+
+        elif system_function_one['function_type'] == 'addfile':
+            ssh_m = Sshmet()
+            ssh_m.set_info(host_user_info)
+            ssh_m.connect()
+            info = ssh_m.execcmd(
+                "echo %s > %s" % (system_function_one['system_content'], system_function_one['system_content_file']))
+            ssh_m.close()
+
+            current_app.logger.info("[system_function]执行： echo %s > %s  结果：%s" % (
+            system_function_one['system_content'], system_function_one['system_content_file'], info))
+
 
     return True
