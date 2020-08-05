@@ -78,6 +78,7 @@
           <el-input v-model="host_filter_form.host_ip" placeholder="请选择" class="select_input_style"></el-input>
           <el-button icon="el-icon-search" circle style="margin-left:30px;" @click="getnewHostsinfo"></el-button>
           <el-button icon="el-icon-circle-plus-outline" circle style="margin-left:30px;" @click="add_host_drawer = true" type="primary"></el-button>
+          <el-button icon="el-icon-delete" circle style="margin-left:30px;" @click="delHostsinfo" type="danger"></el-button>
         </el-form-item>
       </el-form>
     <el-table
@@ -232,6 +233,9 @@ export default {
           this.$message.error(data.msg)
         }
       }
+    },
+    async delHostsinfo () {
+      this.$refs.multipleTable.Selection()
     },
     async hostslistQuery () {
       var datas = JSON.parse(JSON.stringify(this.host_filter_form))
