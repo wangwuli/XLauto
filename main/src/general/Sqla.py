@@ -15,6 +15,12 @@ class Sqla():
         :param bind:连接的数据，默认取配置的SQLALCHEMY_DATABASE_URL，
         :return:
         '''
+
+        #IN 查询支持直接入参list
+        for params_one in params:
+            if isinstance(params[params_one], list):
+                params[params_one] = tuple(params[params_one])
+
         resultProxy = db.session.execute(sql, params, bind=db.get_engine(self.current_app,bind='xlauto_mysql'))
         if fecth == 'one':
             result_tuple = resultProxy.fetchone()
