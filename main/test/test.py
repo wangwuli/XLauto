@@ -14,12 +14,6 @@ a = {
 def console(text):
     print(text)
 
-#
-ssh.set_info(a)
-c = ssh.connect()
-stdin, stdout, stderr = ssh.runcrealtime("llping 192.168.10.134", console)
-
-
 # import paramiko
 #
 # ssh = paramiko.SSHClient()
@@ -32,6 +26,10 @@ stdin, stdout, stderr = ssh.runcrealtime("llping 192.168.10.134", console)
 # for line in iter(stdout.readline,""):
 #     print(line)
 
+
+ssh.set_info(a)
+c = ssh.connect()
+stdin, stdout, stderr = ssh.run("ping 192.168.1.1", console)
 c.close()
 
 
