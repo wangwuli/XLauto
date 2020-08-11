@@ -1,5 +1,6 @@
 import os
 
+from src.dao.hosts_operation import host_action_execute
 from src.deploy import deploy
 from multiprocessing import Pool
 from src.general.Connect_G import Sshmet
@@ -15,6 +16,7 @@ def kubernetes_install():
 
     configuration_info['firewalld'] = 0 if configuration_info['firewalld'] == False else 1
     configuration_info['selinux'] = 0 if configuration_info['selinux'] == False else 1
+    configuration_info['powerboot'] = 0 if configuration_info['powerboot'] == False else 1
 
 
     sqla = Sqla(current_app)
@@ -26,13 +28,28 @@ def kubernetes_install():
     AND (
     (a.system_action = "firewalld_control" AND a.action_service_switch = :firewalld)
     OR (a.system_action = "selinux_control" AND a.action_service_switch = :selinux)
+    OR (a.system_function_id = :repository)
+    OR (a.system_function_id = 8)
+    OR (a.system_action = "enable_docker" AND a.action_service_switch = :powerboot)
+    OR (a.system_action = "enable_kubelet" AND a.action_service_switch = :powerboot)
+    OR (a.system_action = "start_docker" AND a.action_service_switch = :powerboot)
+    OR (a.system_action = "start_kubelet" AND a.action_service_switch = :powerboot)
     )
+   order by a.function_type 
     """
-    host_user_info = sqla.fetch_to_dict(sql, {
+    host_execute_info = sqla.fetch_to_dict(sql, {
         'system_name': configuration_info['system_name'],
         'system_version' : configuration_info['system_version'],
         'firewalld': configuration_info['firewalld'],
         'selinux': configuration_info['selinux'],
+        'repository': configuration_info['repository'],
+        'powerboot': configuration_info['powerboot']
         })
+
+    system_function_ids = []
+    for host_execute_info_one in host_execute_info:
+        system_function_ids.append(host_execute_info_one['system_function_id'])
+
+    host_action_execute(configuration_info['host_ids'],system_function_ids)
 
     return Result.success_response(msg='安装成功')

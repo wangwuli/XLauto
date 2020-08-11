@@ -12,21 +12,15 @@ from flask import current_app
 from main.models.models import SystemFunction, db
 
 
-def host_action_execute(host_id, system_function_ids):
+async def host_action_execute(host_id, system_function_ids):
     """
     执行具体命令表ID动作
     :param host_id:
     :param system_function_id: system_function.system_function_id
     :return:
     """
-    sqla = Sqla(current_app)
-    host_user_info = hosts.get_hotst_connect_info(host_id)
 
-    # sql = """
-    #     SELECT * FROM  system_function a
-    #     WHERE a.system_function_id in [:system_function_id]
-    #     """
-    # system_function_info = sqla.fetch_to_dict(sql, {'system_function_id': system_function_ids})
+    host_user_info = hosts.get_hotst_connect_info(host_id)
 
     system_function_info = db.session.query(SystemFunction.system_function_id,
                                             SystemFunction.function_type,

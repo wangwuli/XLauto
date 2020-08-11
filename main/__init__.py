@@ -30,7 +30,7 @@ def create_app():
     logging_format = logging.Formatter(
         '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s')  # 打印格式
     handler.setFormatter(logging_format)   # 设置格式
-    xlauto.logger.addHandler(handler) # 生成对象，添加句柄
+    xlauto.logger.addHandler(handler)  # 生成对象，添加句柄
 
     return xlauto
 
