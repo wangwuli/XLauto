@@ -5,35 +5,26 @@
 @time: 2020/8/11 17:01
 @desc:
 '''
-
-import time
-import asyncio
+import multiprocessing
 
 
-now = lambda : time.time()
+class ProcessPool():
+    def __init__(self):
+        # logger.debug('初始化池，线程数：%s' % (max_thread))
+        self.pool = multiprocessing.Pool(processes=4)
 
-start = now()
-async def do_some_work(x):
-    async with asyncio.Semaphore(1):
-        for id in range(3):
-            print("Time:", now() - start)
-            await asyncio.sleep(1)
-            print("waiting:", x)
-            print("Time:", now() - start)
+    def start(self, func, param_list, wait=True):
+        if len(param_list) == 0:
+            # logger.debug('提交到线程池的任务为空！')
+            return False
 
+        result = []
+        for param in param_list:
+            result.append(self.pool.apply_async(func=func, args=(param,)))
 
-# 这里是一个协程对象，这个时候do_some_work函数并没有执行
-coroutine = do_some_work(2)
-coroutine2 = do_some_work(3)
-#  创建一个事件loop
-loop = asyncio.get_event_loop()
+        self.pool.close()
+        self.pool.join()
 
-# 将协程加入到事件循环loop
-tasks=[coroutine,coroutine2]
-loop.run_until_complete(asyncio.wait(tasks))
-asyncio.get_event_loop().run_forever()
-time.sleep(10)
-tasks2=[coroutine,coroutine2]
-loop.run_until_complete(asyncio.wait(tasks2))
-
-# loop.run_until_complete(asyncio.wait(coroutine2))
+        # logger.debug('线程池内任务完成!回收线程！')
+        # self.stop()
+        return True
