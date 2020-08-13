@@ -10,9 +10,10 @@ from src.general.Connect_G import Sshmet
 from src.general.Sqla import Sqla
 from flask import current_app
 from main.models.models import SystemFunction, db
+from src.general.process_correlation import ProcessPool
 
 
-async def host_action_execute(host_id, system_function_ids):
+def host_action_execute(host_ids, system_function_ids):
     """
     执行具体命令表ID动作
     :param host_id:
@@ -20,7 +21,7 @@ async def host_action_execute(host_id, system_function_ids):
     :return:
     """
 
-    host_user_info = hosts.get_hotst_connect_info(host_id)
+    pool = ProcessPool()
 
     system_function_info = db.session.query(SystemFunction.system_function_id,
                                             SystemFunction.function_type,
@@ -29,6 +30,17 @@ async def host_action_execute(host_id, system_function_ids):
                                             SystemFunction.action_service_switch,
                                             ).filter(
         SystemFunction.system_function_id.in_(system_function_ids)).all()
+
+    start_list = []
+    for host_id in host_ids:
+        start_list_one = [host_id,system_function_info]
+        start_list.append(start_list_one)
+    pool.start(exec_start, start_list)
+    return True
+
+
+def exec_start(host_id, system_function_info):
+    host_user_info = hosts.get_hotst_connect_info(host_id)
 
     for system_function_one in system_function_info:
         if system_function_one['function_type'] == 'cmd':
@@ -49,7 +61,4 @@ async def host_action_execute(host_id, system_function_ids):
             ssh_m.close()
 
             current_app.logger.info("[system_function]执行： echo %s > %s  结果：%s" % (
-            system_function_one['system_content'], system_function_one['system_content_file'], info))
-
-
-    return True
+                system_function_one['system_content'], system_function_one['system_content_file'], info))

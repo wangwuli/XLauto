@@ -58,3 +58,18 @@ def hosts_add_host():
     db.session.close()
 
     return Result.success_response(msg='新增成功')
+
+
+@hosts.route('/hosts/del_host', methods=['DELETE'])
+def hosts_del_host():
+    del_host_info = request.json.get('del_host_info')
+
+    # delete_script_obj = HostInstance.query.filter(HostInstance.host_id.in_(del_host_info)).all()
+    # delete_script_obj.is_remove = 1
+
+    db.session.query(HostInstance).filter(HostInstance.host_id.in_(del_host_info)).update({"is_remove": 1},synchronize_session='fetch')
+
+    db.session.commit()
+    db.session.close()
+
+    return Result.success_response(msg='删除成功')

@@ -35,7 +35,7 @@ def home_hosts_query_filter(parameter_dict):
     SELECT sql_calc_found_rows a.host_id,a.host_ip,a.host_name,b.code_name AS host_type_text,c.project_name FROM host_instance a
     LEFT JOIN sys_code b ON b.code_id = a.host_id AND b.code_type = "host_type"
     LEFT JOIN projects c ON c.project_id = a.host_project
-    WHERE 1=1
+    WHERE (a.is_remove != 1 OR a.is_remove is null)
     %s
     """ %(sql_fragment)
 

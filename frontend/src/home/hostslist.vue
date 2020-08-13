@@ -227,6 +227,7 @@ export default {
       if (response && response.data) {
         var data = response.data
         if (data.success) {
+          this.hostslistQuery()
           this.$message.success(data.msg)
           this.addhost_dialog_visible = false
         } else {
@@ -235,7 +236,24 @@ export default {
       }
     },
     async delHostsinfo () {
-      this.$refs.multipleTable.Selection()
+      var selectHostinfo = this.$refs.multipleTable.selection
+
+      var hostIds = []
+
+      selectHostinfo.map((item) => {
+        hostIds.push(item.host_id)
+      })
+
+      const response = await Request.DELETE('/hosts/del_host', { del_host_info: hostIds })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.hostslistQuery()
+          this.$message.success(data.msg)
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     },
     async hostslistQuery () {
       var datas = JSON.parse(JSON.stringify(this.host_filter_form))

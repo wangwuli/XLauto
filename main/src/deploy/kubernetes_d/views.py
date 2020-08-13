@@ -7,6 +7,7 @@ from src.general.Connect_G import Sshmet
 from src.general.General import ReturnG, Result
 from flask import request, current_app
 from src.general.Sqla import Sqla
+from src.general.process_correlation import ProcessPool
 
 
 @deploy.route('/deploy/kubernetes_install', methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -52,4 +53,4 @@ def kubernetes_install():
 
     host_action_execute(configuration_info['host_ids'],system_function_ids)
 
-    return Result.success_response(msg='安装成功')
+    return Result.success_response(msg='提交安装申请成功，正在处理')

@@ -25,7 +25,7 @@
     <el-button type="warning" size="mini" @click="configuration_dialog = true">部署</el-button>
     <el-table
       size="mini"
-      ref="multipleTable"
+      ref="tableDataref"
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
@@ -127,6 +127,7 @@ export default {
   name: 'soft_deploy',
   data () {
     return {
+      value: '',
       kubernetes_repository_all_type: [],
       activeName: 'configuration_general',
       configuration_dialog: false,
@@ -193,7 +194,17 @@ export default {
       }
     },
     async kubernetesInstallSubmit () {
-      const response = await Request.POST('/deploy/kubernetes_install', this.configuration_form)
+      var hostInfo = this.$refs.tableDataref.selection
+      if (!hostInfo.length) {
+        this.$message.error('请勾选需要部署的主机')
+      }
+      var hostIds = []
+      hostInfo.map((item) => {
+        hostIds.push(item.host_id)
+      })
+      var datas = JSON.parse(JSON.stringify(this.configuration_form))
+      datas.host_ids = hostIds
+      const response = await Request.POST('/deploy/kubernetes_install', datas)
       if (response && response.data) {
         var data = response.data
         if (data.success) {
