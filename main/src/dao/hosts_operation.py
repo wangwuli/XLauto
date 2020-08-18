@@ -10,10 +10,11 @@ from src.general.Connect_G import Sshmet
 from src.general.Sqla import Sqla
 from flask import current_app
 from main.models.models import SystemFunction, db
+from src.general.Transform import model_to_dict
 from src.general.process_correlation import ProcessPool
 
 
-def host_action_execute(host_ids, system_function_ids):
+def host_action_execute(host_user_infos, system_function_ids):
     """
     执行具体命令表ID动作
     :param host_id:
@@ -31,16 +32,21 @@ def host_action_execute(host_ids, system_function_ids):
                                             ).filter(
         SystemFunction.system_function_id.in_(system_function_ids)).all()
 
+    system_function_info = model_to_dict(system_function_info)
+
     start_list = []
-    for host_id in host_ids:
-        start_list_one = [host_id,system_function_info]
+    for host_user_info in host_user_infos:
+        start_list_one = [host_user_info,system_function_info]
         start_list.append(start_list_one)
     pool.start(exec_start, start_list)
     return True
 
 
-def exec_start(host_id, system_function_info):
-    host_user_info = hosts.get_hotst_connect_info(host_id)
+def exec_start(host_id_system_function_info):
+    host_user_info = host_id_system_function_info[0]
+    system_function_info = host_id_system_function_info[1]
+
+    # host_user_info = hosts.get_hotst_connect_info(host_id)
 
     for system_function_one in system_function_info:
         if system_function_one['function_type'] == 'cmd':

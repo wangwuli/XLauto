@@ -37,4 +37,4 @@ def test(test):
 
 if __name__ == '__main__':
     testp = ProcessPool()
-    testp.start(test,[(1,2),2,3])
+    testp.start(test,[[1,{'1':1}]])
