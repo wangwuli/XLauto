@@ -32,7 +32,7 @@ class ProcessPool():
 
         result = []
         for param in param_list:
-            result.append(self.pool.apply_async(func=func, args=(param,)))
+            result.append(self.pool.apply_async(func=func, args=(param)))
 
         self.pool.close()
         self.pool.join()

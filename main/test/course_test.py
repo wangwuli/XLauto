@@ -20,8 +20,10 @@ class ProcessPool():
 
         result = []
         for param in param_list:
-            result.append(self.pool.apply_async(func=func, args=(param,)))
-
+            try:
+                result.append(self.pool.apply_async(func=func, args=(param)))
+            except Exception as e:
+                print(e)
         self.pool.close()
         self.pool.join()
 
@@ -32,9 +34,9 @@ class ProcessPool():
 
 
 
-def test(test):
-    print (test)
+def test(test,test2):
+    print ('参数1:%s,参数2:%s' %(test,test2))
 
 if __name__ == '__main__':
     testp = ProcessPool()
-    testp.start(test,[[1,{'1':1}]])
+    testp.start(test,[{'0':0,'1':1}])
