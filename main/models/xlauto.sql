@@ -29,16 +29,22 @@ CREATE TABLE IF NOT EXISTS `host_instance` (
   `is_remove` int DEFAULT NULL,
   `comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`host_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.host_instance 的数据：~4 rows (大约)
+-- 正在导出表  xlauto.host_instance 的数据：~10 rows (大约)
 DELETE FROM `host_instance`;
 /*!40000 ALTER TABLE `host_instance` DISABLE KEYS */;
 INSERT INTO `host_instance` (`host_id`, `host_ip`, `host_name`, `host_port`, `host_type_key`, `host_project`, `is_remove`, `comment`) VALUES
-	(1, '192.168.10.134', '测试主机', 22, 'docker', '1', NULL, NULL),
-	(2, '192.168.10.133', NULL, 22, '', '', NULL, NULL),
-	(3, '192.168.10.134', NULL, 22, '', '', NULL, NULL),
-	(4, '192.168.10.135', NULL, 22, '', '', NULL, NULL);
+	(1, '192.168.10.134', '测试主机', 22, 'docker', '1', 1, NULL),
+	(2, '192.168.10.133', NULL, 22, '', '', 1, NULL),
+	(3, '192.168.10.134', NULL, 22, '', '', 1, NULL),
+	(4, '192.168.10.135', NULL, 22, '', '', 1, NULL),
+	(5, '192.168.154', NULL, 22, '', '', 1, NULL),
+	(6, '192.168.155', NULL, 22, '', '', 1, NULL),
+	(7, '192.168.156', NULL, 22, '', '', 1, NULL),
+	(8, '192.168.10.154', NULL, 22, '', '', NULL, NULL),
+	(9, '192.168.10.155', NULL, 22, '', '', NULL, NULL),
+	(10, '192.168.10.156', NULL, 22, '', '', NULL, NULL);
 /*!40000 ALTER TABLE `host_instance` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_users 结构
@@ -50,16 +56,22 @@ CREATE TABLE IF NOT EXISTS `host_users` (
   `user_pass` varchar(50) NOT NULL,
   `user_role` varchar(50) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
--- 正在导出表  xlauto.host_users 的数据：~4 rows (大约)
+-- 正在导出表  xlauto.host_users 的数据：~10 rows (大约)
 DELETE FROM `host_users`;
 /*!40000 ALTER TABLE `host_users` DISABLE KEYS */;
 INSERT INTO `host_users` (`user_id`, `host_id`, `user_name`, `user_pass`, `user_role`) VALUES
 	(1, 1, 'root', '661602611BD6C5A7B531121B4BCC8535', 'root'),
 	(2, 2, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
 	(3, 3, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
-	(4, 4, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root');
+	(4, 4, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(5, 5, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(6, 6, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(7, 7, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(8, 8, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(9, 9, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root'),
+	(10, 10, 'root', 'C717530F41F320757B4AA1BFAF11C42E', 'root');
 /*!40000 ALTER TABLE `host_users` ENABLE KEYS */;
 
 -- 导出  表 xlauto.projects 结构
@@ -77,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   PRIMARY KEY (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.projects 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.projects 的数据：~1 rows (大约)
 DELETE FROM `projects`;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
 INSERT INTO `projects` (`project_id`, `project_name`, `project_code`, `controller_ip`, `order_id`, `is_remove`, `create_time`, `modify_time`, `comments`) VALUES
@@ -98,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
   PRIMARY KEY (`script_file_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='脚本主表';
 
--- 正在导出表  xlauto.script_file_cabinet 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.script_file_cabinet 的数据：~1 rows (大约)
 DELETE FROM `script_file_cabinet`;
 /*!40000 ALTER TABLE `script_file_cabinet` DISABLE KEYS */;
 INSERT INTO `script_file_cabinet` (`script_file_id`, `script_file_path`, `script_file_name`, `script_file_group`, `script_file_type`, `create_time`, `modify_time`, `comment`) VALUES
@@ -191,24 +203,25 @@ CREATE TABLE IF NOT EXISTS `system_function` (
   `force` tinyint DEFAULT NULL COMMENT '标记为码值，禁止全部删除',
   `comment` varchar(100) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`system_function_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='系统命令表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='系统命令表';
 
--- 正在导出表  xlauto.system_function 的数据：~7 rows (大约)
+-- 正在导出表  xlauto.system_function 的数据：~13 rows (大约)
 DELETE FROM `system_function`;
 /*!40000 ALTER TABLE `system_function` DISABLE KEYS */;
 INSERT INTO `system_function` (`system_function_id`, `system_name`, `system_version`, `function_type`, `system_content`, `system_content_file`, `system_action`, `system_action_name`, `action_service_switch`, `force`, `comment`) VALUES
-	(1, 'centos', '8', 'cmd', 'service firewalld start', '', 'firewalld_control', '', 1, NULL, NULL),
-	(2, 'centos', '8', 'cmd', 'service firewalld stop', '', 'firewalld_control', '', 0, NULL, NULL),
-	(3, 'centos', '8', 'cmd', 'sed -i "s/^SELINUX\\=.*/SELINUX\\=disabled/g" /etc/selinux/config ;setenforce 0', '', 'selinux_control', '', 0, NULL, NULL),
-	(4, 'centos', '8', 'cmd', 'sed -i "s/^SELINUX\\=.*/SELINUX\\=enforcing/g" /etc/selinux/config ;setenforce 1', '', 'selinux_control', '', 1, NULL, NULL),
-	(5, 'centos', '8', 'cmd', 'sed -i "s/^SELINUX\\=.*/SELINUX\\=permissive/g" /etc/selinux/config; ;setenforce Permissive', '', 'selinux_control', '', 2, NULL, NULL),
+	(1, 'centos', '8', 'cmd', 'service firewalld start', '', 'firewalld_control', '', 1, 1, NULL),
+	(2, 'centos', '8', 'cmd', 'service firewalld stop', '', 'firewalld_control', '', 0, 1, NULL),
+	(3, 'centos', '8', 'cmd', 'sed -i "s/^SELINUX\\=.*/SELINUX\\=disabled/g" /etc/selinux/config ;setenforce 0', '', 'selinux_control', '', 0, 1, NULL),
+	(4, 'centos', '8', 'cmd', 'sed -i "s/^SELINUX\\=.*/SELINUX\\=enforcing/g" /etc/selinux/config ;setenforce 1', '', 'selinux_control', '', 1, 1, NULL),
+	(5, 'centos', '8', 'cmd', 'sed -i "s/^SELINUX\\=.*/SELINUX\\=permissive/g" /etc/selinux/config; ;setenforce Permissive', '', 'selinux_control', '', 2, 1, NULL),
 	(6, 'centos', '8', 'addfile', '[kuebrnetes]\nname=Kubernetes Repository\nbaseurl=http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el8-x86_64/\nenabled=1\ngpgcheck=0', '/etc/yum.repos.d/Kubernetes_Repository.repo', 'kubernetes_repository', 'Aliyun-Centos8', NULL, 1, NULL),
 	(7, 'centos', '8', 'addfile', '[kuebrnetes]\nname=Kubernetes Repository\nbaseurl=https://packages.cloud.google.com/yum/repos/kuebrnetes-el8-x86_64/\nenabled=1\ngpgcheck=0', '/etc/yum.repos.d/Kubernetes_Repository.repo', 'kubernetes_repository', '官方-Centos8', NULL, 1, NULL),
-	(8, 'centos', '8', 'cmd', 'yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes', '', 'yum_install_kubelet', 'kubelet安装', NULL, NULL, NULL),
-	(9, 'centos', '8', 'cmd', 'systemctl enable docker', '', 'enable_docker', 'docker开机启动', NULL, NULL, NULL),
-	(10, 'centos', '8', 'cmd', 'systemctl start docker', '', 'start_docker', 'docker服务启动', NULL, NULL, NULL),
-	(11, 'centos', '8', 'cmd', 'systemctl enable kubelet', '', 'enable_kubelet', 'kubelet开机启动', NULL, NULL, NULL),
-	(12, 'centos', '8', 'cmd', 'systemctl start kubelet', '', 'enable_kubelet', 'kubelet服务启动', NULL, NULL, NULL);
+	(8, 'centos', '8', 'cmd', 'yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes', '', 'yum_install_kubelet', 'kubelet安装', NULL, 1, NULL),
+	(9, 'centos', '8', 'cmd', 'systemctl enable docker', '', 'enable_docker', 'docker开机启动', 1, NULL, NULL),
+	(10, 'centos', '8', 'cmd', 'systemctl start docker', '', 'start_docker', 'docker服务启动', 1, NULL, NULL),
+	(11, 'centos', '8', 'cmd', 'systemctl enable kubelet', '', 'enable_kubelet', 'kubelet开机启动', 1, NULL, NULL),
+	(12, 'centos', '8', 'cmd', 'systemctl start kubelet', '', 'start_kubelet', 'kubelet服务启动', 1, NULL, NULL),
+	(14, 'centos', '8', 'cmdp', 'find {{ directory }} -mtime +{{ day }} -name "{{ filename }}" -exec rm -rf {} \\;', '', 'rm_day_file', '删除多少天前的文件', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `system_function` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_code 结构
