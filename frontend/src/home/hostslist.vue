@@ -22,7 +22,7 @@
             <el-input v-model="host_add_form.user_name" size="mini" placeholder="请输入" class="add_input_style"></el-input>
             </el-form-item>
             <el-form-item size="mini" label="密码" style="padding-left: 28px;">
-            <el-input v-model="host_add_form.password" size="mini" placeholder="请输入" class="add_input_style" show-password></el-input>
+            <el-input v-model="host_add_form.user_pass" size="mini" placeholder="请输入" class="add_input_style" show-password></el-input>
             </el-form-item>
             <el-form-item size="mini" label="选择项目">
               <el-select v-model="host_add_form.host_project" placeholder="请选择" size="mini" class="add_input_style">

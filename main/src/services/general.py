@@ -15,6 +15,7 @@ def code_query():
     sys_code_data = db.session.query(SysCode.code_id, SysCode.code_key, SysCode.code_name).filter(
         SysCode.code_type == code_type).all()
     db.session.close()
+    db.session.remove()
     data = model_to_dict(sys_code_data)
 
     return Result.success_response(data,'类型查询成功')
@@ -28,6 +29,7 @@ def system_action_query():
     sys_code_data = db.session.query(SystemFunction.system_function_id, SystemFunction.system_action_name).filter(
         SystemFunction.system_action == system_action).all()
     db.session.close()
+    db.session.remove()
     data = model_to_dict(sys_code_data)
 
     return Result.success_response(data,'类型查询成功')

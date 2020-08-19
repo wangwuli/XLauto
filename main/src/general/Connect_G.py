@@ -25,6 +25,7 @@ class Sshmet():
         self.password = None
         self.port = None
         self.timeout = 30
+        self.execcmd_error = ''
 
     def set_info(self, host_info_dict):
         self.ip = host_info_dict["host_ip"]
@@ -53,6 +54,7 @@ class Sshmet():
         #result = ''.join(stdout.read() + stderr.read())
         result = (stdout+ stderr).strip()
         if not stderr == '':
+            self.execcmd_error = stderr
             result = False
         return result
 

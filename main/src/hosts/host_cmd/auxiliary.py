@@ -59,6 +59,7 @@ def run_script_worker(info_dict, script_list, time_out, xlauto):
                     else:
                         db.session.execute(ScriptFileExecuteEvent.__table__.insert(), dicts)
                     db.session.commit()
+                    db.session.remove()
 
                     if ssh.execute_result: break
 
@@ -75,6 +76,7 @@ def run_script_worker(info_dict, script_list, time_out, xlauto):
                 db.session.add(file_sql_obj)
             db.session.commit()
             db.session.close()
+            db.session.remove()
             return False
 
 def query_execute_batch_status(script_execute_event_batch_id):
@@ -87,6 +89,7 @@ def query_execute_batch_status(script_execute_event_batch_id):
                                      ScriptFileExecuteEvent.script_file_content, ScriptFileExecuteEvent.host_id).filter(
         ScriptFileExecuteEvent.script_execute_event_batch_id == script_execute_event_batch_id).all()
     db.session.close()
+    db.session.remove()
     data = model_to_dict(sys_code_data)
 
     return data

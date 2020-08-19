@@ -55,7 +55,7 @@ def kubernetes_install():
     host_user_infos = []
     for host_id  in configuration_info['host_ids']:
         host_user_info = hosts.get_hotst_connect_info(host_id)
-    host_user_infos.append(host_user_info)
+        host_user_infos.append(host_user_info)
 
     host_action_execute(host_user_infos,system_function_ids)
 

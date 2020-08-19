@@ -13,6 +13,7 @@ from flask import current_app
 def home_menu_query():
     sys_menu = db.session.query(SysMenu.id,SysMenu.parent_id,SysMenu.name,SysMenu.icon,SysMenu.title).all()
     db.session.close()
+    db.session.remove()
     sys_menu_data = model_to_dict(sys_menu)
 
     data = list_to_tree(sys_menu_data)
@@ -43,5 +44,6 @@ def home_projects_query():
     project_obj = db.session.query(Project.project_id, Project.project_name, Project.project_code,
                                     Project.controller_ip, Project.order_id, Project.comments, ).all()
     db.session.close()
+    db.session.remove()
     project_data = model_to_dict(project_obj)
     return Result.success_response(project_data,'项目查询成功')

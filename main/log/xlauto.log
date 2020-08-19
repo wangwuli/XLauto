@@ -2,3 +2,22 @@
 1111111111111111
 11111111111111111111111
 2222222222
+2020-08-19 15:34:33,154 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：service firewalld stop 结果：Redirecting to /bin/systemctl stop firewalld.service
+【剩余执行动作终止】
+2020-08-19 15:34:33,278 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：sed -i "s/^SELINUX\=.*/SELINUX\=disabled/g" /etc/selinux/config ;setenforce 0 结果：Redirecting to /bin/systemctl stop firewalld.service
+【剩余执行动作终止】
+2020-08-19 15:34:33,383 - INFO - hosts_operation.py - exec_start - 64 - [system_function]执行： echo [kuebrnetes]
+name=Kubernetes Repository
+baseurl=http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el8-x86_64/
+enabled=1
+gpgcheck=0 > /etc/yum.repos.d/Kubernetes_Repository.repo  结果：False
+2020-08-19 15:34:35,908 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes 结果：错误：没有任何匹配: kubelet kubeadm kubectl
+【剩余执行动作终止】
+2020-08-19 15:34:36,015 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl enable docker 结果：Failed to enable unit: Unit file docker.service does not exist.
+【剩余执行动作终止】
+2020-08-19 15:34:36,143 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl start docker 结果：Failed to start docker.service: Unit docker.service not found.
+【剩余执行动作终止】
+2020-08-19 15:34:36,267 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl enable kubelet 结果：Failed to enable unit: Unit file kubelet.service does not exist.
+【剩余执行动作终止】
+2020-08-19 15:34:36,366 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl start kubelet 结果：Failed to start kubelet.service: Unit kubelet.service not found.
+【剩余执行动作终止】

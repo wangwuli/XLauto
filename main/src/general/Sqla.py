@@ -85,15 +85,18 @@ class Sqla():
     #加密
     def sql_encryption(self, str):
         sql = """
-        select HEX(AES_ENCRYPT(:str, 'key')) AS passwd;
+        select HEX(AES_ENCRYPT(:str, :iskey)) AS passwd;
         """
-        return self.fetch_to_dict(sql,{'str':str, 'key': self.current_app.config['PASS_KEY']})[0]['passwd']
+        # test= self.fetch_to_dict(sql,{'str':str, 'iskey': self.current_app.config['PASS_KEY']})
+        return self.fetch_to_dict(sql,{'str':str, 'iskey': self.current_app.config['PASS_KEY']})[0]['passwd']
     # 解密
     def sql_decrypt(self, unhex_str):
         sql = """
-        select AES_DECRYPT(UNHEX(:str), :key) AS passwd;
+        select AES_DECRYPT(UNHEX(:str), :iskey) AS passwd;
         """
-        return self.fetch_to_dict(sql,{'str':unhex_str, 'key': self.current_app.config['PASS_KEY']})[0]['passwd']
+        # test = self.fetch_to_dict(sql, {'str': unhex_str, 'iskey': self.current_app.config['PASS_KEY']})
+        passwd = self.fetch_to_dict(sql,{'str':unhex_str, 'iskey': self.current_app.config['PASS_KEY']})[0]['passwd']
+        return str(passwd, encoding="utf-8")
 
 
     def GetInsertOrUpdateObj(self, cls, strFilter, **kw):
@@ -116,4 +119,5 @@ class Sqla():
 
         db.session.commit()
         db.session.close()
+        db.session.remove()
         return res

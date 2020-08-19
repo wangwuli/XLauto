@@ -32,7 +32,7 @@ def update_script_file():
     db.session.add(file_sql_obj)
     db.session.commit()
     db.session.close()
-
+    db.session.remove()
     f_obj.save(script_path_file)
 
     return Result.success_response(msg='上传成功')
@@ -87,6 +87,7 @@ def rm_script():
     db.session.delete(delete_script_obj)
     db.session.commit()
     db.session.close()
+    db.session.remove()
 
     return Result.success_response(msg='删除成功')
 
@@ -101,6 +102,7 @@ def edit_script():
 
     db.session.commit()
     db.session.close()
+    db.session.remove()
 
     return Result.success_response(msg='修改成功')
 

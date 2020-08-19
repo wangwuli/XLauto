@@ -56,6 +56,7 @@ def hosts_add_host():
         db.session.add(user_obj)
     db.session.commit()
     db.session.close()
+    db.session.remove()
 
     return Result.success_response(msg='新增成功')
 
@@ -71,5 +72,6 @@ def hosts_del_host():
 
     db.session.commit()
     db.session.close()
+    db.session.remove()
 
     return Result.success_response(msg='删除成功')

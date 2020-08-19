@@ -5,6 +5,7 @@
 @time: 2020/7/31 11:32
 @desc:
 '''
+from sqlalchemy import engine
 from src.general.Connect_G import Sshmet
 from flask import current_app
 from main.models.models import SystemFunction, db
@@ -30,19 +31,22 @@ def host_action_execute(host_user_infos, system_function_ids, replace_parameters
                                             SystemFunction.action_service_switch,
                                             ).filter(
         SystemFunction.system_function_id.in_(system_function_ids)).all()
+    db.session.close()
+    db.session.remove()
 
     system_function_info = model_to_dict(system_function_info)
 
+    xlauto = current_app._get_current_object()
+
     start_list = []
     for host_user_info in host_user_infos:
-        start_list_one = {'host_user_info': host_user_info, 'system_function_info': system_function_info,
-                          'replace_parameters': replace_parameters}
+        start_list_one = [host_user_info, system_function_info, replace_parameters, xlauto]
         start_list.append(start_list_one)
     pool.start(exec_start, start_list)
     return True
 
 
-def exec_start(host_user_info, system_function_info, replace_parameters):
+def exec_start(host_user_info, system_function_info, replace_parameters, xlauto):
 
     ssh_m = Sshmet()
     ssh_m.set_info(host_user_info)
@@ -51,17 +55,23 @@ def exec_start(host_user_info, system_function_info, replace_parameters):
     for system_function_one in system_function_info:
         if system_function_one['function_type'] == 'cmd':
             info = ssh_m.execcmd(system_function_one['system_content'])
-            current_app.logger.info("[system_function]执行：%s 结果：%s" % (system_function_one['system_content'], info))
 
         elif system_function_one['function_type'] == 'addfile':
             info = ssh_m.execcmd(
                 "echo %s > %s" % (system_function_one['system_content'], system_function_one['system_content_file']))
-            current_app.logger.info("[system_function]执行： echo %s > %s  结果：%s" % (
-                system_function_one['system_content'], system_function_one['system_content_file'], info))
 
         elif system_function_one['function_type'] == 'cmdp':
             system_content = Template(system_function_one['system_content']).render(replace_parameters)
             info = ssh_m.execcmd(system_content)
-            current_app.logger.info("[system_function]执行：%s 结果：%s" % (system_function_one['system_content'], info))
+
+        if not info:
+            info = ssh_m.execcmd_error + '【剩余执行动作终止】'
+            info = ("[system_function]执行：%s 结果失败：%s" % (system_function_one['system_content'], info))
+            break
+        info = ("[system_function]执行：%s 结果成功：%s" % (system_function_one['system_content'], info))
+        print (info)
+        xlauto.logger.info(info)
 
     ssh_m.close()
+
+    return info
