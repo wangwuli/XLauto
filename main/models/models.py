@@ -81,16 +81,16 @@ class ServerSoftware(db.Model):
 
     soft_id = db.Column(db.Integer, primary_key=True)
     host_id = db.Column(db.Integer, index=True)
-    soft_type = db.Column(db.String(50, 'latin1_swedish_ci'), index=True)
+    soft_type = db.Column(db.String(50), index=True)
     soft_port = db.Column(db.Integer)
-    start_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    stop_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    restart_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    soft_log_path = db.Column(db.String(50, 'latin1_swedish_ci'))
+    start_soft_cmd = db.Column(db.String(50))
+    stop_soft_cmd = db.Column(db.String(50))
+    restart_soft_cmd = db.Column(db.String(50))
+    soft_log_path = db.Column(db.String(50))
     is_remove = db.Column(db.Integer)
     create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
     modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    comments = db.Column(db.String(50, 'latin1_swedish_ci'))
+    comments = db.Column(db.String(50))
 
 
 
@@ -135,3 +135,4 @@ class SystemFunction(db.Model):
     action_service_switch = db.Column(db.Integer, info='服务类动作，启动，停止标记。1启动，2停止')
     force = db.Column(db.Integer, info='标记为码值，禁止全部删除')
     comment = db.Column(db.String(100), info='备注')
+    order_by = db.Column(db.Integer, server_default=db.FetchedValue(), info='排序')
