@@ -87,6 +87,7 @@ def exec_start(host_user_info, system_function_info, replace_parameters, xlauto)
                 info = ssh_m.execcmd_error + '【第%s次重试执行:%s】' %(error, system_function_one)
                 xlauto.logger.info(info)
                 system_function_info.insert(0, system_function_one)
+                continue
 
         error = 0
         info = ("[system_function]执行：%s 结果成功：%s" % (system_function_one['system_content'], info))
