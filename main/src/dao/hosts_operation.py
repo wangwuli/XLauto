@@ -5,6 +5,8 @@
 @time: 2020/7/31 11:32
 @desc:
 '''
+import threading
+
 from sqlalchemy import engine
 from src.general.Connect_G import Sshmet
 from flask import current_app
@@ -22,27 +24,34 @@ def host_action_execute(host_user_infos, system_function_ids, replace_parameters
     :return:
     """
 
-    pool = ProcessPool()
-
     system_function_info = db.session.query(SystemFunction.system_function_id,
                                             SystemFunction.function_type,
                                             SystemFunction.system_content,
                                             SystemFunction.system_content_file,
                                             SystemFunction.action_service_switch,
-                                            ).filter(
+                                            ).order_by(db.desc(SystemFunction.order_by)).filter(
         SystemFunction.system_function_id.in_(system_function_ids)).all()
+    db.session.commit()
     db.session.close()
     db.session.remove()
 
     system_function_info = model_to_dict(system_function_info)
+    # system_function_info = ''
 
     xlauto = current_app._get_current_object()
+    # run_script_worker(info_dict, script_total_list, timeout, xlauto)
+    # db.get_engine(app=xlauto).dispose()
+    # db.engine.dispose()
+    # db.session.expunge(system_function_info)
 
-    start_list = []
+    # start_list = []
+    pool = ProcessPool()
     for host_user_info in host_user_infos:
-        start_list_one = [host_user_info, system_function_info, replace_parameters, xlauto]
-        start_list.append(start_list_one)
-    pool.start(exec_start, start_list)
+        p = threading.Thread(target=exec_start, args=(host_user_info, system_function_info, replace_parameters, xlauto))
+        p.start()
+    #     start_list_one = [host_user_info, system_function_info, replace_parameters,xlauto]
+    #     start_list.append(start_list_one)
+    # pool.start(exec_start, start_list)
     return True
 
 
@@ -52,22 +61,35 @@ def exec_start(host_user_info, system_function_info, replace_parameters, xlauto)
     ssh_m.set_info(host_user_info)
     ssh_m.connect()
 
+    error = 0
     for system_function_one in system_function_info:
+
         if system_function_one['function_type'] == 'cmd':
             info = ssh_m.execcmd(system_function_one['system_content'])
 
         elif system_function_one['function_type'] == 'addfile':
             info = ssh_m.execcmd(
-                "echo %s > %s" % (system_function_one['system_content'], system_function_one['system_content_file']))
+                "echo '%s' > %s" % (system_function_one['system_content'], system_function_one['system_content_file']))
 
         elif system_function_one['function_type'] == 'cmdp':
             system_content = Template(system_function_one['system_content']).render(replace_parameters)
             info = ssh_m.execcmd(system_content)
 
-        if not info:
-            info = ssh_m.execcmd_error + '【剩余执行动作终止】'
+        if info == False:
+            error += 1
             info = ("[system_function]执行：%s 结果失败：%s" % (system_function_one['system_content'], info))
-            break
+            xlauto.logger.info(info)
+            if error > 3:
+                info = ssh_m.execcmd_error + '【剩余执行动作终止】'
+                xlauto.logger.info(info)
+                break
+            else:
+                info = ssh_m.execcmd_error + '【第%s次重试执行:%s】' %(error, system_function_one)
+                xlauto.logger.info(info)
+                system_function_info.insert(0, system_function_one)
+                continue
+
+        error = 0
         info = ("[system_function]执行：%s 结果成功：%s" % (system_function_one['system_content'], info))
         print (info)
         xlauto.logger.info(info)

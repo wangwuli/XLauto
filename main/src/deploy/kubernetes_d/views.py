@@ -32,12 +32,14 @@ def kubernetes_install():
     OR (a.system_action = "selinux_control" AND a.action_service_switch = :selinux)
     OR (a.system_function_id = :repository)
     OR (a.system_function_id = 8)
+    OR (a.system_action = "docker_repository")
+    OR (a.system_action = "yum_install_docker")
     OR (a.system_action = "enable_docker" AND a.action_service_switch = :powerboot)
     OR (a.system_action = "enable_kubelet" AND a.action_service_switch = :powerboot)
     OR (a.system_action = "start_docker" AND a.action_service_switch = :powerboot)
     OR (a.system_action = "start_kubelet" AND a.action_service_switch = :powerboot)
     )
-   order by a.function_type 
+   order by a.order_by desc
     """
     host_execute_info = sqla.fetch_to_dict(sql, {
         'system_name': configuration_info['system_name'],
