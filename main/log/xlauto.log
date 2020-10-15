@@ -1,0 +1,154 @@
+2020-06-16 17:02:35,528 - WARNING - update_file.py - rm_script - 85 - [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\src/data\\scriptfiles\\b2c98548-9894-11ea-a689-001a7dda7113'
+1111111111111111
+11111111111111111111111
+2222222222
+2020-08-19 15:34:33,154 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：service firewalld stop 结果：Redirecting to /bin/systemctl stop firewalld.service
+【剩余执行动作终止】
+2020-08-19 15:34:33,278 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：sed -i "s/^SELINUX\=.*/SELINUX\=disabled/g" /etc/selinux/config ;setenforce 0 结果：Redirecting to /bin/systemctl stop firewalld.service
+【剩余执行动作终止】
+2020-08-19 15:34:33,383 - INFO - hosts_operation.py - exec_start - 64 - [system_function]执行： echo [kuebrnetes]
+name=Kubernetes Repository
+baseurl=http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el8-x86_64/
+enabled=1
+gpgcheck=0 > /etc/yum.repos.d/Kubernetes_Repository.repo  结果：False
+2020-08-19 15:34:35,908 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes 结果：错误：没有任何匹配: kubelet kubeadm kubectl
+【剩余执行动作终止】
+2020-08-19 15:34:36,015 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl enable docker 结果：Failed to enable unit: Unit file docker.service does not exist.
+【剩余执行动作终止】
+2020-08-19 15:34:36,143 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl start docker 结果：Failed to start docker.service: Unit docker.service not found.
+【剩余执行动作终止】
+2020-08-19 15:34:36,267 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl enable kubelet 结果：Failed to enable unit: Unit file kubelet.service does not exist.
+【剩余执行动作终止】
+2020-08-19 15:34:36,366 - INFO - hosts_operation.py - exec_start - 58 - [system_function]执行：systemctl start kubelet 结果：Failed to start kubelet.service: Unit kubelet.service not found.
+【剩余执行动作终止】
+2020-08-19 21:09:10,061 - INFO - hosts_operation.py - exec_start - 79 - [system_function]执行：service firewalld stop 结果失败：Redirecting to /bin/systemctl stop firewalld.service
+【剩余执行动作终止】
+2020-08-19 21:19:46,472 - INFO - hosts_operation.py - exec_start - 79 - [system_function]执行：systemctl stop firewalld  结果失败：【剩余执行动作终止】
+2020-08-19 21:22:27,550 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：systemctl stop firewalld  结果成功：
+2020-08-19 21:22:27,754 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：sed -i "s/^SELINUX\=.*/SELINUX\=disabled/g" /etc/selinux/config ;setenforce 0 结果成功：
+2020-08-19 21:22:27,989 - INFO - hosts_operation.py - exec_start - 79 - [system_function]执行：[kuebrnetes]
+name=Kubernetes Repository
+baseurl=http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el8-x86_64/
+enabled=1
+gpgcheck=0 结果失败：bash:行1: Repository: 未找到命令
+【剩余执行动作终止】
+2020-08-19 21:25:39,888 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：systemctl stop firewalld  结果成功：
+2020-08-19 21:25:40,092 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：sed -i "s/^SELINUX\=.*/SELINUX\=disabled/g" /etc/selinux/config ;setenforce 0 结果成功：
+2020-08-19 21:26:43,336 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：systemctl stop firewalld  结果成功：
+2020-08-19 21:26:43,560 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：sed -i "s/^SELINUX\=.*/SELINUX\=disabled/g" /etc/selinux/config ;setenforce 0 结果成功：
+2020-08-19 21:26:43,740 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：[kuebrnetes]
+name=Kubernetes Repository
+baseurl=http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el8-x86_64/
+enabled=1
+gpgcheck=0 结果成功：
+2020-08-19 21:26:51,278 - INFO - hosts_operation.py - exec_start - 79 - [system_function]执行：yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes 结果失败：Errors during downloading metadata for repository 'kuebrnetes':
+  - Status code: 404 for http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el8-x86_64/repodata/repomd.xml (IP: 175.6.41.102)
+错误：Failed to download metadata for repo 'kuebrnetes': Cannot download repomd.xml: Cannot download repodata/repomd.xml: All mirrors were tried
+【剩余执行动作终止】
+2020-08-19 22:01:18,488 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：systemctl stop firewalld  结果成功：
+2020-08-19 22:01:18,663 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：sed -i "s/^SELINUX\=.*/SELINUX\=disabled/g" /etc/selinux/config ;setenforce 0 结果成功：
+2020-08-19 22:01:18,875 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：[kuebrnetes]
+name=Kubernetes Repository
+baseurl=http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el7-x86_64/
+enabled=1
+gpgcheck=0 结果成功：
+2020-08-19 22:01:26,136 - INFO - hosts_operation.py - exec_start - 79 - [system_function]执行：yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes 结果失败：Errors during downloading metadata for repository 'kuebrnetes':
+  - Status code: 404 for http://mirrors.aliyun.com/kuebrnetes/yum/repos/kuebrnetes-el7-x86_64/repodata/repomd.xml (IP: 163.181.37.212)
+错误：Failed to download metadata for repo 'kuebrnetes': Cannot download repomd.xml: Cannot download repodata/repomd.xml: All mirrors were tried
+【剩余执行动作终止】
+2020-08-19 22:03:20,608 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：systemctl stop firewalld  结果成功：
+2020-08-19 22:03:20,822 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：sed -i "s/^SELINUX\=.*/SELINUX\=disabled/g" /etc/selinux/config ;setenforce 0 结果成功：
+2020-08-19 22:03:21,026 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：[kuebrnetes]
+name=Kubernetes Repository
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=0 结果成功：
+2020-08-19 22:15:21,168 - INFO - hosts_operation.py - exec_start - 83 - [system_function]执行：yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes 结果成功：Kubernetes Repository                           4.9 kB/s | 101 kB     00:20    
+依赖关系解决。
+================================================================================
+ 软件包                     架构       版本                仓库            大小
+================================================================================
+安装:
+ kubeadm                    x86_64     1.18.8-0            kuebrnetes     8.8 M
+ kubectl                    x86_64     1.18.8-0            kuebrnetes     9.5 M
+ kubelet                    x86_64     1.18.8-0            kuebrnetes      21 M
+安装依赖关系:
+ conntrack-tools            x86_64     1.4.4-10.el8        BaseOS         204 k
+ cri-tools                  x86_64     1.13.0-0            kuebrnetes     5.1 M
+ kubernetes-cni             x86_64     0.8.6-0             kuebrnetes      18 M
+ libnetfilter_cthelper      x86_64     1.0.0-15.el8        BaseOS          24 k
+ libnetfilter_cttimeout     x86_64     1.0.0-11.el8        BaseOS          24 k
+ libnetfilter_queue         x86_64     1.0.2-11.el8        BaseOS          30 k
+ socat                      x86_64     1.7.3.3-2.el8       AppStream      302 k
+
+事务概要
+================================================================================
+安装  10 软件包
+
+总下载：62 M
+安装大小：265 M
+下载软件包：
+(1/10): libnetfilter_cthelper-1.0.0-15.el8.x86_  24 kB/s |  24 kB     00:01    
+(2/10): libnetfilter_cttimeout-1.0.0-11.el8.x86 1.0 MB/s |  24 kB     00:00    
+(3/10): conntrack-tools-1.4.4-10.el8.x86_64.rpm 194 kB/s | 204 kB     00:01    
+(4/10): libnetfilter_queue-1.0.2-11.el8.x86_64. 1.3 MB/s |  30 kB     00:00    
+(5/10): socat-1.7.3.3-2.el8.x86_64.rpm           48 kB/s | 302 kB     00:06    
+[MIRROR] 14bfe6e75a9efc8eca3f638eb22c7e2ce759c67f95b43b16fae4ebabde1549f3-cri-tools-1.13.0-0.x86_64.rpm: Curl error (18): Transferred a partial file for https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/Packages/14bfe6e75a9efc8eca3f638eb22c7e2ce759c67f95b43b16fae4ebabde1549f3-cri-tools-1.13.0-0.x86_64.rpm [transfer closed with 2025803 bytes remaining to read]
+(6/10): 14bfe6e75a9efc8eca3f638eb22c7e2ce759c67  16 kB/s | 5.1 MB     05:30    
+(7/10): de422b616a367cafae90aef704625fc34b0b222 9.9 MB/s |  21 MB     00:02    
+(8/10): 029bc0d7b2112098bdfa3f4621f2ce325d7a2c3  10 MB/s |  18 MB     00:01    
+[MIRROR] f1795288ba09abd5e6738fbf82e237e3792ee2dcda4512fa5d35388dae622cef-kubeadm-1.18.8-0.x86_64.rpm: Curl error (18): Transferred a partial file for https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/Packages/f1795288ba09abd5e6738fbf82e237e3792ee2dcda4512fa5d35388dae622cef-kubeadm-1.18.8-0.x86_64.rpm [transfer closed with 2814632 bytes remaining to read]
+(9/10): f1795288ba09abd5e6738fbf82e237e3792ee2d  15 kB/s | 8.8 MB     09:48    
+[MIRROR] efd73a4178ebf9939f86b4200dba0247a57ead65f2403d8576b241faf478ac42-kubectl-1.18.8-0.x86_64.rpm: Curl error (18): Transferred a partial file for https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/Packages/efd73a4178ebf9939f86b4200dba0247a57ead65f2403d8576b241faf478ac42-kubectl-1.18.8-0.x86_64.rpm [transfer closed with 3169484 bytes remaining to read]
+(10/10): efd73a4178ebf9939f86b4200dba0247a57ead  15 kB/s | 9.5 MB     10:38    
+--------------------------------------------------------------------------------
+总计                                             94 kB/s |  62 MB     11:20     
+运行事务检查
+事务检查成功。
+运行事务测试
+事务测试成功。
+运行事务
+  准备中  :                                                                 1/1 
+  安装    : kubectl-1.18.8-0.x86_64                                        1/10 
+  安装    : cri-tools-1.13.0-0.x86_64                                      2/10 
+  安装    : libnetfilter_queue-1.0.2-11.el8.x86_64                         3/10 
+  运行脚本: libnetfilter_queue-1.0.2-11.el8.x86_64                         3/10 
+  安装    : libnetfilter_cttimeout-1.0.0-11.el8.x86_64                     4/10 
+  运行脚本: libnetfilter_cttimeout-1.0.0-11.el8.x86_64                     4/10 
+  安装    : libnetfilter_cthelper-1.0.0-15.el8.x86_64                      5/10 
+  运行脚本: libnetfilter_cthelper-1.0.0-15.el8.x86_64                      5/10 
+  安装    : conntrack-tools-1.4.4-10.el8.x86_64                            6/10 
+  运行脚本: conntrack-tools-1.4.4-10.el8.x86_64                            6/10 
+  安装    : socat-1.7.3.3-2.el8.x86_64                                     7/10 
+  安装    : kubernetes-cni-0.8.6-0.x86_64                                  8/10 
+  安装    : kubelet-1.18.8-0.x86_64                                        9/10 
+  安装    : kubeadm-1.18.8-0.x86_64                                       10/10 
+  运行脚本: kubeadm-1.18.8-0.x86_64                                       10/10 
+  验证    : socat-1.7.3.3-2.el8.x86_64                                     1/10 
+  验证    : conntrack-tools-1.4.4-10.el8.x86_64                            2/10 
+  验证    : libnetfilter_cthelper-1.0.0-15.el8.x86_64                      3/10 
+  验证    : libnetfilter_cttimeout-1.0.0-11.el8.x86_64                     4/10 
+  验证    : libnetfilter_queue-1.0.2-11.el8.x86_64                         5/10 
+  验证    : cri-tools-1.13.0-0.x86_64                                      6/10 
+  验证    : kubeadm-1.18.8-0.x86_64                                        7/10 
+  验证    : kubectl-1.18.8-0.x86_64                                        8/10 
+  验证    : kubelet-1.18.8-0.x86_64                                        9/10 
+  验证    : kubernetes-cni-0.8.6-0.x86_64                                 10/10 
+
+已安装:
+  conntrack-tools-1.4.4-10.el8.x86_64                                           
+  cri-tools-1.13.0-0.x86_64                                                     
+  kubeadm-1.18.8-0.x86_64                                                       
+  kubectl-1.18.8-0.x86_64                                                       
+  kubelet-1.18.8-0.x86_64                                                       
+  kubernetes-cni-0.8.6-0.x86_64                                                 
+  libnetfilter_cthelper-1.0.0-15.el8.x86_64                                     
+  libnetfilter_cttimeout-1.0.0-11.el8.x86_64                                    
+  libnetfilter_queue-1.0.2-11.el8.x86_64                                        
+  socat-1.7.3.3-2.el8.x86_64                                                    
+
+完毕！
+2020-08-19 22:15:21,368 - INFO - hosts_operation.py - exec_start - 79 - [system_function]执行：systemctl enable docker 结果失败：Failed to enable unit: Unit file docker.service does not exist.
+【剩余执行动作终止】
+
+1111111
