@@ -264,9 +264,9 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
   `statu` int(11) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.sys_menu 的数据：~7 rows (大约)
+-- 正在导出表  xlauto.sys_menu 的数据：~9 rows (大约)
 DELETE FROM `sys_menu`;
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `statu`, `comments`) VALUES
@@ -275,8 +275,10 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `sta
 	(3, 2, '网络', 'network', '/network', 'el-icon-place', NULL, NULL),
 	(4, 2, '主机', 'host_m', '/host_m', 'el-icon-place', NULL, NULL),
 	(5, NULL, '部署', 'deploy', NULL, 'el-icon-s-claim', NULL, NULL),
-	(6, NULL, '维护', 'info_record', NULL, 'el-icon-s-custom', NULL, NULL),
-	(7, 5, '软件部署', 'soft_d', '/soft_d', 'el-icon-s-claim', NULL, NULL);
+	(7, 5, '软件部署', 'soft_d', '/soft_d', 'el-icon-s-claim', NULL, NULL),
+	(8, NULL, '管理', 'manage', NULL, 'el-icon-s-claim', NULL, NULL),
+	(9, 8, 'Zabbix', 'zabbix_management', '/zabbix_management', 'el-icon-s-claim', NULL, NULL),
+	(100, NULL, '维护', 'info_record', NULL, 'el-icon-s-custom', NULL, NULL);
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
