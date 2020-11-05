@@ -1,6 +1,9 @@
 <template>
   <el-row>
     <el-tabs :tab-position="tabPosition" style="height: 100%" @tab-click="tabs_switch">
+      <el-tab-pane label="快捷工具">
+        <HostCommon ref="hotsCmd"></HostCommon>
+      </el-tab-pane>
       <el-tab-pane label="主机信息">
         <HostInfo ref="hotsInfo"></HostInfo>
       </el-tab-pane>
@@ -14,12 +17,14 @@
 <script>
 import HostInfo from './host_info'
 import HostCmd from './host_cmd'
+import HostCommon from './host_common'
 
 export default {
   name: 'host_m',
   components: {
     HostInfo: HostInfo,
-    HostCmd: HostCmd
+    HostCmd: HostCmd,
+    HostCommon: HostCommon
   },
   data () {
     return {
