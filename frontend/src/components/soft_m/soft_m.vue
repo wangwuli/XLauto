@@ -1,7 +1,10 @@
 <template>
   <el-row>
     <el-tabs tab-position="left" style="height: 100%" @tab-click="tabs_switch">
-      <el-tab-pane label="快捷部署">
+      <el-tab-pane label="应用部署">
+        <CommonDep ref="CommonDep"></CommonDep>
+      </el-tab-pane>
+      <el-tab-pane label="软件部署">
         <CommonDep ref="CommonDep"></CommonDep>
       </el-tab-pane>
       <el-tab-pane label="Kubernetes">
