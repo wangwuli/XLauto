@@ -1,10 +1,12 @@
 <template>
   <el-row>
-    <el-button type="primary" size="mini">模板管理</el-button>
+    <el-button type="primary" size="mini">查询大文件</el-button>
   <el-table
+    :row-style="{height:'20px'}"
+    :cell-style="{padding:'0px'}"
+    style="font-size: 10px;width: 100%"
     size="mini"
     :data="tableData"
-    style="width: 100%"
     :row-class-name="tableRowClassName"
     @selection-change="handleSelectionChange">
     <el-table-column
@@ -31,17 +33,28 @@
       label="操作"
       width="100">
       <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button @click="handleClick(scope.row)" type="text" size="small">部署</el-button>
+        <el-button type="text" size="small">重启</el-button>
       </template>
     </el-table-column>
   </el-table>
+    <el-row>
+      <querybigfileDialog ref="query_big_file_dialog_ref"></querybigfileDialog>
+    </el-row>
   </el-row>
 </template>
 
 <script>
+import querybigfileDialog from '@/components/host_m/hots_common_el/query_big_file'
+
 export default {
+  components: {
+    querybigfileDialog: querybigfileDialog
+  },
   methods: {
+    open_big_file_dialog () {
+      this.handleSelectionChange()
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
