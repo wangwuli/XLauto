@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- 主机:                           127.0.0.1
--- 服务器版本:                        8.0.20 - MySQL Community Server - GPL
--- 服务器操作系统:                      Win64
--- HeidiSQL 版本:                  10.2.0.5599
+-- 服务器版本:                        5.7.21 - MySQL Community Server (GPL)
+-- 服务器操作系统:                      Win32
+-- HeidiSQL 版本:                  10.3.0.5771
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -13,19 +13,19 @@
 
 
 -- 导出 xlauto 的数据库结构
-CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `xlauto`;
 
 -- 导出  表 xlauto.host_instance 结构
 DROP TABLE IF EXISTS `host_instance`;
 CREATE TABLE IF NOT EXISTS `host_instance` (
-  `host_id` int NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_ip` varchar(50) NOT NULL,
   `host_name` varchar(50) DEFAULT NULL,
-  `host_port` int DEFAULT NULL,
+  `host_port` int(11) DEFAULT NULL,
   `host_type_key` varchar(50) NOT NULL,
   `host_project` varchar(50) DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`host_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
@@ -50,8 +50,8 @@ INSERT INTO `host_instance` (`host_id`, `host_ip`, `host_name`, `host_port`, `ho
 -- 导出  表 xlauto.host_users 结构
 DROP TABLE IF EXISTS `host_users`;
 CREATE TABLE IF NOT EXISTS `host_users` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int NOT NULL,
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) NOT NULL,
   `user_name` varchar(50) NOT NULL,
   `user_pass` varchar(50) NOT NULL,
   `user_role` varchar(50) NOT NULL,
@@ -78,12 +78,12 @@ INSERT INTO `host_users` (`user_id`, `host_id`, `user_name`, `user_pass`, `user_
 -- 导出  表 xlauto.projects 结构
 DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
-  `project_id` int NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(50) DEFAULT NULL,
   `project_code` varchar(50) DEFAULT NULL,
   `controller_ip` varchar(50) DEFAULT NULL,
-  `order_id` int DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `modify_time` datetime DEFAULT NULL,
   `comments` varchar(500) DEFAULT NULL,
@@ -100,7 +100,7 @@ INSERT INTO `projects` (`project_id`, `project_name`, `project_code`, `controlle
 -- 导出  表 xlauto.script_file_cabinet 结构
 DROP TABLE IF EXISTS `script_file_cabinet`;
 CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
-  `script_file_id` int NOT NULL AUTO_INCREMENT,
+  `script_file_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_file_path` varchar(300) DEFAULT NULL,
   `script_file_name` varchar(50) DEFAULT NULL,
   `script_file_group` varchar(50) DEFAULT NULL,
@@ -121,14 +121,14 @@ INSERT INTO `script_file_cabinet` (`script_file_id`, `script_file_path`, `script
 -- 导出  表 xlauto.script_file_execute_event 结构
 DROP TABLE IF EXISTS `script_file_execute_event`;
 CREATE TABLE IF NOT EXISTS `script_file_execute_event` (
-  `script_file_execute_event_id` int NOT NULL AUTO_INCREMENT,
+  `script_file_execute_event_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_execute_event_batch_id` varchar(50) DEFAULT NULL,
-  `script_file_id` int DEFAULT NULL,
+  `script_file_id` int(11) DEFAULT NULL,
   `execute_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `execute_end_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `execute_result` tinyint DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
+  `execute_result` tinyint(4) DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
   `script_file_content` mediumtext,
-  `host_id` int DEFAULT NULL,
+  `host_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`script_file_execute_event_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1 COMMENT='脚本执行事件表';
 
@@ -167,18 +167,18 @@ INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script
 -- 导出  表 xlauto.server_software 结构
 DROP TABLE IF EXISTS `server_software`;
 CREATE TABLE IF NOT EXISTS `server_software` (
-  `soft_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int DEFAULT NULL,
-  `soft_type` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `soft_port` int DEFAULT NULL,
-  `start_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `stop_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `restart_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `soft_log_path` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `soft_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) DEFAULT NULL,
+  `soft_type` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `soft_port` int(11) DEFAULT NULL,
+  `start_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `stop_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `restart_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `soft_log_path` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `modify_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `comments` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `comments` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`soft_id`),
   KEY `ix_server_software_host_id` (`host_id`),
   KEY `ix_server_software_soft_type` (`soft_type`)
@@ -192,7 +192,7 @@ DELETE FROM `server_software`;
 -- 导出  表 xlauto.system_function 结构
 DROP TABLE IF EXISTS `system_function`;
 CREATE TABLE IF NOT EXISTS `system_function` (
-  `system_function_id` int NOT NULL AUTO_INCREMENT,
+  `system_function_id` int(11) NOT NULL AUTO_INCREMENT,
   `system_name` varchar(50) NOT NULL COMMENT '操作系统名称',
   `system_version` varchar(50) NOT NULL COMMENT '系统版本',
   `function_type` varchar(50) NOT NULL COMMENT '文件新增、文件内容追加、指定内容替换、执行命令',
@@ -200,14 +200,14 @@ CREATE TABLE IF NOT EXISTS `system_function` (
   `system_content_file` varchar(200) DEFAULT NULL COMMENT '文件文本路径',
   `system_action` varchar(50) NOT NULL COMMENT '动作归类',
   `system_action_name` varchar(50) DEFAULT NULL COMMENT '动作归类名',
-  `action_service_switch` tinyint DEFAULT NULL COMMENT '服务类动作，启动，停止标记。1启动，2停止',
-  `force` tinyint DEFAULT NULL COMMENT '标记为码值，禁止全部删除',
-  `order_by` int DEFAULT NULL COMMENT '排序',
+  `action_service_switch` tinyint(4) DEFAULT NULL COMMENT '服务类动作，启动，停止标记。1启动，2停止',
+  `force` tinyint(4) DEFAULT NULL COMMENT '标记为码值，禁止全部删除',
+  `order_by` int(11) DEFAULT NULL COMMENT '排序',
   `comment` varchar(100) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`system_function_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='系统命令表';
 
--- 正在导出表  xlauto.system_function 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.system_function 的数据：~15 rows (大约)
 DELETE FROM `system_function`;
 /*!40000 ALTER TABLE `system_function` DISABLE KEYS */;
 INSERT INTO `system_function` (`system_function_id`, `system_name`, `system_version`, `function_type`, `system_content`, `system_content_file`, `system_action`, `system_action_name`, `action_service_switch`, `force`, `order_by`, `comment`) VALUES
@@ -231,14 +231,14 @@ INSERT INTO `system_function` (`system_function_id`, `system_name`, `system_vers
 -- 导出  表 xlauto.system_other_portals 结构
 DROP TABLE IF EXISTS `system_other_portals`;
 CREATE TABLE IF NOT EXISTS `system_other_portals` (
-  `system_other_portals_id` int NOT NULL AUTO_INCREMENT,
+  `system_other_portals_id` int(11) NOT NULL AUTO_INCREMENT,
   `portal_label` varchar(50) NOT NULL,
   `portal_name` varchar(50) DEFAULT NULL,
   `portal_url` varchar(500) DEFAULT NULL,
   `portal_login_user` varchar(50) DEFAULT NULL,
   `portal_login_pwd` varchar(50) DEFAULT NULL,
   `portal_icon` varchar(50) DEFAULT NULL,
-  `force` tinyint DEFAULT NULL COMMENT '系统项，是否禁止删除',
+  `force` tinyint(4) DEFAULT NULL COMMENT '系统项，是否禁止删除',
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`system_other_portals_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -247,18 +247,18 @@ CREATE TABLE IF NOT EXISTS `system_other_portals` (
 DELETE FROM `system_other_portals`;
 /*!40000 ALTER TABLE `system_other_portals` DISABLE KEYS */;
 INSERT INTO `system_other_portals` (`system_other_portals_id`, `portal_label`, `portal_name`, `portal_url`, `portal_login_user`, `portal_login_pwd`, `portal_icon`, `force`, `comments`) VALUES
-	(1, 'zabbix', 'Zabbix', 'http://192.168.20.204/zabbix/', '', '', NULL, 1, NULL);
+	(1, 'zabbix', 'Zabbix', 'http://192.168.20.204/zabbix/', 'zabbix', '123', NULL, 1, NULL);
 /*!40000 ALTER TABLE `system_other_portals` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_code 结构
 DROP TABLE IF EXISTS `sys_code`;
 CREATE TABLE IF NOT EXISTS `sys_code` (
-  `code_id` int NOT NULL AUTO_INCREMENT,
+  `code_id` int(11) NOT NULL AUTO_INCREMENT,
   `code_key` varchar(500) DEFAULT NULL,
   `code_name` varchar(50) NOT NULL,
   `code_type` varchar(50) NOT NULL,
   `f_code` varchar(50) DEFAULT NULL,
-  `order_queue` smallint DEFAULT NULL,
+  `order_queue` smallint(6) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`code_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
@@ -286,18 +286,18 @@ INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code
 -- 导出  表 xlauto.sys_menu 结构
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE IF NOT EXISTS `sys_menu` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `parent_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `path` varchar(50) DEFAULT NULL,
   `icon` varchar(50) DEFAULT NULL,
-  `statu` int DEFAULT NULL,
+  `statu` int(11) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.sys_menu 的数据：~9 rows (大约)
+-- 正在导出表  xlauto.sys_menu 的数据：~10 rows (大约)
 DELETE FROM `sys_menu`;
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `statu`, `comments`) VALUES
@@ -308,9 +308,28 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `sta
 	(5, NULL, '部署', 'deploy', NULL, 'el-icon-s-claim', NULL, NULL),
 	(7, 5, '软件部署', 'soft_d', '/soft_d', 'el-icon-s-claim', NULL, NULL),
 	(8, NULL, '管理', 'manage', NULL, 'el-icon-s-claim', NULL, NULL),
-	(9, 8, 'Zabbix', 'zabbix_management', '/zabbix_management', 'el-icon-s-claim', NULL, NULL),
-	(100, NULL, '维护', 'info_record', NULL, 'el-icon-s-custom', NULL, NULL);
+	(9, 8, 'Zabbix', 'zabbix', '/zabbix', 'el-icon-s-claim', NULL, NULL),
+	(100, NULL, '维护', 'info_record', NULL, 'el-icon-s-custom', NULL, NULL),
+	(101, 100, '配置', 'setting', '/setting', 'el-icon-s-custom', NULL, NULL);
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
+
+-- 导出  表 xlauto.zabbix_agent 结构
+DROP TABLE IF EXISTS `zabbix_agent`;
+CREATE TABLE IF NOT EXISTS `zabbix_agent` (
+  `zabbix_install_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) DEFAULT NULL,
+  `install_info` mediumtext,
+  `execute_result` tinyint(4) DEFAULT NULL COMMENT '-1错误、1成功、2警告、3未知',
+  `zabbix_hostid` varchar(100) DEFAULT NULL,
+  `zabbix_groupid` varchar(100) DEFAULT NULL,
+  `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`zabbix_install_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- 正在导出表  xlauto.zabbix_agent 的数据：~0 rows (大约)
+DELETE FROM `zabbix_agent`;
+/*!40000 ALTER TABLE `zabbix_agent` DISABLE KEYS */;
+/*!40000 ALTER TABLE `zabbix_agent` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
