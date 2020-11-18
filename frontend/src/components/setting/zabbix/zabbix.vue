@@ -3,15 +3,17 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>基本信息</span>
-        <el-button style="float: right; padding: 3px 0" type="text">保存</el-button>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="ZabbixConfSave">保存</el-button>
       </div>
       <div>
       <el-form :model="form" size="mini" ref="form_data" :rules="rules">
+        <el-row>
         <el-form-item label="API地址：" :label-width="formLabel_width" prop="portal_url">
           <el-input v-model="form.portal_url" autocomplete="off" size="mini" placeholder="请输入URL"
-                     class="input_basic_information"></el-input>
+                     class="input_url_basic_information"></el-input>
         </el-form-item>
-
+        </el-row>
+        <el-row>
         <el-form-item label="用户名：" :label-width="formLabel_width" prop="portal_login_user">
           <el-input v-model="form.portal_login_user" autocomplete="off" size="mini" placeholder="请输入"
                      class="input_basic_information" ></el-input>
@@ -21,6 +23,7 @@
           <el-input v-model="form.portal_login_pwd" autocomplete="off" size="mini" placeholder="请输入"
                     class="input_basic_information" show-password></el-input>
         </el-form-item>
+          </el-row>
       </el-form>
         </div>
     </el-card>
@@ -28,7 +31,12 @@
 </template>
 
 <script>
+import * as Request from '@/general/request.js'
+
 export default {
+  created () {
+    this.ZabbixConfQuery()
+  },
   name: 'zabbix',
   data () {
     return {
@@ -48,6 +56,30 @@ export default {
         ]
       }
     }
+  },
+  methods: {
+    async ZabbixConfQuery () {
+      const response = await Request.GET('/setting/main', { portal_label: 'zabbix' })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.form = data.data[0]
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async ZabbixConfSave () {
+      const response = await Request.POST('/setting/main', { form: this.form })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    }
   }
 }
 </script>
@@ -58,5 +90,9 @@ export default {
   }
 .input_basic_information {
   width: 200px;
+}
+
+.input_url_basic_information {
+  width: 400px;
 }
 </style>

@@ -28,6 +28,11 @@ module.exports = {
         target: 'http://localhost:5000',
         ws: true,
         changeOrigin: true
+      },
+      '/setting/': {
+        target: 'http://localhost:5000',
+        ws: true,
+        changeOrigin: true
       }
     }
   }

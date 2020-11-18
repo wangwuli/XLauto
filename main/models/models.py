@@ -81,16 +81,16 @@ class ServerSoftware(db.Model):
 
     soft_id = db.Column(db.Integer, primary_key=True)
     host_id = db.Column(db.Integer, index=True)
-    soft_type = db.Column(db.String(50, 'latin1_swedish_ci'), index=True)
+    soft_type = db.Column(db.String(50), index=True)
     soft_port = db.Column(db.Integer)
-    start_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    stop_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    restart_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    soft_log_path = db.Column(db.String(50, 'latin1_swedish_ci'))
+    start_soft_cmd = db.Column(db.String(50))
+    stop_soft_cmd = db.Column(db.String(50))
+    restart_soft_cmd = db.Column(db.String(50))
+    soft_log_path = db.Column(db.String(50))
     is_remove = db.Column(db.Integer)
     create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
     modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    comments = db.Column(db.String(50, 'latin1_swedish_ci'))
+    comments = db.Column(db.String(50))
 
 
 
@@ -134,6 +134,7 @@ class SystemFunction(db.Model):
     system_action_name = db.Column(db.String(50), info='动作归类名')
     action_service_switch = db.Column(db.Integer, info='服务类动作，启动，停止标记。1启动，2停止')
     force = db.Column(db.Integer, info='标记为码值，禁止全部删除')
+    order_by = db.Column(db.Integer, info='排序')
     comment = db.Column(db.String(100), info='备注')
 
 
@@ -142,9 +143,11 @@ class SystemOtherPortal(db.Model):
     __tablename__ = 'system_other_portals'
 
     system_other_portals_id = db.Column(db.Integer, primary_key=True)
-    portal_name = db.Column(db.String(50), nullable=False)
-    portal_url = db.Column(db.String(500), nullable=False)
-    portal_login_user = db.Column(db.String(50), nullable=False)
-    portal_login_pwd = db.Column(db.String(50), nullable=False)
+    portal_label = db.Column(db.String(50), nullable=False)
+    portal_name = db.Column(db.String(50))
+    portal_url = db.Column(db.String(500))
+    portal_login_user = db.Column(db.String(50))
+    portal_login_pwd = db.Column(db.String(50))
     portal_icon = db.Column(db.String(50))
+    force = db.Column(db.Integer, info='系统项，是否禁止删除')
     comments = db.Column(db.String(50))

@@ -1,3 +1,4 @@
+from src.setting import setting
 from src.hosts import hosts
 from src.selfhealing import selfhealing
 from src.services import services
@@ -13,6 +14,7 @@ def init_app(app):
     app.register_blueprint(selfhealing)
     app.register_blueprint(services)
     app.register_blueprint(hosts)
+    app.register_blueprint(setting)
 
 
 def init_sapp(sockets):
