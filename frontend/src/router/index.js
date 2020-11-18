@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import HostM from '@/components/host_m/host_m'
 import SoftD from '@/components/soft_m/soft_m'
-import ZabbixM from '@/components/soft_m/zabbix/zabbix_management'
+import ZabbixM from '@/components/soft_m/zabbix/index'
 import Setting from '@/components/setting/index'
 
 Vue.use(VueRouter)
@@ -39,8 +39,8 @@ const routes = [
     component: SoftD
   },
   {
-    path: '/zabbix_management',
-    name: 'zabbix_management',
+    path: '/zabbix',
+    name: 'zabbix',
     component: ZabbixM
   },
   {

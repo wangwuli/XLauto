@@ -82,6 +82,8 @@
         </el-form-item>
       </el-form>
     <el-table
+      :row-style="{height:'20px'}"
+    :cell-style="{padding:'0px'}"
       @row-click="hoststableClick"
       size="mini"
       ref="multipleTable"
