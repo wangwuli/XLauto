@@ -1,36 +1,65 @@
 <template>
   <el-row>
-    <el-button type="primary" size="mini" @click="hosts_add_target">主机加入<i class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
+    <el-button type="primary" size="mini" @click="hosts_add_target">主机加入<i
+      class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
     <el-button type="primary" size="mini">查询</el-button>
     <el-button type="primary" size="mini">同步</el-button>
     <el-button type="primary" size="mini">安装</el-button>
+    <el-select
+      size="mini"
+      v-model="zabbix_hots_groups"
+      multiple
+      collapse-tags
+      style="margin-left: 20px"
+      placeholder="全选Zabbix组">
+      <el-option
+        v-for="item in zabbix_hots_groups_list"
+        :key="item.groupid"
+        :label="item.name"
+        :value="item.groupid">
+      </el-option>
+    </el-select>
+    <el-select
+      size="mini"
+      v-model="zabbix_templateids"
+      multiple
+      collapse-tags
+      style="margin-left: 20px"
+      placeholder="全选Zabbix模板">
+      <el-option
+        v-for="item in zabbix_templateids_list"
+        :key="item.templateid"
+        :label="item.name"
+        :value="item.templateid">
+      </el-option>
+    </el-select>
     <el-table
-    :row-style="{height:'20px'}"
-    :cell-style="{padding:'0px'}"
-    style="font-size: 10px;width: 100%"
-    size="mini"
-    :data="hosts_table_data"
-    :row-class-name="tableRowClassName"
-    @selection-change="handleSelectionChange">
-    <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      prop="host_ip"
-      label="IP"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="host_name"
-      label="主机名"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="install_info"
-      label="安装信息"
-    show-overflow-tooltip>
-    </el-table-column>
+      :row-style="{height:'20px'}"
+      :cell-style="{padding:'0px'}"
+      style="font-size: 10px;width: 100%"
+      size="mini"
+      :data="hosts_table_data"
+      :row-class-name="tableRowClassName"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        prop="host_ip"
+        label="IP"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="host_name"
+        label="主机名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="install_info"
+        label="安装信息"
+        show-overflow-tooltip>
+      </el-table-column>
       <el-table-column
         label="结果"
         show-overflow-tooltip>
@@ -45,6 +74,51 @@
              style="font-size: 15px; color: #909399"/>
         </template>
       </el-table-column>
+      <el-table-column
+        label="Zabbix主机组"
+        show-overflow-tooltip>
+        <template slot-scope='hots_groups'>
+          <el-select
+            size="mini"
+            v-model="hots_groups.row.zabbix_hots_groups"
+            multiple
+            collapse-tags
+            placeholder="请选择">
+            <el-option
+              v-for="item in hots_groups.row.zabbix_hots_groups_list"
+              :key="item.groupid"
+              :label="item.name"
+              :value="item.groupid">
+            </el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="Zabbix主机名"
+        show-overflow-tooltip>
+        <template slot-scope='host_name'>
+          <el-input size="mini" v-model="host_name.row.zabbix_host_name" placeholder="请输入内容"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="Zabbix模板"
+        show-overflow-tooltip>
+        <template slot-scope='zabbix_template'>
+          <el-select
+            size="mini"
+            v-model="zabbix_template.row.zabbix_templateids"
+            multiple
+            collapse-tags
+            placeholder="请选择">
+            <el-option
+              v-for="item in zabbix_template.row.zabbix_templateids_list"
+              :key="item.templateid"
+              :label="item.name"
+              :value="item.templateid">
+            </el-option>
+          </el-select>
+        </template>
+      </el-table-column>
   </el-table>
   </el-row>
 </template>
@@ -56,18 +130,37 @@ export default {
   name: 'zabbix',
   data () {
     return {
-      hosts_table_data: []
-      // hosts_table_data: [{
-      //   host_ip: '2016-05-01',
-      //   host_name: '王小虎',
-      //   install_info: '上海市普陀区金沙江路 1518 弄',
-      //   execute_result: 1
-      // }, {
-      //   host_ip: '2016-05-03',
-      //   host_name: '王小虎',
-      //   install_info: '上海市普陀区金沙江路 1518 弄',
-      //   execute_result: 0
-      // }]
+      zabbix_hots_groups_list: [],
+      zabbix_hots_groups: [],
+      zabbix_templateids_list: [],
+      zabbix_templateids: [],
+      // hosts_table_data: []
+      hosts_table_data: [{
+        host_ip: '2016-05-01',
+        host_name: '王小虎',
+        install_info: '上海市普陀区金沙江路 1518 弄',
+        execute_result: 1,
+        zabbix_hots_groups_list: [{
+          groupid: '2',
+          name: 'Linux servers',
+          internal: '0'
+        }],
+        zabbix_hots_groups: [],
+        zabbix_templateids_list: [{
+          templateid: '2',
+          name: 'Linux template',
+          internal: '0'
+        }],
+        zabbix_templateids: [],
+        zabbix_host_name: 'ahahah'
+      }, {
+        host_ip: '2016-05-03',
+        host_name: '王小虎',
+        install_info: '上海市普陀区金沙江路 1518 弄',
+        execute_result: 0,
+        zabbix_hots_groups_list: [],
+        zabbix_hots_groups: []
+      }]
     }
   },
   computed: {
