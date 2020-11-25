@@ -21,7 +21,7 @@ def query_portal_label_info(portal_label):
     :return:
     """
     sys_code_data = db.session.query(SystemOtherPortal.system_other_portals_id, SystemOtherPortal.portal_name,
-                                     SystemOtherPortal.portal_url, SystemOtherPortal.portal_login_user, SystemOtherPortal.portal_login_pwd).filter(
+                                     SystemOtherPortal.portal_url, SystemOtherPortal.portal_login_user, SystemOtherPortal.portal_login_pwd,SystemOtherPortal.portal_disabled).filter(
         SystemOtherPortal.portal_label == portal_label).all()
     db.session.close()
     db.session.remove()
@@ -30,7 +30,7 @@ def query_portal_label_info(portal_label):
     return data
 
 
-def save_portal_label_zabbix_info(data_dict):
+def save_portal_label_info(data_dict):
     """
     保存Zabbix信息
     :param data_dict:
@@ -40,6 +40,11 @@ def save_portal_label_zabbix_info(data_dict):
     portal_label_infot_obj.portal_url = data_dict['portal_url']
     portal_label_infot_obj.portal_login_user = data_dict['portal_login_user']
     portal_label_infot_obj.portal_login_pwd = data_dict['portal_login_pwd']
+    if not data_dict['portal_disabled']:
+        data_dict['portal_disabled'] = 1
+    else:
+        data_dict['portal_disabled'] = 0
+    portal_label_infot_obj.portal_disabled = data_dict['portal_disabled']
 
     db.session.commit()
     db.session.close()

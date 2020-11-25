@@ -6,3 +6,4 @@ flask-sqlalchemy==2.4.1
 flask-sqlacodegen==1.1.7
 pymysql==0.9.3
 flask-sockets==0.2.1
+pyzabbix==0.8.2

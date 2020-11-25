@@ -81,16 +81,16 @@ class ServerSoftware(db.Model):
 
     soft_id = db.Column(db.Integer, primary_key=True)
     host_id = db.Column(db.Integer, index=True)
-    soft_type = db.Column(db.String(50), index=True)
+    soft_type = db.Column(db.String(50, 'latin1_swedish_ci'), index=True)
     soft_port = db.Column(db.Integer)
-    start_soft_cmd = db.Column(db.String(50))
-    stop_soft_cmd = db.Column(db.String(50))
-    restart_soft_cmd = db.Column(db.String(50))
-    soft_log_path = db.Column(db.String(50))
+    start_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    stop_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    restart_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    soft_log_path = db.Column(db.String(50, 'latin1_swedish_ci'))
     is_remove = db.Column(db.Integer)
     create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
     modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    comments = db.Column(db.String(50))
+    comments = db.Column(db.String(50, 'latin1_swedish_ci'))
 
 
 
@@ -143,6 +143,7 @@ class SystemOtherPortal(db.Model):
     __tablename__ = 'system_other_portals'
 
     system_other_portals_id = db.Column(db.Integer, primary_key=True)
+    portal_disabled = db.Column(db.Integer, info='是否禁用，1为禁用')
     portal_label = db.Column(db.String(50), nullable=False)
     portal_name = db.Column(db.String(50))
     portal_url = db.Column(db.String(500))

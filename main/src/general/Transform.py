@@ -30,6 +30,8 @@ def model_to_dict(obj):
         for obj_one in obj:
             data_one = dict(zip(fields,obj_one))
             return_list.append(data_one)
+    if len(return_list) == 1:
+        return_list = return_list[0]
     return return_list
 
 
