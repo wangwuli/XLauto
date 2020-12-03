@@ -8,30 +8,21 @@
 
 import json
 import re
+from flask import current_app
 from src.deploy.zabbix.login import zabbix_api_login
 
 
 class OmnisCollect:
     def __init__(self):
-        self.log("开始登录")
-        self.zapi = zabbix_api_login()
-        self.log("登录成功")
+        self.zapi = current_app.config.xlautoenv['zabbix_key']
 
-    def log(self, msg):
-        self.logger.info(msg + getDateTime())
-
-    def get_temp_group(self):
+    def get_group(self):
         """
-        查询模板组
+        查询组
         :return:
         """
         info = self.zapi.hostgroup.get(output="extend")
-        return_info = []
-        for info_one in info:
-            if re.match('\[Templates\]', info_one['name']):
-                return_info.append(info_one)
-
-        return return_info
+        return info
 
     def post_group(self, group_name):
         """
@@ -50,22 +41,21 @@ class OmnisCollect:
         info = self.zapi.hostgroup.delete(*groupids)
         return info
 
-    def get_templated_item(self, templateids):
+    def get_templated_item(self, template_host_ids):
         """
-          查询模板的监控项
+          查询主机模板监控项
           :param templateids:
           :return:
           """
-
-        self.log("开始获取模板数据"+json.dumps(templateids))
-        info = self.zapi.item.get(templateids=templateids)
-        self.log("结束获取模板")
+        current_app.logger.info("开始获取模板数据" + json.dumps(template_host_ids))
+        info = self.zapi.item.get(templateids=template_host_ids)
+        current_app.logger.info("结束获取模板")
 
         return info
 
     def get_trigger(self, itemid):
         """
-
+        查询触发器详情
         :param itemid:
         :return:
         """
@@ -74,6 +64,13 @@ class OmnisCollect:
         return info
 
     def add_trigger(self, description, expression, serverity):
+        """
+        新增触发器
+        :param description:
+        :param expression:
+        :param serverity:
+        :return:
+        """
         info = self.zapi.trigger.create(description=description, expression=expression, priority=serverity)
 
         return info
