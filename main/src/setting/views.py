@@ -7,10 +7,8 @@
 '''
 
 from flask import request
-from flask import current_app
-from src.deploy.zabbix.login import zabbix_api_login
 from src.general.General import Result
-from src.setting.auxiliary import query_portal_label_info, save_portal_label_info
+from src.setting.auxiliary import query_portal_label_info, save_portal_label_info, zabbix_setting_control
 from . import setting
 
 
@@ -32,14 +30,10 @@ def setting_main_zabbix():
         data_dict = request.get_json()
 
         data_dict_form = data_dict['form']
-        if data_dict_form['portal_disabled']:
-            zabbix_str = zabbix_api_login()
-            if zabbix_str[0]:
-                current_app.config.xlautoenv['zabbix_key'] = zabbix_str
-            else:
-                Result.fail_response(msg="保存失败：%s" %zabbix_str[1])
-        else:
-            current_app.config.xlautoenv['zabbix_key'] = ''
+        zabbix_setting_control_status = zabbix_setting_control()
+
+        if not zabbix_setting_control_status[0]:
+            Result.fail_response(msg="保存失败：%s" %zabbix_setting_control_status[1])
 
         save_portal_label_info(data_dict_form)
         return Result.success_response(msg='保存成功')

@@ -5,11 +5,9 @@
 @time: 2020/11/18 11:56
 @desc:
 '''
-import os
-import time
-import paramiko
-import threading
-from src.general.Connect_G import SCPMet
+
+
+from flask import current_app
 from src.general.Transform import model_to_dict
 from main.models.models import SystemOtherPortal, db
 
@@ -49,5 +47,23 @@ def save_portal_label_info(data_dict):
     db.session.commit()
     db.session.close()
     db.session.remove()
+
+    return True
+
+
+
+def zabbix_setting_control():
+    from src.deploy.zabbix.login import zabbix_api_login
+
+    zabbix_label_info = query_portal_label_info('zabbix')
+
+    if zabbix_label_info['portal_disabled'] != 1:
+        # zabbix_setting_control_status = zabbix_setting_control()
+        # if not zabbix_setting_control_status[0]:
+        #     return (False, zabbix_setting_control_status[1])
+        zabbix_str = zabbix_api_login()
+        current_app.config.xlautoenv['zabbix_key'] = zabbix_str
+    else:
+        current_app.config.xlautoenv['zabbix_key'] = ''
 
     return True
