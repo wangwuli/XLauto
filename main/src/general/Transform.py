@@ -23,14 +23,14 @@ from functools import wraps
 #         raise TypeError('Type error of parameter')
 
 
-def model_to_dict(obj):
+def model_to_dict(obj, onedict=True):
     return_list = []
     if len(obj) != 0:
         fields = obj[0]._fields
         for obj_one in obj:
             data_one = dict(zip(fields,obj_one))
             return_list.append(data_one)
-    if len(return_list) == 1:
+    if len(return_list) == 1 and onedict:
         return_list = return_list[0]
     return return_list
 

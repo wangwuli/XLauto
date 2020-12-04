@@ -8090,3 +8090,6 @@ containerd.io-1.2.6-3.3.fc30.x86_64.rpm         736 kB/s |  21 MB     00:29
 【第1次重试执行:{'system_function_id': 11, 'function_type': 'cmd', 'system_content': 'systemctl enable kubelet', 'system_content_file': '', 'action_service_switch': 1}】
 2020-09-01 23:26:34,362 - INFO - hosts_operation.py - exec_start - 95 - [system_function]执行：systemctl enable kubelet 结果成功：
 2020-09-01 23:26:34,532 - INFO - hosts_operation.py - exec_start - 95 - [system_function]执行：systemctl start kubelet 结果成功：
+2020-12-04 17:56:08,978 - WARNING - login.py - zabbix_api_login - 26 - Zabbix登陆失败：('Error -32602: Invalid params., Login name or password is incorrect.', -32602)
+2020-12-04 17:56:46,358 - WARNING - login.py - zabbix_api_login - 26 - Zabbix登陆失败：('Error -32602: Invalid params., Login name or password is incorrect.', -32602)
+2020-12-04 17:57:27,426 - WARNING - login.py - zabbix_api_login - 26 - Zabbix登陆失败：('Error -32602: Invalid params., Login name or password is incorrect.', -32602)

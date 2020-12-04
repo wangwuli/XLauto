@@ -45,5 +45,5 @@ def home_projects_query():
                                     Project.controller_ip, Project.order_id, Project.comments, ).all()
     db.session.close()
     db.session.remove()
-    project_data = model_to_dict(project_obj)
+    project_data = model_to_dict(project_obj, onedict=False)
     return Result.success_response(project_data,'项目查询成功')

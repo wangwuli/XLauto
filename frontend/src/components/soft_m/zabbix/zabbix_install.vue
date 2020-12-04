@@ -128,6 +128,9 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'zabbix',
+  created () {
+    this.zabbix_templates_query()
+  },
   data () {
     return {
       zabbix_hots_groups_list: [],
@@ -175,6 +178,18 @@ export default {
         this.hosts_table_data = JSON.parse(JSON.stringify(this.table_click_value))
       } else {
         this.$message.warning('标靶中无选中服务器')
+      }
+    },
+    async zabbix_templates_query () {
+      const response = await Request.GET('/deploy/zabbix/templates')
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          // this.$message.success(data.msg)
+          this.templates = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
       }
     }
   }

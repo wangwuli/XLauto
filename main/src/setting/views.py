@@ -32,7 +32,7 @@ def setting_main_zabbix():
         data_dict_form = data_dict['form']
         zabbix_setting_control_status = zabbix_setting_control()
 
-        if not zabbix_setting_control_status[0]:
+        if zabbix_setting_control_status != True:
             Result.fail_response(msg="保存失败：%s" %zabbix_setting_control_status[1])
 
         save_portal_label_info(data_dict_form)

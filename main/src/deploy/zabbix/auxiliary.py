@@ -12,7 +12,7 @@ from flask import current_app
 from src.deploy.zabbix.login import zabbix_api_login
 
 
-class OmnisCollect:
+class ZabbixCollect:
     def __init__(self):
         self.zapi = current_app.config.xlautoenv['zabbix_key']
 
@@ -132,8 +132,11 @@ class OmnisCollect:
         return info
 
 
-    def get_template(self, templateids):
-        info = self.zapi.template.get(filter={"groupids":templateids},
-                                      output="extend",
-                                      selectGroups=['groupid', 'name'])
+    def get_template(self, templateids=None):
+        if templateids:
+            info = self.zapi.template.get(filter={"groupids":templateids},
+                                          output="extend",
+                                          selectGroups=['groupid', 'name'])
+        else:
+            info = self.zapi.template.get()
         return info
