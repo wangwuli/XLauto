@@ -13,7 +13,7 @@ from flask import current_app
 
 class ZabbixCollect:
     def __init__(self):
-        self.zapi = current_app.config.xlautoenv['zabbix_key']
+        self.zapi = current_app.config.xlautoenv['zabbix_api']
 
     def get_group(self):
         """

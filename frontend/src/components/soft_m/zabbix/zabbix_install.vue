@@ -27,6 +27,7 @@
       style="margin-left: 20px"
       placeholder="全选Zabbix模板">
       <el-option
+        filterable
         v-for="item in zabbix_templateids_list"
         :key="item.templateid"
         :label="item.name"
@@ -39,8 +40,7 @@
       style="font-size: 10px;width: 100%"
       size="mini"
       :data="hosts_table_data"
-      :row-class-name="tableRowClassName"
-      @selection-change="handleSelectionChange">
+      :row-class-name="tableRowClassName">
       <el-table-column
         type="selection"
         width="55">
@@ -105,13 +105,14 @@
         show-overflow-tooltip>
         <template slot-scope='zabbix_template'>
           <el-select
+            filterable
             size="mini"
             v-model="zabbix_template.row.zabbix_templateids"
             multiple
             collapse-tags
             placeholder="请选择">
             <el-option
-              v-for="item in zabbix_template.row.zabbix_templateids_list"
+              v-for="item in zabbix_templateids_list"
               :key="item.templateid"
               :label="item.name"
               :value="item.templateid">
@@ -187,7 +188,7 @@ export default {
         var data = response.data
         if (data.success) {
           // this.$message.success(data.msg)
-          this.templates = data.data
+          this.zabbix_templateids_list = data.data
         } else {
           this.$message.error(data.msg)
         }

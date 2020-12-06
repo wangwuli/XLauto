@@ -12,7 +12,7 @@ from src.deploy.zabbix.login import zabbix_setting_control
 from src.general.General import Result
 from src.setting.auxiliary import query_portal_label_info, save_portal_label_info
 from . import setting
-
+from flask import current_app
 
 @setting.route('/setting/main', methods=['GET','POST'])
 def setting_main():
@@ -32,7 +32,7 @@ def setting_main_zabbix():
         data_dict = request.get_json()
 
         data_dict_form = data_dict['form']
-        zabbix_setting_control_status = zabbix_setting_control()
+        zabbix_setting_control_status = zabbix_setting_control(current_app)
 
         if zabbix_setting_control_status != True:
             Result.fail_response(msg="保存失败：%s" %zabbix_setting_control_status[1])

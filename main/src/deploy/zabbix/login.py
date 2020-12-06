@@ -43,10 +43,10 @@ def zabbix_setting_control(xlauto):
 
     if zabbix_label_info['portal_disabled'] != 1:
 
-        zabbix_str = zabbix_api_login(zabbix_label_info, xlauto)
+        zabbix_api = zabbix_api_login(zabbix_label_info, xlauto)
 
-        xlauto.config.xlautoenv['zabbix_key'] = zabbix_str
+        xlauto.config.xlautoenv['zabbix_api'] = zabbix_api
+        return True
     else:
-        xlauto.config.xlautoenv['zabbix_key'] = ''
-
-    return True
+        xlauto.config.xlautoenv['zabbix_api'] = ''
+        return False
