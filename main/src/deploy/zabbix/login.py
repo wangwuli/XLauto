@@ -13,7 +13,7 @@ from pyzabbix import ZabbixAPI
 from src.general.File import str_sin_file
 
 
-def zabbix_api_login(zabbix_server_info=None,happened_log_path=None):
+def zabbix_api_login(zabbix_server_info=None, xlauto=None):
 
     if not zabbix_server_info:
         zabbix_server_info = query_portal_label_info("zabbix")
@@ -25,22 +25,23 @@ def zabbix_api_login(zabbix_server_info=None,happened_log_path=None):
     try:
         zapi = ZabbixAPI(zabbix_server)
         zapi.login(zabbix_user, zabbix_password)
-        if happened_log_path:
-            logging.info('Zabbix登陆成功')
+        if xlauto:
+            # logging.info('Zabbix登陆成功')
             # str_sin_file(happened_log_path, 'Zabbix登陆成功')
+            xlauto.logger.info('Zabbix登陆成功')
         else:
             current_app.logger.info('Zabbix登陆成功')
         return zapi
     except Exception as e:
-        if happened_log_path:
-            logging.info('Zabbix登陆失败：%s' % e)
-        else:
+        if xlauto:
             # str_sin_file(happened_log_path, 'Zabbix登陆失败：%s' %e)
+            xlauto.logger.warning('Zabbix登陆失败：%s' % e)
+        else:
             current_app.logger.warning('Zabbix登陆失败：%s' % e)
         return [False, e]
 
 
-def zabbix_setting_control(happened_log_path):
+def zabbix_setting_control(xlauto):
 
     zabbix_label_info = alone_query_portal_label_info('zabbix')
 
@@ -49,10 +50,10 @@ def zabbix_setting_control(happened_log_path):
         # if not zabbix_setting_control_status[0]:
         #     return (False, zabbix_setting_control_status[1])
 
-        zabbix_str = zabbix_api_login(zabbix_label_info, happened_log_path)
+        zabbix_str = zabbix_api_login(zabbix_label_info, xlauto)
 
-        current_app.config.xlautoenv['zabbix_key'] = zabbix_str
+        xlauto.config.xlautoenv['zabbix_key'] = zabbix_str
     else:
-        current_app.config.xlautoenv['zabbix_key'] = ''
+        xlauto.config.xlautoenv['zabbix_key'] = ''
 
     return True

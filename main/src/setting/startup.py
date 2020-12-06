@@ -10,9 +10,6 @@ import os
 from src.deploy.zabbix.login import zabbix_setting_control
 import settings
 
-def setting_control(project_path):
-    #日志位置                                                                                                                                                                                                                        6
-    happened_log_path = os.path.join(project_path, settings.HAPPENED_LOG)
-
+def setting_control(xlauto):
     #zabbix功能配置
-    zabbix_setting_control(happened_log_path)
+    zabbix_setting_control(xlauto)

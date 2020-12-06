@@ -37,7 +37,7 @@ def create_app():
     xlauto.logger.addHandler(handler)  # 生成对象，添加句柄
 
     #项目启动
-    setting_control(project_path)
+    setting_control(xlauto)
 
     return xlauto
 
