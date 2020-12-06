@@ -8,6 +8,8 @@
 
 
 from flask import current_app
+
+from src.general.Sql_G import mysql_sql_exec
 from src.general.Transform import model_to_dict
 from main.models.models import SystemOtherPortal, db
 
@@ -18,13 +20,23 @@ def query_portal_label_info(portal_label):
     :param portal_label:
     :return:
     """
-    sys_code_data = db.session.query(SystemOtherPortal.system_other_portals_id, SystemOtherPortal.portal_name,
-                                     SystemOtherPortal.portal_url, SystemOtherPortal.portal_login_user, SystemOtherPortal.portal_login_pwd,SystemOtherPortal.portal_disabled).filter(
-        SystemOtherPortal.portal_label == portal_label).all()
-    db.session.close()
-    db.session.remove()
-    data = model_to_dict(sys_code_data)
+    with current_app.app_context():
+        sys_code_data = db.session.query(SystemOtherPortal.system_other_portals_id, SystemOtherPortal.portal_name,
+                                         SystemOtherPortal.portal_url, SystemOtherPortal.portal_login_user, SystemOtherPortal.portal_login_pwd,SystemOtherPortal.portal_disabled).filter(
+            SystemOtherPortal.portal_label == portal_label).all()
+        db.session.close()
+        db.session.remove()
+        data = model_to_dict(sys_code_data)
 
+        return data
+
+
+def alone_query_portal_label_info(portal_label):
+    sql  = """
+    SELECT * FROM system_other_portals a
+    WHERE a.portal_label = %s
+    """
+    data = mysql_sql_exec(sql, [portal_label])
     return data
 
 
@@ -47,23 +59,5 @@ def save_portal_label_info(data_dict):
     db.session.commit()
     db.session.close()
     db.session.remove()
-
-    return True
-
-
-
-def zabbix_setting_control():
-    from src.deploy.zabbix.login import zabbix_api_login
-
-    zabbix_label_info = query_portal_label_info('zabbix')
-
-    if zabbix_label_info['portal_disabled'] != 1:
-        # zabbix_setting_control_status = zabbix_setting_control()
-        # if not zabbix_setting_control_status[0]:
-        #     return (False, zabbix_setting_control_status[1])
-        zabbix_str = zabbix_api_login()
-        current_app.config.xlautoenv['zabbix_key'] = zabbix_str
-    else:
-        current_app.config.xlautoenv['zabbix_key'] = ''
 
     return True

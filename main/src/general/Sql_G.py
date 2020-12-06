@@ -6,7 +6,6 @@
 @desc:
 '''
 import pymysql
-from flask import app
 
 import settings
 
@@ -42,4 +41,6 @@ def mysql_sql_exec(cmd, args = []):
                 i += 1
             i_a += 1
 
+    if len(row_list) == 1:
+        return row_list[0]
     return row_list

@@ -9,7 +9,6 @@
 import json
 import re
 from flask import current_app
-from src.deploy.zabbix.login import zabbix_api_login
 
 
 class ZabbixCollect:

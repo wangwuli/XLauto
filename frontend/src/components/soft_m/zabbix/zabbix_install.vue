@@ -125,6 +125,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import * as Request from '@/general/request.js'
 
 export default {
   name: 'zabbix',

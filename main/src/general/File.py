@@ -18,3 +18,8 @@ def str_save_file(file_content_str, file_path=None):
     hooks.write(file_content_str)
     hooks.close()
     return file_path
+
+def str_sin_file(file_path, str):
+    hooks = open(file_path, 'a')
+    hooks.write(str)
+    hooks.close()

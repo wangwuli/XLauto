@@ -7,8 +7,10 @@
 '''
 
 from flask import request
+
+from src.deploy.zabbix.login import zabbix_setting_control
 from src.general.General import Result
-from src.setting.auxiliary import query_portal_label_info, save_portal_label_info, zabbix_setting_control
+from src.setting.auxiliary import query_portal_label_info, save_portal_label_info
 from . import setting
 
 
