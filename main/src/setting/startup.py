@@ -8,7 +8,6 @@
 import os
 
 from src.deploy.zabbix.login import zabbix_setting_control
-import settings
 
 def setting_control(xlauto):
     #zabbix功能配置

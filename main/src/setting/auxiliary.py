@@ -6,9 +6,6 @@
 @desc:
 '''
 
-
-from flask import current_app
-
 from src.general.Sql_G import mysql_sql_exec
 from src.general.Transform import model_to_dict
 from main.models.models import SystemOtherPortal, db
@@ -20,15 +17,14 @@ def query_portal_label_info(portal_label):
     :param portal_label:
     :return:
     """
-    with current_app.app_context():
-        sys_code_data = db.session.query(SystemOtherPortal.system_other_portals_id, SystemOtherPortal.portal_name,
-                                         SystemOtherPortal.portal_url, SystemOtherPortal.portal_login_user, SystemOtherPortal.portal_login_pwd,SystemOtherPortal.portal_disabled).filter(
-            SystemOtherPortal.portal_label == portal_label).all()
-        db.session.close()
-        db.session.remove()
-        data = model_to_dict(sys_code_data)
+    sys_code_data = db.session.query(SystemOtherPortal.system_other_portals_id, SystemOtherPortal.portal_name,
+                                     SystemOtherPortal.portal_url, SystemOtherPortal.portal_login_user, SystemOtherPortal.portal_login_pwd,SystemOtherPortal.portal_disabled).filter(
+        SystemOtherPortal.portal_label == portal_label).all()
+    db.session.close()
+    db.session.remove()
+    data = model_to_dict(sys_code_data)
 
-        return data
+    return data
 
 
 def alone_query_portal_label_info(portal_label):
