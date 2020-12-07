@@ -37,7 +37,7 @@ def create_app():
     handler.setFormatter(logging_format)   # 设置格式
     xlauto.logger.addHandler(handler)  # 生成对象，添加句柄
 
-    #项目启动
+    #项目启动动作
     setting_control(xlauto)
 
     return xlauto

@@ -8,9 +8,10 @@
     <el-select
       size="mini"
       v-model="zabbix_hots_groups"
+      filterable
       multiple
       collapse-tags
-      style="margin-left: 20px"
+      style="margin-left: 20px;width: 350px"
       placeholder="全选Zabbix组">
       <el-option
         v-for="item in zabbix_hots_groups_list"
@@ -20,11 +21,14 @@
       </el-option>
     </el-select>
     <el-select
+      popper-append-to-body="false"
+      @change="all_templateids_change"
       size="mini"
       v-model="zabbix_templateids"
       multiple
+      filterable
       collapse-tags
-      style="margin-left: 20px"
+      style="margin-left: 20px; width: 350px"
       placeholder="全选Zabbix模板">
       <el-option
         filterable
@@ -102,9 +106,10 @@
       </el-table-column>
       <el-table-column
         label="Zabbix模板"
-        show-overflow-tooltip>
+        width="350px">
         <template slot-scope='zabbix_template'>
           <el-select
+            style="width: 300px"
             filterable
             size="mini"
             v-model="zabbix_template.row.zabbix_templateids"
@@ -175,6 +180,11 @@ export default {
     })
   },
   methods: {
+    all_templateids_change () {
+      this.hosts_table_data.map((item) => {
+        item.zabbix_templateids = this.zabbix_templateids
+      })
+    },
     hosts_add_target () {
       if (this.table_click_value) {
         this.hosts_table_data = JSON.parse(JSON.stringify(this.table_click_value))
@@ -198,5 +208,15 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  /deep/ .el-select__tags-text  {
+    display: inline-block;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .el-select /deep/ .el-tag__close.el-icon-close {
+    top: -5px;
+  }
 </style>
