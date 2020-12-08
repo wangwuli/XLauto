@@ -5,7 +5,7 @@
         <ZabbixInstall ref="zabbix_management_ref"></ZabbixInstall>
       </el-tab-pane>
       <el-tab-pane label="模板管理">待开发</el-tab-pane>
-      <el-tab-pane label="绑定模板">待开发</el-tab-pane>
+      <el-tab-pane label="Web监控">待开发</el-tab-pane>
     </el-tabs>
   </el-row>
 </template>

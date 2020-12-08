@@ -15,15 +15,15 @@ class ZabbixCollect:
     def __init__(self):
         self.zapi = current_app.config.xlautoenv['zabbix_api']
 
-    def get_group(self):
+    def get_host_group(self):
         """
-        查询组
+        查询主机组
         :return:
         """
         info = self.zapi.hostgroup.get(output="extend")
         return info
 
-    def post_group(self, group_name):
+    def post_host_group(self, group_name):
         """
         新增组
         :return:
@@ -31,7 +31,7 @@ class ZabbixCollect:
         info = self.zapi.hostgroup.create(name=group_name)
         return info
 
-    def del_group(self, *groupids):
+    def del_host_group(self, *groupids):
         """
         删除组get_item_desc
         :param groupids:

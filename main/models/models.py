@@ -159,9 +159,12 @@ class ZabbixAgent(db.Model):
     __tablename__ = 'zabbix_agent'
 
     zabbix_install_id = db.Column(db.Integer, primary_key=True)
-    host_id = db.Column(db.Integer)
+    host_id = db.Column(db.Integer, info='host_instance.host_id')
     install_info = db.Column(db.String)
     execute_result = db.Column(db.Integer, info='-1错误、1成功、2警告、3未知')
+    zabbix_host_name = db.Column(db.String(50), info='主机名')
     zabbix_hostid = db.Column(db.String(100))
-    zabbix_groupid = db.Column(db.String(100))
+    zabbix_groupids = db.Column(db.String(100), info='主机组')
+    zabbix_templateids = db.Column(db.String(100), info='关联模板')
+    monitored_by_proxy_id = db.Column(db.String(50), info='代理ID')
     operate_time = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())

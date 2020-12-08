@@ -1,2 +1,23 @@
 2020-12-07 00:52:36,998 - WARNING - login.py - zabbix_api_login - 38 - Zabbix登陆失败：('Error -32602: Invalid params., Login name or password is incorrect.', -32602)
 2020-12-07 00:53:59,395 - WARNING - login.py - zabbix_api_login - 38 - Zabbix登陆失败：HTTPConnectionPool(host='192.168.20.204', port=80): Max retries exceeded with url: /zabbix//api_jsonrpc.php (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x06347090>: Failed to establish a new connection: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。',))
+2020-12-07 09:57:18,014 - WARNING - login.py - zabbix_api_login - 34 - Zabbix登陆失败：('Error -32602: Invalid params., Login name or password is incorrect.', -32602)
+2020-12-07 09:58:21,861 - WARNING - login.py - zabbix_api_login - 34 - Zabbix登陆失败：('Error -32602: Invalid params., Login name or password is incorrect.', -32602)
+2020-12-07 09:59:15,812 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-07 11:11:08,417 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-07 16:18:50,558 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-07 16:25:17,912 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-07 17:28:01,699 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 14:59:42,653 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 15:00:50,214 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 15:02:46,687 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 15:03:29,658 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 15:09:58,174 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 15:13:00,385 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:15:34,888 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:19:43,984 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:22:06,711 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:23:08,307 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:40:19,910 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:51:58,683 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:54:33,088 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-08 17:55:19,908 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
