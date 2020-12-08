@@ -43,7 +43,7 @@ INSERT INTO `host_instance` (`host_id`, `host_ip`, `host_name`, `host_port`, `ho
 	(6, '192.168.155', NULL, 22, '', '', 1, NULL),
 	(7, '192.168.156', NULL, 22, '', '', 1, NULL),
 	(8, '192.168.10.154', NULL, 22, '', '', 1, NULL),
-	(9, '192.168.10.155', NULL, 22, '', '', NULL, NULL),
+	(9, '192.168.10.133', '哦哦哦哦', 22, '', '', NULL, NULL),
 	(10, '192.168.10.156', NULL, 22, '', '', NULL, NULL),
 	(11, '192.168.20.154', NULL, 22, '', '', NULL, NULL);
 /*!40000 ALTER TABLE `host_instance` ENABLE KEYS */;
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   PRIMARY KEY (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.projects 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.projects 的数据：~1 rows (大约)
 DELETE FROM `projects`;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
 INSERT INTO `projects` (`project_id`, `project_name`, `project_code`, `controller_ip`, `order_id`, `is_remove`, `create_time`, `modify_time`, `comments`) VALUES
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
   PRIMARY KEY (`script_file_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='脚本主表';
 
--- 正在导出表  xlauto.script_file_cabinet 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.script_file_cabinet 的数据：~1 rows (大约)
 DELETE FROM `script_file_cabinet`;
 /*!40000 ALTER TABLE `script_file_cabinet` DISABLE KEYS */;
 INSERT INTO `script_file_cabinet` (`script_file_id`, `script_file_path`, `script_file_name`, `script_file_group`, `script_file_type`, `create_time`, `modify_time`, `comment`) VALUES
@@ -229,29 +229,6 @@ INSERT INTO `system_function` (`system_function_id`, `system_name`, `system_vers
 	(16, 'centos', '8', 'cmd', 'yum install https://download.docker.com/linux/fedora/30/x86_64/stable/Packages/containerd.io-1.2.6-3.3.fc30.x86_64.rpm -y; yum install docker-ce -y', '', 'yum_install_docker', 'docker安装', NULL, NULL, 98, NULL);
 /*!40000 ALTER TABLE `system_function` ENABLE KEYS */;
 
--- 导出  表 xlauto.system_other_portals 结构
-DROP TABLE IF EXISTS `system_other_portals`;
-CREATE TABLE IF NOT EXISTS `system_other_portals` (
-  `system_other_portals_id` int NOT NULL AUTO_INCREMENT,
-  `portal_disabled` tinyint DEFAULT NULL COMMENT '是否禁用，1为禁用',
-  `portal_label` varchar(50) NOT NULL,
-  `portal_name` varchar(50) DEFAULT NULL,
-  `portal_url` varchar(500) DEFAULT NULL,
-  `portal_login_user` varchar(50) DEFAULT NULL,
-  `portal_login_pwd` varchar(50) DEFAULT NULL,
-  `portal_icon` varchar(50) DEFAULT NULL,
-  `force` tinyint DEFAULT NULL COMMENT '系统项，是否禁止删除',
-  `comments` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`system_other_portals_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- 正在导出表  xlauto.system_other_portals 的数据：~1 rows (大约)
-DELETE FROM `system_other_portals`;
-/*!40000 ALTER TABLE `system_other_portals` DISABLE KEYS */;
-INSERT INTO `system_other_portals` (`system_other_portals_id`, `portal_disabled`, `portal_label`, `portal_name`, `portal_url`, `portal_login_user`, `portal_login_pwd`, `portal_icon`, `force`, `comments`) VALUES
-	(1, 0, 'zabbix', 'Zabbix', 'http://192.168.20.204/zabbix/', 'zabbix', '123', NULL, 1, NULL);
-/*!40000 ALTER TABLE `system_other_portals` ENABLE KEYS */;
-
 -- 导出  表 xlauto.sys_code 结构
 DROP TABLE IF EXISTS `sys_code`;
 CREATE TABLE IF NOT EXISTS `sys_code` (
@@ -319,18 +296,23 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `sta
 DROP TABLE IF EXISTS `zabbix_agent`;
 CREATE TABLE IF NOT EXISTS `zabbix_agent` (
   `zabbix_install_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int DEFAULT NULL,
+  `host_id` int DEFAULT NULL COMMENT 'host_instance.host_id',
   `install_info` mediumtext,
   `execute_result` tinyint DEFAULT NULL COMMENT '-1错误、1成功、2警告、3未知',
+  `zabbix_host_name` varchar(50) DEFAULT NULL COMMENT '主机名',
   `zabbix_hostid` varchar(100) DEFAULT NULL,
-  `zabbix_groupid` varchar(100) DEFAULT NULL,
+  `zabbix_groupids` varchar(100) DEFAULT NULL COMMENT '主机组',
+  `zabbix_templateids` varchar(100) DEFAULT NULL COMMENT '关联模板',
+  `monitored_by_proxy_id` varchar(50) DEFAULT NULL COMMENT '代理ID',
   `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`zabbix_install_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- 正在导出表  xlauto.zabbix_agent 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.zabbix_agent 的数据：~1 rows (大约)
 DELETE FROM `zabbix_agent`;
 /*!40000 ALTER TABLE `zabbix_agent` DISABLE KEYS */;
+INSERT INTO `zabbix_agent` (`zabbix_install_id`, `host_id`, `install_info`, `execute_result`, `zabbix_host_name`, `zabbix_hostid`, `zabbix_groupids`, `zabbix_templateids`, `monitored_by_proxy_id`, `operate_time`) VALUES
+	(9, 9, '1111', 1, '192.168.10.133.CBH', '11857', '40', '10074', NULL, '2020-12-08 17:39:38');
 /*!40000 ALTER TABLE `zabbix_agent` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
