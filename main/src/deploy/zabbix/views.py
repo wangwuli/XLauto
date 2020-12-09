@@ -49,9 +49,7 @@ def zabbix_agents_install():
         delete_zabbix_agent(data['host_ids'])
         update_zabbix_agent(zabbix_info_host, host_info)
 
+        #查询最新的数据返回前端
         zabbix_agent_info = get_zabbix_agent_info(data['host_ids'])
-
-
-
 
         return Result.success_response(data=zabbix_agent_info, msg="同步成功")
