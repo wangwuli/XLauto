@@ -15,6 +15,22 @@ class ZabbixCollect:
     def __init__(self):
         self.zapi = current_app.config.xlautoenv['zabbix_api']
 
+
+    def get_host(self, host_list):
+        """
+        查询主机信息
+        :return:
+        """
+        info = self.zapi.host.get(
+            output = ['hostid', 'proxy_hostid',"host"],
+            selectGroups = 'extend',
+            selectParentTemplates = 'extend',
+            filter = {
+                "host": host_list
+            }
+        )
+        return info
+
     def get_host_group(self):
         """
         查询主机组

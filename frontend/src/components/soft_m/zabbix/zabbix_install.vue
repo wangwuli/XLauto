@@ -3,8 +3,8 @@
     <el-button type="primary" size="mini" @click="hosts_add_target">主机加入<i
       class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
     <el-button type="primary" size="mini" @click="zabbix_agents_install_info_query">查询</el-button>
-    <el-tooltip class="item" effect="dark" content="使用：{IP.project}为名字，去Zabbix内与hostname进行匹配" placement="top-start">
-      <el-button type="primary" size="mini" @click="zabbix_agents_install_info_query">同步</el-button>
+    <el-tooltip class="item" effect="dark" content="使用：{IP.project_code}为名字，去Zabbix内与hostname进行匹配" placement="top-start">
+      <el-button type="primary" size="mini" @click="zabbix_agents_install_info_sync">同步</el-button>
     </el-tooltip>
     <el-button type="primary" size="mini">安装</el-button>
     <el-select
@@ -58,6 +58,11 @@
         width="180">
       </el-table-column>
       <el-table-column
+        prop="project_code"
+        label="项目编号"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
         prop="host_name"
         label="主机名"
         width="180">
@@ -65,6 +70,11 @@
       <el-table-column
         prop="install_info"
         label="安装信息"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="operate_time"
+        label="同步时间"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -82,13 +92,21 @@
         </template>
       </el-table-column>
       <el-table-column
-        width="300px"
+        label="Zabbix主机名"
+        width="165px"
+        >
+        <template slot-scope='host_name'>
+          <el-input size="mini" v-model="host_name.row.zabbix_host_name" placeholder="无"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column
+        width="250px"
         label="Zabbix主机组"
         >
         <template slot-scope='hots_groups'>
           <el-select
             filterable
-            style="width: 280px"
+            style="width: 240px"
             size="mini"
             v-model="hots_groups.row.zabbix_hots_groups"
             multiple
@@ -104,18 +122,11 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Zabbix主机名"
-        show-overflow-tooltip>
-        <template slot-scope='host_name'>
-          <el-input size="mini" v-model="host_name.row.zabbix_host_name" placeholder="请输入内容"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column
         label="Zabbix模板"
-        width="300px">
+        width="250px">
         <template slot-scope='zabbix_template'>
           <el-select
-            style="width: 280px"
+            style="width: 240px"
             filterable
             size="mini"
             v-model="zabbix_template.row.zabbix_templateids"
@@ -203,7 +214,51 @@ export default {
         }
       }
     },
+    hosts_table_data_updata (data) {
+      var returnData = []
+      data.map((item) => {
+        var ifOkk = true
+        for (let ai = 0; ai < this.hosts_table_data.length; ai++) {
+          if (item.host_id === this.hosts_table_data[ai].host_id) {
+            item.zabbix_hots_groups = item.zabbix_groupids.split(',')
+            item.zabbix_templateids = item.zabbix_templateids.split(',')
+            returnData.push(item)
+            ifOkk = false
+            continue
+          }
+        }
+        if (ifOkk) {
+          returnData.push(item)
+        }
+      })
+      if (returnData.length) {
+        this.hosts_table_data = returnData
+      }
+    },
     async zabbix_agents_install_info_query () {
+      if (!this.$refs.hosts_table_data_ref.selection.length) {
+        this.$message.warning('请勾选需要查询的服务器')
+        return
+      }
+      var hotsIds = []
+      this.$refs.hosts_table_data_ref.selection.map((item) => {
+        hotsIds.push(item.host_id)
+      })
+      this.$message.info('正在查询请稍后...')
+      const response = await Request.GET('/deploy/zabbix/agents_install', { host_ids: hotsIds.join() })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success('查询成功')
+          // this.$message.success(data.msg)
+          // 替换查询到的数据，未查询数到的数据不发生改变
+          this.hosts_table_data_updata(data.data)
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async zabbix_agents_install_info_sync () {
       if (!this.$refs.hosts_table_data_ref.selection.length) {
         this.$message.warning('请勾选需要同步的服务器')
         return
@@ -212,30 +267,16 @@ export default {
       this.$refs.hosts_table_data_ref.selection.map((item) => {
         hotsIds.push(item.host_id)
       })
-      var returnData = []
-      const response = await Request.GET('/deploy/zabbix/agents_install', { host_ids: hotsIds.join() })
+      this.$message.info('正在同步请稍后')
+      const response = await Request.POST('/deploy/zabbix/agents_install', { host_ids: hotsIds })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
-          // this.$message.success(data.msg)
-          data.data.map((item) => {
-            var ifOkk = true
-            for (let ai = 0; ai < this.hosts_table_data.length; ai++) {
-              if (item.host_id === this.hosts_table_data[ai].host_id) {
-                item.zabbix_hots_groups = item.zabbix_groupids.split(',')
-                item.zabbix_templateids = item.zabbix_templateids.split(',')
-                returnData.push(item)
-                ifOkk = false
-                continue
-              }
-            }
-            if (ifOkk) {
-              returnData.push(item)
-            }
-          })
-          this.hosts_table_data = returnData
+          this.$message.success('同步成功')
+          this.hosts_table_data_updata(data.data)
+          // this.zabbix_agents_install_info_query()
         } else {
-          this.$message.error(data.msg)
+          this.$message.error('同步失败:' + data.msg)
         }
       }
     }
