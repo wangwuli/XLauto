@@ -33,6 +33,20 @@ class HostUser(db.Model):
 
 
 
+class InstallSoftware(db.Model):
+    __tablename__ = 'install_software'
+
+    id = db.Column(db.Integer, primary_key=True)
+    soft_code = db.Column(db.String(50), info='sys_code.server_software_type   软件编码')
+    operation = db.Column(db.String(50), info='sys_code.server_software_action_type  软件动作')
+    install_package = db.Column(db.String(50))
+    system_function_id = db.Column(db.String(50), info='system_function.system_function_id 关联命令，逗号间隔可多个')
+    script_file_id = db.Column(db.String(50), info='script_file_cabinet.script_file_id 关键脚本，逗号间隔可多个')
+    execute_result = db.Column(db.String(50), info='执行结果收集')
+    comment = db.Column(db.String(50), info='备注')
+
+
+
 class Project(db.Model):
     __tablename__ = 'projects'
 

@@ -6,7 +6,7 @@
     <el-tooltip class="item" effect="dark" content="使用：{IP.project_code}为名字，去Zabbix内与hostname进行匹配" placement="top-start">
       <el-button type="primary" size="mini" @click="zabbix_agents_install_info_sync">同步</el-button>
     </el-tooltip>
-    <el-button type="primary" size="mini">安装</el-button>
+    <el-button type="primary" size="mini" @click="zabbix_agents_install_exec">安装</el-button>
     <el-select
       @change="all_host_groups_change"
       size="mini"
@@ -277,6 +277,24 @@ export default {
           // this.zabbix_agents_install_info_query()
         } else {
           this.$message.error('同步失败:' + data.msg)
+        }
+      }
+    },
+    async zabbix_agents_install_exec () {
+      if (!this.$refs.hosts_table_data_ref.selection.length) {
+        this.$message.warning('请勾选需要查询的服务器')
+        return
+      }
+      this.$message.info('正在安装请稍后...')
+      const response = await Request.PUT('/deploy/zabbix/agents_install', { hosts_table_data: this.hosts_table_data })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success('安装成功')
+          // 替换查询到的数据，未查询数到的数据不发生改变
+          // this.hosts_table_data_updata(data.data)
+        } else {
+          this.$message.error(data.msg)
         }
       }
     }

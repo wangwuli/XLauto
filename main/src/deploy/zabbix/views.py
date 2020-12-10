@@ -53,3 +53,11 @@ def zabbix_agents_install():
         zabbix_agent_info = get_zabbix_agent_info(data['host_ids'])
 
         return Result.success_response(data=zabbix_agent_info, msg="同步成功")
+
+    if request.method == 'PUT':
+        """
+        安装并记录Zabbix信息
+        """
+        data = request.get_json()
+
+        return Result.success_response(data=data, msg="安装成功")
