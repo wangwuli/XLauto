@@ -22,6 +22,25 @@ class HostInstance(db.Model):
 
 
 
+class HostServerSoftware(db.Model):
+    __tablename__ = 'host_server_software'
+
+    server_software_id = db.Column(db.Integer, primary_key=True)
+    host_id = db.Column(db.Integer, index=True)
+    soft_type = db.Column(db.String(50, 'latin1_swedish_ci'), index=True)
+    soft_port = db.Column(db.Integer)
+    start_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    stop_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    restart_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
+    soft_log_path = db.Column(db.String(50, 'latin1_swedish_ci'))
+    software_install_id = db.Column(db.Integer)
+    is_remove = db.Column(db.Integer)
+    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
+    comments = db.Column(db.String(50, 'latin1_swedish_ci'))
+
+
+
 class HostUser(db.Model):
     __tablename__ = 'host_users'
 
@@ -30,20 +49,6 @@ class HostUser(db.Model):
     user_name = db.Column(db.String(50), nullable=False)
     user_pass = db.Column(db.String(50), nullable=False)
     user_role = db.Column(db.String(50), nullable=False)
-
-
-
-class InstallSoftware(db.Model):
-    __tablename__ = 'install_software'
-
-    id = db.Column(db.Integer, primary_key=True)
-    soft_code = db.Column(db.String(50), info='sys_code.server_software_type   软件编码')
-    operation = db.Column(db.String(50), info='sys_code.server_software_action_type  软件动作')
-    install_package = db.Column(db.String(50))
-    system_function_id = db.Column(db.String(50), info='system_function.system_function_id 关联命令，逗号间隔可多个')
-    script_file_id = db.Column(db.String(50), info='script_file_cabinet.script_file_id 关键脚本，逗号间隔可多个')
-    execute_result = db.Column(db.String(50), info='执行结果收集')
-    comment = db.Column(db.String(50), info='备注')
 
 
 
@@ -90,21 +95,54 @@ class ScriptFileExecuteEvent(db.Model):
 
 
 
-class ServerSoftware(db.Model):
-    __tablename__ = 'server_software'
+class SoftwareConf(db.Model):
+    __tablename__ = 'software_conf'
 
-    soft_id = db.Column(db.Integer, primary_key=True)
-    host_id = db.Column(db.Integer, index=True)
-    soft_type = db.Column(db.String(50, 'latin1_swedish_ci'), index=True)
-    soft_port = db.Column(db.Integer)
-    start_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    stop_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    restart_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    soft_log_path = db.Column(db.String(50, 'latin1_swedish_ci'))
-    is_remove = db.Column(db.Integer)
-    create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    comments = db.Column(db.String(50, 'latin1_swedish_ci'))
+    software_conf_id = db.Column(db.Integer, primary_key=True)
+    software_conf_name = db.Column(db.String(50))
+    project_id = db.Column(db.Integer)
+    server_software_type = db.Column(db.String(50), info='sys_code.server_software_type')
+    software_parameter_id = db.Column(db.Integer, info='software_parameter.software_parameter_id')
+    software_conf_path = db.Column(db.String(50))
+    comment = db.Column(db.String(50))
+
+
+
+class SoftwarePackage(db.Model):
+    __tablename__ = 'software_package'
+
+    software_install_id = db.Column(db.Integer, primary_key=True)
+    software_name = db.Column(db.String(50), info='软件名称 会下/package/software/下创建一个软件目录')
+    software_versions = db.Column(db.String(50))
+    package_path = db.Column(db.String(50), info='安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面')
+    software_package_zip_type = db.Column(db.String(50), info='sys_code.sys_type=software_package_zip_type')
+    software_install_type = db.Column(db.String(50), info='sys_code.sys_type=software_install_type')
+    comment = db.Column(db.String(50), info='备注')
+
+
+
+class SoftwarePackageInstallEvent(db.Model):
+    __tablename__ = 'software_package_install_event'
+
+    software_package_install_event_id = db.Column(db.Integer, primary_key=True)
+    host_id = db.Column(db.Integer, nullable=False, info='host_instance.host_id')
+    software_package_id = db.Column(db.Integer, info='software_install.software_install_id')
+    execute_result = db.Column(db.String(1000), info='执行结果收集')
+    server_software_action_type = db.Column(db.String(50), info='执行动作 code_key：sys_code.code_type=server_software_action_type')
+    execute_status = db.Column(db.String(50), info='执行动作 code_key：sys_code.code_type=tandard_execution_results')
+    execute_time = db.Column(db.String(50), info='第一次执行时间')
+    re_execute_time = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue(), info='最后一次执行时间')
+
+
+
+class SoftwareParameter(db.Model):
+    __tablename__ = 'software_parameter'
+
+    software_parameter_id = db.Column(db.Integer, primary_key=True)
+    software_conf_id = db.Column(db.Integer, nullable=False, info='software_conf.software_conf_id')
+    replacement_entry = db.Column(db.String(50), nullable=False)
+    replacement_value = db.Column(db.String(50), nullable=False)
+    comment = db.Column(db.String(50), nullable=False)
 
 
 
