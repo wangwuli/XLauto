@@ -6,6 +6,7 @@ import HostM from '@/components/host_m/host_m'
 import SoftD from '@/components/soft_m/soft_m'
 import ZabbixM from '@/components/soft_m/zabbix/index'
 import Setting from '@/components/setting/index'
+import SoftS from '@/components/soft_s/soft_s'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,11 @@ const routes = [
     path: '/setting',
     name: 'setting',
     component: Setting
+  },
+  {
+    path: '/soft_s',
+    name: 'soft_s',
+    component: SoftS
   }
 ]
 

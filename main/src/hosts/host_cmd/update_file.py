@@ -129,7 +129,7 @@ def script_execute_query_history():
     c.code_name AS script_file_execute_result_text
     FROM script_file_execute_event a
     LEFT JOIN  script_file_cabinet b ON a.script_file_id = b.script_file_id
-    LEFT JOIN sys_code c ON c.code_key = a.execute_result AND c.code_type = "script_file_execute_result_ype"
+    LEFT JOIN sys_code c ON c.code_key = a.execute_result AND c.code_type = "standard_execution_results"
     ORDER BY execute_time DESC
     %s
     """ %sql_fragment
