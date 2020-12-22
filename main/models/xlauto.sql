@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- 主机:                           127.0.0.1
--- 服务器版本:                        8.0.20 - MySQL Community Server - GPL
--- 服务器操作系统:                      Win64
--- HeidiSQL 版本:                  10.2.0.5599
+-- 服务器版本:                        5.7.21 - MySQL Community Server (GPL)
+-- 服务器操作系统:                      Win32
+-- HeidiSQL 版本:                  10.3.0.5771
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -13,21 +13,22 @@
 
 
 -- 导出 xlauto 的数据库结构
-CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `xlauto`;
 
 -- 导出  表 xlauto.host_instance 结构
+DROP TABLE IF EXISTS `host_instance`;
 CREATE TABLE IF NOT EXISTS `host_instance` (
-  `host_id` int NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_ip` varchar(50) NOT NULL,
   `host_name` varchar(50) DEFAULT NULL,
-  `host_port` int DEFAULT NULL,
+  `host_port` int(11) DEFAULT NULL,
   `host_type_key` varchar(50) NOT NULL,
   `host_project` varchar(50) DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`host_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  xlauto.host_instance 的数据：~11 rows (大约)
 DELETE FROM `host_instance`;
@@ -47,20 +48,21 @@ INSERT INTO `host_instance` (`host_id`, `host_ip`, `host_name`, `host_port`, `ho
 /*!40000 ALTER TABLE `host_instance` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_server_software 结构
+DROP TABLE IF EXISTS `host_server_software`;
 CREATE TABLE IF NOT EXISTS `host_server_software` (
-  `server_software_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int DEFAULT NULL,
-  `soft_type` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `soft_port` int DEFAULT NULL,
-  `start_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `stop_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `restart_soft_cmd` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `soft_log_path` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `software_install_id` int DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `server_software_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) DEFAULT NULL,
+  `soft_type` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `soft_port` int(11) DEFAULT NULL,
+  `start_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `stop_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `restart_soft_cmd` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `soft_log_path` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `software_install_id` int(11) DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `modify_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `comments` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `comments` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`server_software_id`),
   KEY `ix_server_software_host_id` (`host_id`),
   KEY `ix_server_software_soft_type` (`soft_type`)
@@ -72,14 +74,15 @@ DELETE FROM `host_server_software`;
 /*!40000 ALTER TABLE `host_server_software` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_users 结构
+DROP TABLE IF EXISTS `host_users`;
 CREATE TABLE IF NOT EXISTS `host_users` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int NOT NULL,
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) NOT NULL,
   `user_name` varchar(50) NOT NULL,
   `user_pass` varchar(50) NOT NULL,
   `user_role` varchar(50) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 -- 正在导出表  xlauto.host_users 的数据：~11 rows (大约)
 DELETE FROM `host_users`;
@@ -99,13 +102,14 @@ INSERT INTO `host_users` (`user_id`, `host_id`, `user_name`, `user_pass`, `user_
 /*!40000 ALTER TABLE `host_users` ENABLE KEYS */;
 
 -- 导出  表 xlauto.projects 结构
+DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
-  `project_id` int NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(50) DEFAULT NULL,
   `project_code` varchar(50) DEFAULT NULL,
   `controller_ip` varchar(50) DEFAULT NULL,
-  `order_id` int DEFAULT NULL,
-  `is_remove` int DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `is_remove` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `modify_time` datetime DEFAULT NULL,
   `comments` varchar(500) DEFAULT NULL,
@@ -120,8 +124,9 @@ INSERT INTO `projects` (`project_id`, `project_name`, `project_code`, `controlle
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 
 -- 导出  表 xlauto.script_file_cabinet 结构
+DROP TABLE IF EXISTS `script_file_cabinet`;
 CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
-  `script_file_id` int NOT NULL AUTO_INCREMENT,
+  `script_file_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_file_path` varchar(300) DEFAULT NULL,
   `script_file_name` varchar(50) DEFAULT NULL,
   `script_file_group` varchar(50) DEFAULT NULL,
@@ -140,15 +145,16 @@ INSERT INTO `script_file_cabinet` (`script_file_id`, `script_file_path`, `script
 /*!40000 ALTER TABLE `script_file_cabinet` ENABLE KEYS */;
 
 -- 导出  表 xlauto.script_file_execute_event 结构
+DROP TABLE IF EXISTS `script_file_execute_event`;
 CREATE TABLE IF NOT EXISTS `script_file_execute_event` (
-  `script_file_execute_event_id` int NOT NULL AUTO_INCREMENT,
+  `script_file_execute_event_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_execute_event_batch_id` varchar(50) DEFAULT NULL,
-  `script_file_id` int DEFAULT NULL,
+  `script_file_id` int(11) DEFAULT NULL,
   `execute_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `execute_end_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `execute_result` tinyint DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
+  `execute_result` tinyint(4) DEFAULT NULL COMMENT 'sys_code.script_file_execute_result_ype   1为成功，0为失败',
   `script_file_content` mediumtext,
-  `host_id` int DEFAULT NULL,
+  `host_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`script_file_execute_event_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1 COMMENT='脚本执行事件表';
 
@@ -185,12 +191,13 @@ INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script
 /*!40000 ALTER TABLE `script_file_execute_event` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_conf 结构
+DROP TABLE IF EXISTS `software_conf`;
 CREATE TABLE IF NOT EXISTS `software_conf` (
-  `software_conf_id` int NOT NULL AUTO_INCREMENT,
+  `software_conf_id` int(11) NOT NULL AUTO_INCREMENT,
   `software_conf_name` varchar(50) DEFAULT NULL,
-  `project_id` int DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
   `server_software_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.server_software_type',
-  `software_parameter_id` int DEFAULT NULL COMMENT 'software_parameter.software_parameter_id',
+  `software_parameter_id` int(11) DEFAULT NULL COMMENT 'software_parameter.software_parameter_id',
   `software_conf_path` varchar(50) DEFAULT NULL,
   `comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`software_conf_id`)
@@ -202,15 +209,16 @@ DELETE FROM `software_conf`;
 /*!40000 ALTER TABLE `software_conf` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_package 结构
+DROP TABLE IF EXISTS `software_package`;
 CREATE TABLE IF NOT EXISTS `software_package` (
-  `software_install_id` int NOT NULL AUTO_INCREMENT,
+  `software_package_id` int(11) NOT NULL AUTO_INCREMENT,
   `software_name` varchar(50) DEFAULT NULL COMMENT '软件名称 会下/package/software/下创建一个软件目录',
   `software_versions` varchar(50) DEFAULT NULL,
   `package_path` varchar(50) DEFAULT NULL COMMENT '安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面',
   `software_package_zip_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=software_package_zip_type',
   `software_install_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=software_install_type',
   `comment` varchar(50) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`software_install_id`)
+  PRIMARY KEY (`software_package_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件安装表';
 
 -- 正在导出表  xlauto.software_package 的数据：~0 rows (大约)
@@ -219,10 +227,11 @@ DELETE FROM `software_package`;
 /*!40000 ALTER TABLE `software_package` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_package_install_event 结构
+DROP TABLE IF EXISTS `software_package_install_event`;
 CREATE TABLE IF NOT EXISTS `software_package_install_event` (
-  `software_package_install_event_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int NOT NULL COMMENT 'host_instance.host_id',
-  `software_package_id` int DEFAULT NULL COMMENT 'software_install.software_install_id',
+  `software_package_install_event_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) NOT NULL COMMENT 'host_instance.host_id',
+  `software_package_id` int(11) DEFAULT NULL COMMENT 'software_package.software_package_id',
   `execute_result` varchar(1000) DEFAULT NULL COMMENT '执行结果收集',
   `server_software_action_type` char(50) DEFAULT NULL COMMENT '执行动作 code_key：sys_code.code_type=server_software_action_type',
   `execute_status` char(50) DEFAULT NULL COMMENT '执行动作 code_key：sys_code.code_type=tandard_execution_results',
@@ -237,9 +246,10 @@ DELETE FROM `software_package_install_event`;
 /*!40000 ALTER TABLE `software_package_install_event` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_parameter 结构
+DROP TABLE IF EXISTS `software_parameter`;
 CREATE TABLE IF NOT EXISTS `software_parameter` (
-  `software_parameter_id` int NOT NULL AUTO_INCREMENT,
-  `software_conf_id` int NOT NULL COMMENT 'software_conf.software_conf_id',
+  `software_parameter_id` int(11) NOT NULL AUTO_INCREMENT,
+  `software_conf_id` int(11) NOT NULL COMMENT 'software_conf.software_conf_id',
   `replacement_entry` varchar(50) NOT NULL,
   `replacement_value` varchar(50) NOT NULL,
   `comment` varchar(50) NOT NULL,
@@ -252,8 +262,9 @@ DELETE FROM `software_parameter`;
 /*!40000 ALTER TABLE `software_parameter` ENABLE KEYS */;
 
 -- 导出  表 xlauto.system_function 结构
+DROP TABLE IF EXISTS `system_function`;
 CREATE TABLE IF NOT EXISTS `system_function` (
-  `system_function_id` int NOT NULL AUTO_INCREMENT,
+  `system_function_id` int(11) NOT NULL AUTO_INCREMENT,
   `system_name` varchar(50) NOT NULL COMMENT '操作系统名称',
   `system_version` varchar(50) NOT NULL COMMENT '系统版本',
   `function_type` varchar(50) NOT NULL COMMENT '文件新增、文件内容追加、指定内容替换、执行命令',
@@ -261,9 +272,9 @@ CREATE TABLE IF NOT EXISTS `system_function` (
   `system_content_file` varchar(200) DEFAULT NULL COMMENT '文件文本路径',
   `system_action` varchar(50) NOT NULL COMMENT '动作归类',
   `system_action_name` varchar(50) DEFAULT NULL COMMENT '动作归类名',
-  `action_service_switch` tinyint DEFAULT NULL COMMENT '服务类动作，启动，停止标记。1启动，2停止',
-  `force` tinyint DEFAULT NULL COMMENT '标记为码值，禁止全部删除',
-  `order_by` int DEFAULT NULL COMMENT '排序',
+  `action_service_switch` tinyint(4) DEFAULT NULL COMMENT '服务类动作，启动，停止标记。1启动，2停止',
+  `force` tinyint(4) DEFAULT NULL COMMENT '标记为码值，禁止全部删除',
+  `order_by` int(11) DEFAULT NULL COMMENT '排序',
   `comment` varchar(100) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`system_function_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='系统命令表';
@@ -290,13 +301,14 @@ INSERT INTO `system_function` (`system_function_id`, `system_name`, `system_vers
 /*!40000 ALTER TABLE `system_function` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_code 结构
+DROP TABLE IF EXISTS `sys_code`;
 CREATE TABLE IF NOT EXISTS `sys_code` (
-  `code_id` int NOT NULL AUTO_INCREMENT,
+  `code_id` int(11) NOT NULL AUTO_INCREMENT,
   `code_key` varchar(500) DEFAULT NULL,
   `code_name` varchar(50) NOT NULL,
   `code_type` varchar(50) NOT NULL,
   `f_code` varchar(50) DEFAULT NULL,
-  `order_queue` smallint DEFAULT NULL,
+  `order_queue` smallint(6) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`code_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
@@ -331,17 +343,18 @@ INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code
 /*!40000 ALTER TABLE `sys_code` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_menu 结构
+DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE IF NOT EXISTS `sys_menu` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `parent_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `path` varchar(50) DEFAULT NULL,
   `icon` varchar(50) DEFAULT NULL,
-  `statu` int DEFAULT NULL,
+  `statu` int(11) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  xlauto.sys_menu 的数据：~11 rows (大约)
 DELETE FROM `sys_menu`;
@@ -361,11 +374,12 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `sta
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
 -- 导出  表 xlauto.zabbix_agent 结构
+DROP TABLE IF EXISTS `zabbix_agent`;
 CREATE TABLE IF NOT EXISTS `zabbix_agent` (
-  `zabbix_install_id` int NOT NULL AUTO_INCREMENT,
-  `host_id` int DEFAULT NULL COMMENT 'host_instance.host_id',
+  `zabbix_install_id` int(11) NOT NULL AUTO_INCREMENT,
+  `host_id` int(11) DEFAULT NULL COMMENT 'host_instance.host_id',
   `install_info` mediumtext,
-  `execute_result` tinyint DEFAULT NULL COMMENT '-1错误、1成功、2警告、3未知',
+  `execute_result` tinyint(4) DEFAULT NULL COMMENT '-1错误、1成功、2警告、3未知',
   `zabbix_host_name` varchar(50) DEFAULT NULL COMMENT '主机名',
   `zabbix_hostid` varchar(100) DEFAULT NULL,
   `zabbix_groupids` varchar(100) DEFAULT NULL COMMENT '主机组',
@@ -375,7 +389,7 @@ CREATE TABLE IF NOT EXISTS `zabbix_agent` (
   PRIMARY KEY (`zabbix_install_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
--- 正在导出表  xlauto.zabbix_agent 的数据：~1 rows (大约)
+-- 正在导出表  xlauto.zabbix_agent 的数据：~0 rows (大约)
 DELETE FROM `zabbix_agent`;
 /*!40000 ALTER TABLE `zabbix_agent` DISABLE KEYS */;
 INSERT INTO `zabbix_agent` (`zabbix_install_id`, `host_id`, `install_info`, `execute_result`, `zabbix_host_name`, `zabbix_hostid`, `zabbix_groupids`, `zabbix_templateids`, `monitored_by_proxy_id`, `operate_time`) VALUES

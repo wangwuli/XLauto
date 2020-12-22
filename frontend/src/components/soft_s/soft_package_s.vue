@@ -54,8 +54,40 @@
         label="备注">
       </el-table-column>
     </el-table>
-    <el-dialog title="包上传" :visible.sync="adddialog">
-           <el-upload
+    <el-dialog title="包上传" :visible.sync="adddialog" width="600px">
+      <el-form :model="configuration_form" size="mini" :inline="true" style="margin-top: 20px">
+        <el-row>
+          <el-form-item label="软件名称">
+            <el-input
+              placeholder="请输入内容"
+              v-model="input"
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="软件版本">
+            <el-input
+              placeholder="请输入内容"
+              v-model="input"
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="安装方式">
+            <el-input
+              placeholder="请输入内容"
+              v-model="input"
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="解压方式">
+            <el-input
+              placeholder="请输入内容"
+              v-model="input"
+              clearable>
+            </el-input>
+          </el-form-item>
+        </el-row>
+      </el-form>
+      <el-upload
         drag
         multiple
         accept=".zip,.gz,.tgz,.tar"
@@ -71,39 +103,8 @@
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </el-upload>
-      <el-form :model="configuration_form" size="mini" :inline="true">
-        <el-row>
-          <el-form-item label="软件名称">
-            <el-input
-              placeholder="请输入内容"
-              v-model="input"
-              clearable>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="软件名称">
-            <el-input
-              placeholder="请输入内容"
-              v-model="input"
-              clearable>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="软件名称">
-            <el-input
-              placeholder="请输入内容"
-              v-model="input"
-              clearable>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="软件名称">
-            <el-input
-              placeholder="请输入内容"
-              v-model="input"
-              clearable>
-            </el-input>
-          </el-form-item>
-        </el-row>
-      </el-form>
-      <el-button style="margin-right: 10px;margin-bottom: 10px; float: right" size="mini" type="success" @click="submitUpload">提交
+      <el-button style="margin-right: 10px;margin-bottom: 10px; float: right" size="mini" type="success"
+                 @click="submitUpload">提交
       </el-button>
     </el-dialog>
   </el-row>
@@ -169,5 +170,9 @@ export default {
   }
   /deep/ .el-table__fixed {
     height: 100% !important;
+  }
+  /deep/ .el-upload-dragger {
+    width: 530px;
+    height: 130px;
   }
 </style>
