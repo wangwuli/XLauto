@@ -54,47 +54,52 @@
         label="备注">
       </el-table-column>
     </el-table>
-    <el-dialog title="包上传" :visible.sync="adddialog" width="600px">
-      <el-form :model="configuration_form" size="mini" :inline="true" style="margin-top: 20px">
-        <el-row>
-          <el-form-item label="软件名称">
+    <el-dialog title="包上传" :visible.sync="adddialog" width="610px">
+      <el-form :model="software_package_form" ref="software_package_form_ref" :rules="rules" size="mini" :inline="true" style="margin-top: 20px">
+          <el-form-item label="软件名称" prop="software_name">
             <el-input
               placeholder="请输入内容"
-              v-model="input"
+              v-model="software_package_form.software_name"
               clearable>
             </el-input>
           </el-form-item>
-          <el-form-item label="软件版本">
+          <el-form-item label="软件版本"  prop="software_versions">
             <el-input
               placeholder="请输入内容"
-              v-model="input"
+              v-model="software_package_form.software_versions"
               clearable>
             </el-input>
           </el-form-item>
-          <el-form-item label="安装方式">
-            <el-input
-              placeholder="请输入内容"
-              v-model="input"
-              clearable>
-            </el-input>
+          <el-form-item label="安装方式"  prop="software_install_type">
+            <el-select v-model="software_package_form.software_install_type" placeholder="请选择">
+              <el-option
+                v-for="item in software_install_type"
+                :key="item.code_key"
+                :label="item.code_name"
+                :value="item.code_key">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="解压方式">
-            <el-input
-              placeholder="请输入内容"
-              v-model="input"
-              clearable>
-            </el-input>
+          <el-form-item label="压缩方式"  prop="software_package_zip_type">
+            <el-select v-model="software_package_form.software_package_zip_type" placeholder="请选择">
+              <el-option
+                v-for="item in software_package_zip_type"
+                :key="item.code_key"
+                :label="item.code_name"
+                :value="item.code_key">
+              </el-option>
+            </el-select>
           </el-form-item>
-        </el-row>
       </el-form>
       <el-upload
+        :data="software_package_form"
         drag
         multiple
         accept=".zip,.gz,.tgz,.tar"
         :limit="1"
         class="upload-demo"
         ref="upload"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="/deploy/soft_package"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :file-list="fileList"
@@ -111,24 +116,83 @@
 </template>
 
 <script>
+import * as Request from '@/general/request.js'
 export default {
   name: 'zabbix',
+  created () {
+    this.software_package_zip_type_query()
+    this.software_install_type_query()
+  },
   methods: {
     handleClick (row) {
       console.log(row)
     },
     submitUpload () {
-      this.$refs.upload.submit()
+      this.$refs.software_package_form_ref.validate((valid) => {
+        if (valid) {
+          this.$refs.upload.submit()
+        } else {
+          return false
+        }
+      })
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
     },
     handlePreview (file) {
       console.log(file)
+    },
+    async software_package_zip_type_query () {
+      const response = await Request.GET('/general/code_query', { code_type: 'software_package_zip_type' })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          // this.$message.success(data.msg)
+          this.software_package_zip_type = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async software_install_type_query () {
+      const response = await Request.GET('/general/code_query', { code_type: 'software_install_type' })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          // this.$message.success(data.msg)
+          this.software_install_type = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     }
   },
   data () {
     return {
+      rules: {
+        software_name: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        ],
+        software_versions: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        ],
+        software_package_zip_type: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        ],
+        software_install_type: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        ]
+      },
+      software_package_form: {
+        software_name: '',
+        software_versions: '',
+        software_package_zip_type: '',
+        software_install_type: ''
+      },
+      software_install_type_value: '',
+      software_install_type: [],
+      software_package_zip_type_value: '',
+      software_package_zip_type: [],
       adddialog: false,
       tableData: [{
         date: '2016-05-02',
@@ -172,7 +236,7 @@ export default {
     height: 100% !important;
   }
   /deep/ .el-upload-dragger {
-    width: 530px;
+    width: 553px;
     height: 130px;
   }
 </style>

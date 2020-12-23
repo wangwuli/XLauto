@@ -49,3 +49,6 @@ TMP_PATH = 'src/tmp'
 
 #临时日志
 HAPPENED_LOG = 'log/xlauto.log'
+
+#包位置
+PACKAGE = 'package'
