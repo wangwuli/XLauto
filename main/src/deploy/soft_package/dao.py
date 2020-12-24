@@ -19,3 +19,5 @@ def save_software_package(data_dict):
     db.session.commit()
     db.session.close()
     db.session.remove()
+
+    return True

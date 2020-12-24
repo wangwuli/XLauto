@@ -111,7 +111,7 @@ class SoftwareConf(db.Model):
 class SoftwarePackage(db.Model):
     __tablename__ = 'software_package'
 
-    software_install_id = db.Column(db.Integer, primary_key=True)
+    software_package_id = db.Column(db.Integer, primary_key=True)
     software_name = db.Column(db.String(50), info='软件名称 会下/package/software/下创建一个软件目录')
     software_versions = db.Column(db.String(50))
     package_path = db.Column(db.String(50), info='安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面')
@@ -126,7 +126,7 @@ class SoftwarePackageInstallEvent(db.Model):
 
     software_package_install_event_id = db.Column(db.Integer, primary_key=True)
     host_id = db.Column(db.Integer, nullable=False, info='host_instance.host_id')
-    software_package_id = db.Column(db.Integer, info='software_install.software_install_id')
+    software_package_id = db.Column(db.Integer, info='software_package.software_package_id')
     execute_result = db.Column(db.String(1000), info='执行结果收集')
     server_software_action_type = db.Column(db.String(50), info='执行动作 code_key：sys_code.code_type=server_software_action_type')
     execute_status = db.Column(db.String(50), info='执行动作 code_key：sys_code.code_type=tandard_execution_results')

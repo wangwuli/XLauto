@@ -124,8 +124,16 @@ export default {
     this.software_install_type_query()
   },
   methods: {
-    handleClick (row) {
-      console.log(row)
+    handleClick (response) {
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.$message.success(data.msg)
+          this.adddialog = false
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     },
     submitUpload () {
       this.$refs.software_package_form_ref.validate((valid) => {
