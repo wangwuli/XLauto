@@ -17,7 +17,6 @@ CREATE DATABASE IF NOT EXISTS `xlauto` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `xlauto`;
 
 -- 导出  表 xlauto.host_instance 结构
-DROP TABLE IF EXISTS `host_instance`;
 CREATE TABLE IF NOT EXISTS `host_instance` (
   `host_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_ip` varchar(50) NOT NULL,
@@ -48,7 +47,6 @@ INSERT INTO `host_instance` (`host_id`, `host_ip`, `host_name`, `host_port`, `ho
 /*!40000 ALTER TABLE `host_instance` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_server_software 结构
-DROP TABLE IF EXISTS `host_server_software`;
 CREATE TABLE IF NOT EXISTS `host_server_software` (
   `server_software_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_id` int(11) DEFAULT NULL,
@@ -74,7 +72,6 @@ DELETE FROM `host_server_software`;
 /*!40000 ALTER TABLE `host_server_software` ENABLE KEYS */;
 
 -- 导出  表 xlauto.host_users 结构
-DROP TABLE IF EXISTS `host_users`;
 CREATE TABLE IF NOT EXISTS `host_users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_id` int(11) NOT NULL,
@@ -102,7 +99,6 @@ INSERT INTO `host_users` (`user_id`, `host_id`, `user_name`, `user_pass`, `user_
 /*!40000 ALTER TABLE `host_users` ENABLE KEYS */;
 
 -- 导出  表 xlauto.projects 结构
-DROP TABLE IF EXISTS `projects`;
 CREATE TABLE IF NOT EXISTS `projects` (
   `project_id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(50) DEFAULT NULL,
@@ -124,7 +120,6 @@ INSERT INTO `projects` (`project_id`, `project_name`, `project_code`, `controlle
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 
 -- 导出  表 xlauto.script_file_cabinet 结构
-DROP TABLE IF EXISTS `script_file_cabinet`;
 CREATE TABLE IF NOT EXISTS `script_file_cabinet` (
   `script_file_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_file_path` varchar(300) DEFAULT NULL,
@@ -145,7 +140,6 @@ INSERT INTO `script_file_cabinet` (`script_file_id`, `script_file_path`, `script
 /*!40000 ALTER TABLE `script_file_cabinet` ENABLE KEYS */;
 
 -- 导出  表 xlauto.script_file_execute_event 结构
-DROP TABLE IF EXISTS `script_file_execute_event`;
 CREATE TABLE IF NOT EXISTS `script_file_execute_event` (
   `script_file_execute_event_id` int(11) NOT NULL AUTO_INCREMENT,
   `script_execute_event_batch_id` varchar(50) DEFAULT NULL,
@@ -191,7 +185,6 @@ INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script
 /*!40000 ALTER TABLE `script_file_execute_event` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_conf 结构
-DROP TABLE IF EXISTS `software_conf`;
 CREATE TABLE IF NOT EXISTS `software_conf` (
   `software_conf_id` int(11) NOT NULL AUTO_INCREMENT,
   `software_conf_name` varchar(50) DEFAULT NULL,
@@ -209,25 +202,29 @@ DELETE FROM `software_conf`;
 /*!40000 ALTER TABLE `software_conf` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_package 结构
-DROP TABLE IF EXISTS `software_package`;
 CREATE TABLE IF NOT EXISTS `software_package` (
   `software_package_id` int(11) NOT NULL AUTO_INCREMENT,
   `software_name` varchar(50) DEFAULT NULL COMMENT '软件名称 会下/package/software/下创建一个软件目录',
   `software_versions` varchar(50) DEFAULT NULL,
-  `package_path` varchar(50) DEFAULT NULL COMMENT '安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面',
+  `package_path` varchar(200) DEFAULT NULL COMMENT '安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面',
   `software_package_zip_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=software_package_zip_type',
-  `software_install_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=software_install_type',
+  `package_storage_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=package_storage_type',
   `comment` varchar(50) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`software_package_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件安装表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='软件安装表';
 
 -- 正在导出表  xlauto.software_package 的数据：~0 rows (大约)
 DELETE FROM `software_package`;
 /*!40000 ALTER TABLE `software_package` DISABLE KEYS */;
+INSERT INTO `software_package` (`software_package_id`, `software_name`, `software_versions`, `package_path`, `software_package_zip_type`, `package_storage_type`, `comment`) VALUES
+	(1, 'zabbix', '4.4.0', 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\package\\software\\4.4.0\\zabbix', 'zip', 'local', NULL),
+	(2, '1111', '111', 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\package\\software\\111\\1111', 'zip', 'local', NULL),
+	(3, '222', '22', 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\package\\software\\22\\222', 'zip', 'local', NULL),
+	(4, '333', '33', 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\package\\software\\33\\333', 'zip', 'local', NULL),
+	(5, '4444', '44', 'C:\\Users\\Kk\\Desktop\\开发代码\\XLauto\\main\\package\\software\\44\\4444', 'zip', 'local', NULL);
 /*!40000 ALTER TABLE `software_package` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_package_install_event 结构
-DROP TABLE IF EXISTS `software_package_install_event`;
 CREATE TABLE IF NOT EXISTS `software_package_install_event` (
   `software_package_install_event_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_id` int(11) NOT NULL COMMENT 'host_instance.host_id',
@@ -246,7 +243,6 @@ DELETE FROM `software_package_install_event`;
 /*!40000 ALTER TABLE `software_package_install_event` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_parameter 结构
-DROP TABLE IF EXISTS `software_parameter`;
 CREATE TABLE IF NOT EXISTS `software_parameter` (
   `software_parameter_id` int(11) NOT NULL AUTO_INCREMENT,
   `software_conf_id` int(11) NOT NULL COMMENT 'software_conf.software_conf_id',
@@ -262,7 +258,6 @@ DELETE FROM `software_parameter`;
 /*!40000 ALTER TABLE `software_parameter` ENABLE KEYS */;
 
 -- 导出  表 xlauto.system_function 结构
-DROP TABLE IF EXISTS `system_function`;
 CREATE TABLE IF NOT EXISTS `system_function` (
   `system_function_id` int(11) NOT NULL AUTO_INCREMENT,
   `system_name` varchar(50) NOT NULL COMMENT '操作系统名称',
@@ -301,7 +296,6 @@ INSERT INTO `system_function` (`system_function_id`, `system_name`, `system_vers
 /*!40000 ALTER TABLE `system_function` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_code 结构
-DROP TABLE IF EXISTS `sys_code`;
 CREATE TABLE IF NOT EXISTS `sys_code` (
   `code_id` int(11) NOT NULL AUTO_INCREMENT,
   `code_key` varchar(500) DEFAULT NULL,
@@ -311,9 +305,9 @@ CREATE TABLE IF NOT EXISTS `sys_code` (
   `order_queue` smallint(6) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`code_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.sys_code 的数据：~23 rows (大约)
+-- 正在导出表  xlauto.sys_code 的数据：~25 rows (大约)
 DELETE FROM `sys_code`;
 /*!40000 ALTER TABLE `sys_code` DISABLE KEYS */;
 INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code`, `order_queue`, `comments`) VALUES
@@ -335,15 +329,16 @@ INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code
 	(18, 'reinstall', '覆盖安装', 'server_software_action_type', NULL, NULL, NULL),
 	(19, 'rpm', 'RPM', 'software_install_type', NULL, NULL, NULL),
 	(20, 'make', 'Make', 'software_install_type', NULL, NULL, NULL),
-	(21, 'yum', 'Yum', 'software_install_type', NULL, NULL, NULL),
+	(21, 'unzip', 'Unzip', 'software_install_type', NULL, NULL, NULL),
 	(22, 'zip', 'zip', 'software_package_zip_type', NULL, NULL, NULL),
 	(23, 'gz', 'gz', 'software_package_zip_type', NULL, NULL, NULL),
 	(24, 'tgz', 'tgz', 'software_package_zip_type', NULL, NULL, NULL),
-	(25, 'tar', 'tar', 'software_package_zip_type', NULL, NULL, NULL);
+	(25, 'tar', 'tar', 'software_package_zip_type', NULL, NULL, NULL),
+	(26, 'local', '本地', 'package_storage_type', NULL, NULL, NULL),
+	(27, 'repository', 'URL仓库', 'package_storage_type', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `sys_code` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_menu 结构
-DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE IF NOT EXISTS `sys_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
@@ -374,7 +369,6 @@ INSERT INTO `sys_menu` (`id`, `parent_id`, `title`, `name`, `path`, `icon`, `sta
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
 -- 导出  表 xlauto.zabbix_agent 结构
-DROP TABLE IF EXISTS `zabbix_agent`;
 CREATE TABLE IF NOT EXISTS `zabbix_agent` (
   `zabbix_install_id` int(11) NOT NULL AUTO_INCREMENT,
   `host_id` int(11) DEFAULT NULL COMMENT 'host_instance.host_id',
