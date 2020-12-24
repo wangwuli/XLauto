@@ -1,7 +1,8 @@
 <template>
   <el-row>
-    <el-button type="primary" size="mini" @click="adddialog = true">新增</el-button>
+    <el-button type="primary" size="mini" @click="adddialog = true">本地新增</el-button>
     <el-button type="danger" size="mini">删除</el-button>
+    <el-button type="primary" size="mini" @click="software_package_query">刷新</el-button>
     <el-table
       class="tableClass"
       :row-style="{height:'20px'}"
@@ -24,29 +25,24 @@
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
-        prop="date"
+        prop="software_name"
         label="软件名">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
-        prop="name"
+        prop="package_path"
         label="包文件">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
-        prop="province"
+        prop="software_versions"
         label="版本">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
-        prop="city"
-        label="安装方式"
+        prop="package_storage_type_name"
+        label="存储方式"
         width="120">
-      </el-table-column>
-      <el-table-column
-        show-overflow-tooltip
-        prop="address"
-        label="配置文件">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
@@ -70,10 +66,10 @@
               clearable>
             </el-input>
           </el-form-item>
-          <el-form-item label="安装方式"  prop="software_install_type">
-            <el-select v-model="software_package_form.software_install_type" placeholder="请选择">
+          <el-form-item label="存储方式"  prop="package_storage_type">
+            <el-select v-model="software_package_form.package_storage_type" placeholder="请选择">
               <el-option
-                v-for="item in software_install_type"
+                v-for="item in package_storage_type"
                 :key="item.code_key"
                 :label="item.code_name"
                 :value="item.code_key">
@@ -100,8 +96,7 @@
         class="upload-demo"
         ref="upload"
         action="/deploy/soft_package"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
+        :on-success="updata_success"
         :file-list="fileList"
         :auto-upload="false">
         <div slot="tip" class="el-upload__tip">只能上传zip/gz/tgz/tar文件，且只能一个</div>
@@ -121,19 +116,11 @@ export default {
   name: 'zabbix',
   created () {
     this.software_package_zip_type_query()
-    this.software_install_type_query()
+    this.package_storage_type_query()
+    this.software_package_query()
   },
   methods: {
     handleClick (response) {
-      if (response && response.data) {
-        var data = response.data
-        if (data.success) {
-          this.$message.success(data.msg)
-          this.adddialog = false
-        } else {
-          this.$message.error(data.msg)
-        }
-      }
     },
     submitUpload () {
       this.$refs.software_package_form_ref.validate((valid) => {
@@ -144,11 +131,14 @@ export default {
         }
       })
     },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
+    updata_success (response) {
+      if (response.success) {
+        this.$message.success(response.msg)
+        this.adddialog = false
+        this.software_package_query()
+      } else {
+        this.$message.error(response.msg)
+      }
     },
     async software_package_zip_type_query () {
       const response = await Request.GET('/general/code_query', { code_type: 'software_package_zip_type' })
@@ -162,13 +152,24 @@ export default {
         }
       }
     },
-    async software_install_type_query () {
-      const response = await Request.GET('/general/code_query', { code_type: 'software_install_type' })
+    async package_storage_type_query () {
+      const response = await Request.GET('/general/code_one_query', { code_type: 'package_storage_type', code_key: 'local' })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
           // this.$message.success(data.msg)
-          this.software_install_type = data.data
+          this.package_storage_type = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async software_package_query () {
+      const response = await Request.GET('/deploy/soft_package')
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.tableData = data.data
         } else {
           this.$message.error(data.msg)
         }
@@ -177,60 +178,33 @@ export default {
   },
   data () {
     return {
+      fileList: [],
       rules: {
         software_name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' }
+          { required: true, message: '请输入软件名称', trigger: 'blur' }
         ],
         software_versions: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' }
+          { required: true, message: '请输入版本号', trigger: 'blur' }
         ],
         software_package_zip_type: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' }
+          { required: true, message: '请选择压缩类型', trigger: 'blur' }
         ],
-        software_install_type: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        package_storage_type: [
+          { required: true, message: '请选择存储类似', trigger: 'blur' }
         ]
       },
       software_package_form: {
         software_name: '',
         software_versions: '',
         software_package_zip_type: '',
-        software_install_type: ''
+        package_storage_type: ''
       },
       software_install_type_value: '',
-      software_install_type: [],
+      package_storage_type: [],
       software_package_zip_type_value: '',
       software_package_zip_type: [],
       adddialog: false,
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1517 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1519 弄',
-        zip: 200333
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1516 弄',
-        zip: 200333
-      }]
+      tableData: []
     }
   }
 }

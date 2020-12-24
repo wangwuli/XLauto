@@ -21,6 +21,21 @@ def code_query():
     return Result.success_response(data,'类型查询成功')
 
 
+# 锁定单值码表查询通用接口
+@services.route('/general/code_one_query', methods=['GET'])
+def code_one_query():
+    code_type = request.args.get('code_type')
+    code_key = request.args.get('code_key')
+
+    sys_code_data = db.session.query(SysCode.code_id, SysCode.code_key, SysCode.code_name).filter(
+        SysCode.code_type == code_type, SysCode.code_key == code_key).all()
+    db.session.close()
+    db.session.remove()
+    data = model_to_dict(sys_code_data, onedict=False)
+
+    return Result.success_response(data,'类型查询成功')
+
+
 #命令查询通用接口
 @services.route('/general/system_action_query', methods=['GET'])
 def system_action_query():

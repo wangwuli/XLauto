@@ -27,17 +27,17 @@ class HostServerSoftware(db.Model):
 
     server_software_id = db.Column(db.Integer, primary_key=True)
     host_id = db.Column(db.Integer, index=True)
-    soft_type = db.Column(db.String(50, 'latin1_swedish_ci'), index=True)
+    soft_type = db.Column(db.String(50), index=True)
     soft_port = db.Column(db.Integer)
-    start_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    stop_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    restart_soft_cmd = db.Column(db.String(50, 'latin1_swedish_ci'))
-    soft_log_path = db.Column(db.String(50, 'latin1_swedish_ci'))
+    start_soft_cmd = db.Column(db.String(50))
+    stop_soft_cmd = db.Column(db.String(50))
+    restart_soft_cmd = db.Column(db.String(50))
+    soft_log_path = db.Column(db.String(50))
     software_install_id = db.Column(db.Integer)
     is_remove = db.Column(db.Integer)
     create_time = db.Column(db.DateTime, server_default=db.FetchedValue())
     modify_time = db.Column(db.DateTime, server_default=db.FetchedValue())
-    comments = db.Column(db.String(50, 'latin1_swedish_ci'))
+    comments = db.Column(db.String(50))
 
 
 
@@ -114,9 +114,9 @@ class SoftwarePackage(db.Model):
     software_package_id = db.Column(db.Integer, primary_key=True)
     software_name = db.Column(db.String(50), info='软件名称 会下/package/software/下创建一个软件目录')
     software_versions = db.Column(db.String(50))
-    package_path = db.Column(db.String(50), info='安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面')
+    package_path = db.Column(db.String(200), info='安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面')
     software_package_zip_type = db.Column(db.String(50), info='sys_code.sys_type=software_package_zip_type')
-    software_install_type = db.Column(db.String(50), info='sys_code.sys_type=software_install_type')
+    package_storage_type = db.Column(db.String(50), info='sys_code.sys_type=package_storage_type')
     comment = db.Column(db.String(50), info='备注')
 
 

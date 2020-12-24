@@ -4,7 +4,7 @@
       <el-tab-pane label="安装绑定">
         <SoftInstallS ref="SoftInstallS"></SoftInstallS>
       </el-tab-pane>
-      <el-tab-pane label="安装文件">
+      <el-tab-pane label="软件上传">
         <SoftPackageS ref="SoftPackageS"></SoftPackageS>
       </el-tab-pane>
       <el-tab-pane label="配置管理">
