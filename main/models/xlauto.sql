@@ -187,6 +187,23 @@ INSERT INTO `script_file_execute_event` (`script_file_execute_event_id`, `script
 -- 导出  表 xlauto.software_conf 结构
 CREATE TABLE IF NOT EXISTS `software_conf` (
   `software_conf_id` int(11) NOT NULL AUTO_INCREMENT,
+  `software_package_id` int(11) NOT NULL,
+  `software_conf_name` varchar(50) DEFAULT NULL,
+  `software_conf_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.software_conf__type',
+  `software_conf_path` varchar(50) DEFAULT NULL,
+  `comment` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`software_conf_id`),
+  KEY `software_package_id` (`software_package_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件配置文件，配置模板，待替换参数的配置文件';
+
+-- 正在导出表  xlauto.software_conf 的数据：~0 rows (大约)
+DELETE FROM `software_conf`;
+/*!40000 ALTER TABLE `software_conf` DISABLE KEYS */;
+/*!40000 ALTER TABLE `software_conf` ENABLE KEYS */;
+
+-- 导出  表 xlauto.software_conf_copy 结构
+CREATE TABLE IF NOT EXISTS `software_conf_copy` (
+  `software_conf_id` int(11) NOT NULL AUTO_INCREMENT,
   `software_conf_name` varchar(50) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL,
   `server_software_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.server_software_type',
@@ -194,12 +211,12 @@ CREATE TABLE IF NOT EXISTS `software_conf` (
   `software_conf_path` varchar(50) DEFAULT NULL,
   `comment` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`software_conf_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='软件配置文件，配置模板，待替换参数的配置文件';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='软件配置文件，配置模板，待替换参数的配置文件';
 
--- 正在导出表  xlauto.software_conf 的数据：~0 rows (大约)
-DELETE FROM `software_conf`;
-/*!40000 ALTER TABLE `software_conf` DISABLE KEYS */;
-/*!40000 ALTER TABLE `software_conf` ENABLE KEYS */;
+-- 正在导出表  xlauto.software_conf_copy 的数据：~0 rows (大约)
+DELETE FROM `software_conf_copy`;
+/*!40000 ALTER TABLE `software_conf_copy` DISABLE KEYS */;
+/*!40000 ALTER TABLE `software_conf_copy` ENABLE KEYS */;
 
 -- 导出  表 xlauto.software_package 结构
 CREATE TABLE IF NOT EXISTS `software_package` (
@@ -208,12 +225,12 @@ CREATE TABLE IF NOT EXISTS `software_package` (
   `software_versions` varchar(50) DEFAULT NULL,
   `package_path` varchar(200) DEFAULT NULL COMMENT '安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面',
   `software_package_zip_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=software_package_zip_type',
-  `package_storage_type` varchar(200) DEFAULT NULL COMMENT 'sys_code.sys_type=package_storage_type',
+  `package_storage_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=package_storage_type',
   `comment` varchar(50) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`software_package_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='软件安装表';
 
--- 正在导出表  xlauto.software_package 的数据：~0 rows (大约)
+-- 正在导出表  xlauto.software_package 的数据：~5 rows (大约)
 DELETE FROM `software_package`;
 /*!40000 ALTER TABLE `software_package` DISABLE KEYS */;
 INSERT INTO `software_package` (`software_package_id`, `software_name`, `software_versions`, `package_path`, `software_package_zip_type`, `package_storage_type`, `comment`) VALUES
@@ -305,9 +322,9 @@ CREATE TABLE IF NOT EXISTS `sys_code` (
   `order_queue` smallint(6) DEFAULT NULL,
   `comments` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`code_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
--- 正在导出表  xlauto.sys_code 的数据：~25 rows (大约)
+-- 正在导出表  xlauto.sys_code 的数据：~27 rows (大约)
 DELETE FROM `sys_code`;
 /*!40000 ALTER TABLE `sys_code` DISABLE KEYS */;
 INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code`, `order_queue`, `comments`) VALUES
@@ -335,7 +352,9 @@ INSERT INTO `sys_code` (`code_id`, `code_key`, `code_name`, `code_type`, `f_code
 	(24, 'tgz', 'tgz', 'software_package_zip_type', NULL, NULL, NULL),
 	(25, 'tar', 'tar', 'software_package_zip_type', NULL, NULL, NULL),
 	(26, 'local', '本地', 'package_storage_type', NULL, NULL, NULL),
-	(27, 'repository', 'URL仓库', 'package_storage_type', NULL, NULL, NULL);
+	(27, 'repository', 'URL仓库', 'package_storage_type', NULL, NULL, NULL),
+	(28, 'conf', 'conf', 'software_conf_type', NULL, NULL, NULL),
+	(29, 'xml', 'xml', 'software_conf_type', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `sys_code` ENABLE KEYS */;
 
 -- 导出  表 xlauto.sys_menu 结构

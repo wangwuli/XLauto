@@ -2,7 +2,7 @@
   <el-row>
     <el-row>
       <el-col :span="24">
-        <el-button type="primary" size="mini" @click="adddialog = true">本地新增</el-button>
+        <el-button type="primary" size="mini" @click="open_soft_dir">新增配置</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -37,7 +37,7 @@
         :row-style="{height:'20px'}"
         :cell-style="{padding:'0px'}"
         size="mini"
-        :data="tableData"
+        :data="software_conf_data"
         style="width: 80%">
         <el-table-column
           fixed
@@ -62,24 +62,40 @@
       </el-tabs>
     </el-col>
   </el-row>
+
+    <el-dialog :visible.sync="file_dialog">
+      <OpenLocalFile :software_package_id="software_package_id"></OpenLocalFile>
+    </el-dialog>
+
   </el-row>
 </template>
 
 <script>
 import * as Request from '@/general/request.js'
+import { OpenLocalFile } from '@/xl_communal'
 export default {
+  components: {
+    OpenLocalFile: OpenLocalFile
+  },
   created () {
     this.software_package_query()
   },
   data () {
     return {
       soft_table_data: [],
-      currentRow: null
+      software_conf_data: [],
+      currentRow: null,
+      software_package_id: '',
+      file_dialog: false
     }
   },
   methods: {
+    open_soft_dir () {
+      this.file_dialog = true
+    },
     handleCurrentChange (val) {
-      this.currentRow = val
+      this.software_package_id = val.software_package_id
+      this.software_conf_query(val.software_package_id)
     },
     async software_package_query () {
       const response = await Request.GET('/deploy/soft_package')
@@ -87,6 +103,17 @@ export default {
         var data = response.data
         if (data.success) {
           this.soft_table_data = data.data
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
+    },
+    async software_conf_query (softwarePackageId) {
+      const response = await Request.GET('/deploy/software_conf', { software_package_id: softwarePackageId })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.software_conf_data = data.data
         } else {
           this.$message.error(data.msg)
         }

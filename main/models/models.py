@@ -99,6 +99,18 @@ class SoftwareConf(db.Model):
     __tablename__ = 'software_conf'
 
     software_conf_id = db.Column(db.Integer, primary_key=True)
+    software_package_id = db.Column(db.Integer, nullable=False, index=True)
+    software_conf_name = db.Column(db.String(50))
+    software_conf_type = db.Column(db.String(50), info='sys_code.software_conf__type')
+    software_conf_path = db.Column(db.String(50))
+    comment = db.Column(db.String(50))
+
+
+
+class SoftwareConfCopy(db.Model):
+    __tablename__ = 'software_conf_copy'
+
+    software_conf_id = db.Column(db.Integer, primary_key=True)
     software_conf_name = db.Column(db.String(50))
     project_id = db.Column(db.Integer)
     server_software_type = db.Column(db.String(50), info='sys_code.server_software_type')
