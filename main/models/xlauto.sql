@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `software_package` (
   `software_versions` varchar(50) DEFAULT NULL,
   `package_path` varchar(200) DEFAULT NULL COMMENT '安装包位置，项目/package/software/{{software_versions}}/{{software_name}}下面',
   `software_package_zip_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=software_package_zip_type',
-  `package_storage_type` varchar(50) DEFAULT NULL COMMENT 'sys_code.sys_type=package_storage_type',
+  `package_storage_type` varchar(200) DEFAULT NULL COMMENT 'sys_code.sys_type=package_storage_type',
   `comment` varchar(50) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`software_package_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='软件安装表';

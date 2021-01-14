@@ -1,4 +1,5 @@
 import datetime
+import decimal
 import json
 
 from flask import jsonify, make_response, Response
@@ -25,6 +26,8 @@ class DateEncoder(json.JSONEncoder):
         elif isinstance(obj, datetime.date):
             return obj.strftime("%Y-%m-%d")
         elif isinstance(obj, bytes):
+            return str(obj)
+        elif isinstance(obj, decimal.Decimal):
             return str(obj)
         else:
             return json.JSONEncoder.default(self, obj)

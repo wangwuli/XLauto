@@ -41,3 +41,16 @@
 2020-12-23 17:25:01,354 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
 2020-12-23 17:26:25,333 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
 2020-12-23 17:27:41,194 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 10:26:44,146 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 10:37:31,466 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 16:28:52,727 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 16:39:51,319 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 16:51:17,912 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 16:52:30,022 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 16:56:37,355 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 17:39:36,375 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 17:44:09,450 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-24 17:49:35,975 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
+2020-12-30 16:51:06,274 - WARNING - login.py - zabbix_api_login - 34 - Zabbix登陆失败：HTTPConnectionPool(host='192.168.20.204', port=80): Max retries exceeded with url: /zabbix//api_jsonrpc.php (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000022D378B9310>: Failed to establish a new connection: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。'))
+2020-12-30 17:02:12,858 - WARNING - login.py - zabbix_api_login - 34 - Zabbix登陆失败：HTTPConnectionPool(host='192.168.20.204', port=80): Max retries exceeded with url: /zabbix//api_jsonrpc.php (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000016B0F22D4F0>: Failed to establish a new connection: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。'))
+2021-01-14 11:19:39,647 - INFO - login.py - zabbix_api_login - 28 - Zabbix登陆成功
