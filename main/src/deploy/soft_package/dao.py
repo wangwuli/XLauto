@@ -37,3 +37,14 @@ def get_software_package():
     data = sqla.fetch_to_dict(sql)
 
     return data
+
+def get_software_package_one(software_package_id):
+    sql = """
+        SELECT *
+        FROM software_package a
+        WHERE a.software_package_id = :software_package_id
+    """
+    sqla = Sqla(current_app)
+    data = sqla.fetch_to_dict(sql,{'software_package_id': software_package_id}, fecth='one')
+
+    return data

@@ -64,7 +64,7 @@
   </el-row>
 
     <el-dialog :visible.sync="file_dialog">
-      <OpenLocalFile :software_package_id="software_package_id"></OpenLocalFile>
+      <OpenLocalFile :software_package_id="software_package_id" @submit_select_data="submit_select_data"></OpenLocalFile>
     </el-dialog>
 
   </el-row>
@@ -90,6 +90,9 @@ export default {
     }
   },
   methods: {
+    submit_select_data (val) {
+      debugger
+    },
     open_soft_dir () {
       this.file_dialog = true
     },

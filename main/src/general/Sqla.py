@@ -27,7 +27,7 @@ class Sqla():
             if result_tuple:
                 result = dict(zip(resultProxy.keys(), list(result_tuple)))
             else:
-                return None
+                return []
         else:
             result_tuple_list = resultProxy.fetchall()
             if result_tuple_list:
@@ -37,7 +37,8 @@ class Sqla():
                     result_row = dict(zip(keys, row))
                     result.append(result_row)
             else:
-                return None
+                return []
+        db.session.close()
         db.session.remove()
         return result
 
