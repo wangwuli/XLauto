@@ -17,7 +17,7 @@
         label="软件">
       </el-table-column>
       <el-table-column
-        prop="software_conf_path"
+        prop="software_versions"
         label="版本">
       </el-table-column>
     </el-table>
@@ -34,8 +34,8 @@ export default {
   name: 'open_local_file',
   props: {
     software_package_id: {
-      type: String,
-      default: ''
+      type: Number,
+      default: null
     }
   }
 }

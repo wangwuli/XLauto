@@ -24,7 +24,7 @@
           label="软件">
         </el-table-column>
         <el-table-column
-          prop="software_conf_path"
+          prop="software_versions"
           label="版本">
         </el-table-column>
       </el-table>

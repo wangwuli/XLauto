@@ -19,7 +19,23 @@ def str_save_file(file_content_str, file_path=None):
     hooks.close()
     return file_path
 
+
 def str_sin_file(file_path, str):
     hooks = open(file_path, 'a')
     hooks.write(str)
     hooks.close()
+
+
+def get_dir_file_tree(dirname):
+    """
+    返回目录下所有文件
+    :param dirname:
+    :return:
+    """
+    result = []
+    for maindir, subdir, file_name_list in os.walk(dirname):
+        for filename in file_name_list:
+            apath = os.path.join(maindir, filename)
+            result.append(apath)
+
+    return result
