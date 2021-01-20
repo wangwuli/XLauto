@@ -14,10 +14,12 @@
         width="50">
       </el-table-column>
       <el-table-column
+        show-overflow-tooltip
         prop="file_name"
         label="名称">
       </el-table-column>
       <el-table-column
+        show-overflow-tooltip
         prop="file_type"
         label="属性">
       </el-table-column>
@@ -55,6 +57,9 @@ export default {
       default: null
     }
   },
+  mounted () {
+    this.get_file_list(this.software_package_id)
+  },
   watch: {
     submit_select (val) {
       this.$emit('submit_select_data', val)
@@ -64,6 +69,9 @@ export default {
     }
   },
   methods: {
+    close_dialog_file () {
+      this.dialog_file = false
+    },
     current_directory_r () {
       if (this.file_data_all.indexOf(this.current_directory) === -1) {
         this.$message.error('错误的路径')
@@ -75,7 +83,17 @@ export default {
       this.submit_select = JSON.parse(JSON.stringify(this.submit_select_swap))
     },
     table_dblclick (row) {
-      if (row.file_type === 'd') {
+      if (row.file_name === '..') {
+        var swapPath = this.current_directory.replace(this.current_directory_root, '')
+        var swapPathList = swapPath.split('/')
+        if (swapPathList.length === 1 || swapPathList.length === 2) {
+          this.current_directory = this.current_directory_root
+        } else {
+          swapPathList = swapPathList.slice(0, -2)
+          this.current_directory = this.current_directory_root + swapPathList.join('/') + '/'
+        }
+        this.current_dir()
+      } else if (row.file_type === 'd') {
         this.current_directory = row.file_path
         this.current_dir()
       } else {
@@ -89,6 +107,7 @@ export default {
         var data = response.data
         if (data.success) {
           this.file_data_all = data.data.package_path_dir_list
+          this.current_directory_root = data.data.package_path
           this.current_directory = data.data.package_path
           this.current_dir()
         } else {
@@ -97,7 +116,11 @@ export default {
       }
     },
     current_dir () {
-      var FileTableData = []
+      var FileTableData = [{
+        file_name: '..',
+        file_type: 'd',
+        file_path: ''
+      }]
       this.file_data_all.map((item) => {
         var swapFile = item.replace(this.current_directory, '').split('/')
         if (swapFile.length === 2 && swapFile[1] === '') {

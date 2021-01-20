@@ -12,10 +12,12 @@ from src.general.Sqla import Sqla
 
 
 def save_software_conf(data_dict, no_continuous=True):
-    package_obj = SoftwareConf(software_conf_name=data_dict['software_name'],
+    package_obj = SoftwareConf(software_conf_name=data_dict['file_name'],
                                software_package_id=data_dict['software_package_id'],
-                               software_conf_path=data_dict['software_conf_path'],
-                               comment=data_dict['comment'])
+                               software_conf_path=data_dict['file_path'],
+                               software_conf_type=data_dict.get('software_conf_type'),
+                               comment=data_dict.get('comment')
+                               )
     db.session.add(package_obj)
     db.session.commit()
     db.session.close()

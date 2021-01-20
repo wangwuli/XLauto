@@ -4,7 +4,7 @@ from src.dao.zip_method import unzip_distinguish
 from src.deploy import deploy
 from flask import request, current_app
 
-from src.deploy.software_conf.dao import get_software_conf
+from src.deploy.software_conf.dao import get_software_conf, save_software_conf
 from src.general.General import Result
 
 
@@ -16,8 +16,9 @@ def software_conf():
         return Result.success_response(data=return_data, msg='查询成功')
 
     elif request.method == 'POST':
-        f_obj = request.files['file']
+        data_dict = request.get_json()
+        software_conf_data = data_dict['software_conf_data']
 
-        data_dict = request.form.to_dict()
+        save_software_conf(software_conf_data)
 
         return Result.success_response(msg='保存成功')
