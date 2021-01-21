@@ -25,6 +25,9 @@ def str_sin_file(file_path, str):
     hooks.write(str)
     hooks.close()
 
+def get_file_text(file_path):
+    f = open(file_path, mode='r')
+    return f.read()
 
 def get_dir_file(dirname):
     """

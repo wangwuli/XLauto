@@ -39,3 +39,17 @@ def get_software_conf(software_package_id):
     data = sqla.fetch_to_dict(sql, {"software_package_id": software_package_id})
 
     return data
+
+
+def software_conf_del(software_conf_ids):
+
+    delete_script_obj = SoftwareConf.query.filter(SoftwareConf.software_conf_id.in_(software_conf_ids)).all()
+
+    for delete_script_obj_one in delete_script_obj:
+        db.session.delete(delete_script_obj_one)
+
+    db.session.commit()
+    db.session.close()
+    db.session.remove()
+
+    return True

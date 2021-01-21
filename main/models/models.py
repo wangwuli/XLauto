@@ -102,21 +102,19 @@ class SoftwareConf(db.Model):
     software_package_id = db.Column(db.Integer, nullable=False, index=True)
     software_conf_name = db.Column(db.String(50))
     software_conf_type = db.Column(db.String(50), info='sys_code.software_conf__type')
-    software_conf_path = db.Column(db.String(50))
+    software_conf_path = db.Column(db.String(500))
     comment = db.Column(db.String(50))
 
 
 
-class SoftwareConfCopy(db.Model):
-    __tablename__ = 'software_conf_copy'
+class SoftwareConfParameter(db.Model):
+    __tablename__ = 'software_conf_parameter'
 
-    software_conf_id = db.Column(db.Integer, primary_key=True)
-    software_conf_name = db.Column(db.String(50))
-    project_id = db.Column(db.Integer)
-    server_software_type = db.Column(db.String(50), info='sys_code.server_software_type')
-    software_parameter_id = db.Column(db.Integer, info='software_parameter.software_parameter_id')
-    software_conf_path = db.Column(db.String(50))
-    comment = db.Column(db.String(50))
+    software_conf_parameter_id = db.Column(db.Integer, primary_key=True)
+    software_conf_id = db.Column(db.Integer, nullable=False, info='software_conf.software_conf_id')
+    replacement_entry = db.Column(db.String(50), nullable=False)
+    replacement_value = db.Column(db.String(50), nullable=False)
+    comment = db.Column(db.String(50), nullable=False)
 
 
 
@@ -144,17 +142,6 @@ class SoftwarePackageInstallEvent(db.Model):
     execute_status = db.Column(db.String(50), info='执行动作 code_key：sys_code.code_type=tandard_execution_results')
     execute_time = db.Column(db.String(50), info='第一次执行时间')
     re_execute_time = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue(), info='最后一次执行时间')
-
-
-
-class SoftwareParameter(db.Model):
-    __tablename__ = 'software_parameter'
-
-    software_parameter_id = db.Column(db.Integer, primary_key=True)
-    software_conf_id = db.Column(db.Integer, nullable=False, info='software_conf.software_conf_id')
-    replacement_entry = db.Column(db.String(50), nullable=False)
-    replacement_value = db.Column(db.String(50), nullable=False)
-    comment = db.Column(db.String(50), nullable=False)
 
 
 

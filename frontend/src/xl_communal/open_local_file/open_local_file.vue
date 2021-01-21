@@ -61,7 +61,7 @@ export default {
     this.get_file_list(this.software_package_id)
   },
   watch: {
-    submit_select (val) {
+    submit_select (val) { /// 监听submit_select变量的变化触发
       this.$emit('submit_select_data', val)
     },
     software_package_id (val) {
