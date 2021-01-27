@@ -24,7 +24,7 @@
         label="属性">
       </el-table-column>
     </el-table>
-    <el-dialog title="确认选择双击文件" :visible.sync="dialog_file" append-to-body>
+    <el-dialog title="确认选择双击的文件" :visible.sync="dialog_file" append-to-body>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialog_file = false">取 消</el-button>
         <el-button type="primary" @click="submit_select_r">确 定</el-button>

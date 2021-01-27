@@ -5,6 +5,12 @@
         <el-button type="success" size="mini" @click="open_soft_dir">新增配置</el-button>
         <el-button type="danger" size="mini" @click="del_software_conf_dialog = true">删除配置</el-button>
         <el-button type="primary" size="mini" @click="software_conf_parameter_analysis">分析配置</el-button>
+        <select-sys-code
+          style="width: 20%"
+          code_type="software_conf_type"
+          v-model="software_conf_type"
+        >
+        </select-sys-code>
       </el-col>
     </el-row>
     <el-row>
@@ -108,20 +114,20 @@
 
     <el-dialog title="确认清除勾选配置文件记录" :visible.sync="del_software_conf_dialog" width="500px" >
       <div slot="footer" class="dialog-footer">
-        <el-button @click="del_software_conf_dialog = false">取 消</el-button>
-        <el-button type="primary" @click="del_software_conf">确 定</el-button>
+        <el-button @click="del_software_conf_dialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="del_software_conf" size="mini">确 定</el-button>
       </div>
     </el-dialog>
-
   </el-row>
 </template>
 
 <script>
 import * as Request from '@/general/request.js'
-import { OpenLocalFile } from '@/xl_communal'
+import { OpenLocalFile, SelectSysCode } from '@/xl_communal'
 export default {
   components: {
-    OpenLocalFile: OpenLocalFile
+    OpenLocalFile: OpenLocalFile,
+    SelectSysCode: SelectSysCode
   },
   created () {
     this.software_package_query()
@@ -134,7 +140,8 @@ export default {
       software_package_id: '',
       file_dialog: false,
       software_conf_parameter_data: [],
-      del_software_conf_dialog: false
+      del_software_conf_dialog: false,
+      software_conf_type: ''
     }
   },
   methods: {
@@ -227,7 +234,12 @@ export default {
     },
     async software_conf_parameter_analysis () {
       var softwareConfids = this.get_software_conf_ids()
-      const response = await Request.GET('/deploy/software_conf_parameter/analysis', { software_conf_ids: softwareConfids })
+      debugger
+      const response = await Request.POST('/deploy/software_conf_parameter/analysis',
+        {
+          software_conf_ids: softwareConfids,
+          software_conf_type: this.software_conf_type
+        })
       if (response && response.data) {
         var data = response.data
         if (data.success) {
