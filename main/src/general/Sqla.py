@@ -24,12 +24,16 @@ class Sqla():
         resultProxy = db.session.execute(sql, params, bind=db.get_engine(self.current_app,bind='xlauto_mysql'))
         if fecth == 'one':
             result_tuple = resultProxy.fetchone()
+            db.session.close()
+            db.session.remove()
             if result_tuple:
                 result = dict(zip(resultProxy.keys(), list(result_tuple)))
             else:
                 return []
         else:
             result_tuple_list = resultProxy.fetchall()
+            db.session.close()
+            db.session.remove()
             if result_tuple_list:
                 result = []
                 keys = resultProxy.keys()
@@ -38,8 +42,6 @@ class Sqla():
                     result.append(result_row)
             else:
                 return []
-        db.session.close()
-        db.session.remove()
         return result
 
 

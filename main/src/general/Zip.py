@@ -21,10 +21,12 @@ class zip_c():
         :param file_path: 文件完整路径
         :param target_path: 目标路径，解压路径或者压缩文件路径
         """
-        self.file_name =  file_path.split('.')[0]
+        # self.file_name = software_name
+        # self.file_name =  file_path.split('.')[0]
         self.file_path = file_path
         self.target_path = target_path
-        self.target_path_name = os.path.join(target_path, self.file_name)
+        # self.target_path_name = os.path.join(target_path, self.file_name)
+        self.target_path_name = target_path
         if not os.path.exists(self.target_path_name):
             os.makedirs(self.target_path_name)
 

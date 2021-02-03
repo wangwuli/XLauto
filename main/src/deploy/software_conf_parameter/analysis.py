@@ -15,9 +15,13 @@ def software_conf_parameter_analysis():
 
     elif request.method == 'POST':
         data_dict = request.get_json()
-        software_conf_ids = data_dict['software_conf_ids']
+        software_conf_info = data_dict['software_conf_info']
 
         # save_software_conf_parameter(software_conf_ids)
         conf = Configuration()
-
-        return Result.success_response(msg='保存成功')
+        for software_conf_info_one in software_conf_info:
+            try:
+                conf_content = conf.ini_conf_analysis(software_conf_info_one['software_conf_path'])
+            except Exception as e:
+                return Result.fail_response(msg='解析失败：%s' %e)
+        return Result.success_response(msg='解析成功')

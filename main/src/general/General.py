@@ -18,6 +18,18 @@ class ReturnG:
     def get_value(tuple_):
         return tuple_[1]
 
+    def return_bust(str):
+        return {
+            "status": False,
+            "data": str
+        }
+
+    def return_succeed(str):
+        return {
+            "status": True,
+            "data": str
+        }
+
 
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):

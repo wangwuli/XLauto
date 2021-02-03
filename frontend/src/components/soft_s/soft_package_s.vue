@@ -1,13 +1,14 @@
 <template>
   <el-row>
     <el-button type="primary" size="mini" @click="adddialog = true">本地新增</el-button>
-    <el-button type="danger" size="mini">删除</el-button>
+    <el-button type="danger" size="mini" @click="del_software_package_dialog = true">删除</el-button>
     <el-button type="primary" size="mini" @click="software_package_query">刷新</el-button>
     <el-table
+      ref="tableData_ref"
       class="tableClass"
       :row-style="{height:'20px'}"
       :cell-style="{padding:'0px'}"
-      height="250"
+      :height="table_top"
       size="mini"
       :data="tableData"
       stripe
@@ -107,6 +108,12 @@
                  @click="submitUpload">提交
       </el-button>
     </el-dialog>
+    <el-dialog title="确认删除勾选包信息" :visible.sync="del_software_package_dialog" width="500px" >
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="del_software_package_dialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="software_package_del" size="mini">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-row>
 </template>
 
@@ -174,10 +181,36 @@ export default {
           this.$message.error(data.msg)
         }
       }
+    },
+    get_soft_package_ids () {
+      var softwareConfids = []
+      this.$refs.tableData_ref.selection.map((item) => {
+        softwareConfids.push(item.software_conf_id)
+      })
+      return softwareConfids
+    },
+    async software_package_del () {
+      var softwarePackageInfo = this.$refs.tableData_ref.selection
+      if (!softwarePackageInfo.length) {
+        this.$message.error('请勾选一个配置文件')
+      }
+      const response = await Request.DELETE('/deploy/soft_package', { software_package_info: softwarePackageInfo })
+      if (response && response.data) {
+        var data = response.data
+        if (data.success) {
+          this.del_software_package_dialog = false
+          this.software_package_query()
+        } else {
+          this.$message.error(data.msg)
+        }
+      }
     }
   },
   data () {
     return {
+      del_software_package_dialog: false,
+      clientH: document.documentElement.clientHeight,
+      table_top: this.clientH - 50,
       fileList: [],
       rules: {
         software_name: [

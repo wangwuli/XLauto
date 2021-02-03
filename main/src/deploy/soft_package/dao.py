@@ -8,6 +8,7 @@
 from flask import current_app
 
 from models.models import SoftwarePackage, db
+from src.general.General import ReturnG
 from src.general.Sqla import Sqla
 
 
@@ -48,3 +49,17 @@ def get_software_package_one(software_package_id):
     data = sqla.fetch_to_dict(sql,{'software_package_id': software_package_id}, fecth='one')
 
     return data
+
+
+
+def del_software_package(software_package_ids):
+    software_package_obj = SoftwarePackage.query.filter(SoftwarePackage.software_package_id.in_(software_package_ids)).all()
+
+    for software_package_obj_one in software_package_obj:
+        db.session.delete(software_package_obj_one)
+
+    db.session.commit()
+    db.session.close()
+    db.session.remove()
+
+    return True

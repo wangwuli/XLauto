@@ -4,13 +4,13 @@
       <el-col :span="24">
         <el-button type="success" size="mini" @click="open_soft_dir">新增配置</el-button>
         <el-button type="danger" size="mini" @click="del_software_conf_dialog = true">删除配置</el-button>
-        <el-button type="primary" size="mini" @click="software_conf_parameter_analysis">分析配置</el-button>
         <select-sys-code
-          style="width: 20%"
+          style="width: 15%; margin-left: 5px"
           code_type="software_conf_type"
           v-model="software_conf_type"
-        >
-        </select-sys-code>
+        ></select-sys-code>
+        <el-button type="primary" size="mini" @click="software_conf_parameter_analysis">分析配置</el-button>
+        <el-button style="margin-left: 5px" icon="el-icon-search" size="mini" @click="software_package_query">刷新</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -97,7 +97,7 @@
             <el-table-column
               show-overflow-tooltip
               prop="replacement_value"
-              label="值">
+              label="默认值">
             </el-table-column>
           </el-table>
         </el-tab-pane>
@@ -233,11 +233,11 @@ export default {
       }
     },
     async software_conf_parameter_analysis () {
-      var softwareConfids = this.get_software_conf_ids()
-      debugger
+      // var softwareConfids = this.get_software_conf_ids()
+      var softwareConfinfo = this.$refs.software_conf_data_ref.selection
       const response = await Request.POST('/deploy/software_conf_parameter/analysis',
         {
-          software_conf_ids: softwareConfids,
+          software_conf_info: softwareConfinfo,
           software_conf_type: this.software_conf_type
         })
       if (response && response.data) {
