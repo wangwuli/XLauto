@@ -1,15 +1,18 @@
 import OpenLocalFile from './open_local_file'
 import SelectSysCode from './select-sys-code'
+import XlInputTextarea from './xl-input-textarea'
 
 // const version = '__VERSION__'
 const components = {
   OpenLocalFile,
-  SelectSysCode
+  SelectSysCode,
+  XlInputTextarea
 }
 
 export {
   OpenLocalFile,
-  SelectSysCode
+  SelectSysCode,
+  XlInputTextarea
 }
 export default {
   ...components
