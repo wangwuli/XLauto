@@ -101,9 +101,11 @@
             </el-table-column>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="配置管理">配置管理</el-tab-pane>
-        <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="配置查看">
+          <xl-input-textarea
+            v-model="textarea" :altitude=30>
+          </xl-input-textarea>
+        </el-tab-pane>
       </el-tabs>
     </el-col>
   </el-row>
@@ -123,17 +125,19 @@
 
 <script>
 import * as Request from '@/general/request.js'
-import { OpenLocalFile, SelectSysCode } from '@/xl_communal'
+import { OpenLocalFile, SelectSysCode, XlInputTextarea } from '@/xl_communal'
 export default {
   components: {
     OpenLocalFile: OpenLocalFile,
-    SelectSysCode: SelectSysCode
+    SelectSysCode: SelectSysCode,
+    XlInputTextarea: XlInputTextarea
   },
   created () {
     this.software_package_query()
   },
   data () {
     return {
+      textarea: '',
       soft_table_data: [],
       software_conf_data: [],
       currentRow: null,
