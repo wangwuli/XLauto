@@ -17,11 +17,36 @@ def software_conf_parameter_analysis():
         data_dict = request.get_json()
         software_conf_info = data_dict['software_conf_info']
 
-        # save_software_conf_parameter(software_conf_ids)
         conf = Configuration()
+        software_conf_parameter_list = []
         for software_conf_info_one in software_conf_info:
-            try:
-                conf_content = conf.ini_conf_analysis(software_conf_info_one['software_conf_path'])
-            except Exception as e:
-                return Result.fail_response(msg='解析失败：%s' %e)
-        return Result.success_response(msg='解析成功')
+            if data_dict['software_conf_type'] == "template":
+                software_conf_path = software_conf_info_one['software_conf_path']
+                software_conf_parameter = conf.template_conf_analysis(software_conf_path)
+
+            software_conf_parameter_dict_list = []
+            for software_conf_parameter_one in software_conf_parameter:
+                software_conf_parameter_dict = {
+                    'replacement_entry': software_conf_parameter_one,
+                    'default_value': ''
+                }
+                software_conf_parameter_dict_list.append(software_conf_parameter_dict)
+
+
+            software_conf_parameter_list.append(
+                {
+                    'software_conf_id': software_conf_info_one['software_conf_id'],
+                    'software_conf_parameter': software_conf_parameter_dict_list
+                }
+            )
+
+
+        # save_software_conf_parameter(software_conf_ids)
+
+        # for software_conf_info_one in software_conf_info:
+        #     try:
+        #         conf_content = conf.ini_conf_analysis(software_conf_info_one['software_conf_path'])
+        #     except Exception as e:
+        #         return Result.fail_response(msg='解析失败：%s' %e)
+
+        return Result.success_response(data=software_conf_parameter_list, msg='解析成功')

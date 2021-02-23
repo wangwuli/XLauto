@@ -96,7 +96,7 @@
             </el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="replacement_value"
+              prop="default_value"
               label="默认值">
             </el-table-column>
           </el-table>
@@ -235,6 +235,10 @@ export default {
     async software_conf_parameter_analysis () {
       // var softwareConfids = this.get_software_conf_ids()
       var softwareConfinfo = this.$refs.software_conf_data_ref.selection
+      if (softwareConfinfo.length !== 1) {
+        this.$message.warning('请勾选单个配置')
+        return
+      }
       const response = await Request.POST('/deploy/software_conf_parameter/analysis',
         {
           software_conf_info: softwareConfinfo,
@@ -243,7 +247,25 @@ export default {
       if (response && response.data) {
         var data = response.data
         if (data.success) {
+          var softwareConfParameter = data.data[0].software_conf_parameter
           // this.software_conf_parameter_data = data.data
+          if (this.software_conf_parameter_data.length === 0) {
+            this.software_conf_parameter_data = softwareConfParameter
+          } else {
+            var softwareConfParameterListSwap = []
+            for (var i = 0; i < softwareConfParameter.length; i++) {
+              var confExist = 1
+              for (var p = 0; p < this.software_conf_parameter_data.length; p++) {
+                if (this.software_conf_parameter_data[i].replacement_entry === softwareConfParameter[p].replacement_entry) {
+                  confExist = 0
+                }
+              }
+              if (confExist) {
+                softwareConfParameterListSwap.push(softwareConfParameter)
+              }
+            }
+            softwareConfParameterListSwap.concat(this.software_conf_parameter_data)
+          }
           this.$message.success(data.msg)
         } else {
           this.$message.error(data.msg)

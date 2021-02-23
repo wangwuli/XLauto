@@ -39,7 +39,7 @@ def soft_package():
         data_dict['package_path'] = soft_path
 
         # 解压包文件
-        unzip_info = unzip_distinguish(data_dict['software_package_zip_type'], script_path_file, soft_path)
+        unzip_info = unzip_distinguish(data_dict['software_package_zipanalysis_type'], script_path_file, soft_path)
         if not ReturnG.if_ft(unzip_info):
             Result.fail_response(msg=unzip_info[1])
 
