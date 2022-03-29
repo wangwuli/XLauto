@@ -1,7 +1,7 @@
 #https://www.lfd.uci.edu/~gohlke/pythonlibs/#wordcloud
 flask==1.1.1
 flask_script==2.0.6
-paramiko==2.7.0
+paramiko==2.10.1
 flask-sqlalchemy==2.4.1
 flask-sqlacodegen==1.1.7
 pymysql==0.9.3
